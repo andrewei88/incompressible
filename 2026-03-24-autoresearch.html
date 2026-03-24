@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoresearch: Autonomous AI Research — INCMPRSBL</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "\2014";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
+
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <a href="#section-1" class="active"><span class="num">1</span>Core Concept</a>
+<a href="#section-2"><span class="num">2</span>The Loop</a>
+<a href="#section-3"><span class="num">3</span>Three Files</a>
+<a href="#section-4"><span class="num">4</span>Design</a>
+<a href="#section-5"><span class="num">5</span>Quick Start</a>
+<a href="#section-6"><span class="num">6</span>Small Hardware</a>
+<a href="#section-7"><span class="num">7</span>Forks</a>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
+        <div class="header-top">
+          <h1>Autoresearch: Autonomous AI Research</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener">github.com/karpathy</a> &middot; 990 &rarr; 273 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>4 min</span> saved</span></div>
+      </div>
+
+      <div class="section" id="section-1">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Core Concept</h2>
+  <div class="key-points">
+    <ul>
+      <li>Karpathy's premise: autonomous AI agent swarms will run all research. &ldquo;This repo is the story of how it all began.&rdquo;</li>
+      <li>Give an AI agent a real LLM training setup. It modifies code, trains 5 minutes, checks if val_bpb improved, keeps or discards, repeats. ~12 experiments/hour, ~100 overnight.</li>
+      <li>You don't edit Python. You program program.md files that instruct agents. The agent edits train.py autonomously.</li>
+      <li>val_bpb (validation bits per byte): the single metric. Lower is better, vocab-size-independent, so architectural changes are fairly compared.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">CYCLE</span>
+    <span class="section-format">&middot; Flowchart</span>
+  </div>
+  <h2>The Autoresearch Loop</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">graph TD
+  A["Agent modifies train.py"] --> B["Train 5 min"]
+  B --> C["Evaluate val_bpb"]
+  C --> D{"Improved?"}
+  D -->|"Yes"| E["Keep changes"]
+  D -->|"No"| F["Discard changes"]
+  E --> A
+  F --> A</pre>
+  </div>
+</div>
+
+<div class="section" id="section-3">
+  <div class="section-label">
+    <span class="section-type">FRAMEWORK</span>
+    <span class="section-format">&middot; Table</span>
+  </div>
+  <h2>Three Files</h2>
+  <table class="data-table">
+    <thead><tr><th>File</th><th>Role</th><th>Modified by</th></tr></thead>
+    <tbody>
+      <tr><td>prepare.py</td><td>Data prep, tokenizer, dataloader, eval</td><td>Human (once)</td></tr>
+      <tr><td>train.py</td><td>GPT model, optimizer (Muon + AdamW), training loop</td><td>Agent</td></tr>
+      <tr><td>program.md</td><td>Agent instructions, research direction</td><td>Human</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-4">
+  <div class="section-label">
+    <span class="section-type">FRAMEWORK</span>
+    <span class="section-format">&middot; Table</span>
+  </div>
+  <h2>Design Choices</h2>
+  <table class="data-table">
+    <thead><tr><th>Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Single file to modify</td><td>Scope manageable, diffs reviewable</td></tr>
+      <tr><td>Fixed 5-min time budget</td><td>Experiments comparable regardless of changes; finds optimal model for your platform</td></tr>
+      <tr><td>Self-contained</td><td>One GPU, one file, one metric. No distributed training</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-5">
+  <div class="section-label">
+    <span class="section-type">SEQUENCE</span>
+    <span class="section-format">&middot; Steps</span>
+  </div>
+  <h2>Quick Start</h2>
+  <div class="numbered-steps">
+    <ol>
+      <li>Requires: single NVIDIA GPU (H100 tested), Python 3.10+, uv</li>
+      <li>uv sync (install deps)</li>
+      <li>uv run prepare.py (data + tokenizer, ~2 min, one-time)</li>
+      <li>uv run train.py (test single run, ~5 min)</li>
+      <li>Point Claude/Codex at repo, prompt to read program.md</li>
+    </ol>
+  </div>
+</div>
+
+<div class="section" id="section-6">
+  <div class="section-label">
+    <span class="section-type">PROCESS</span>
+    <span class="section-format">&middot; Checklist</span>
+  </div>
+  <h2>Tuning for Smaller Hardware</h2>
+  <div class="checklist">
+    <div class="group">
+      <div class="group-label">Adjustments for non-H100</div>
+      <div class="item">&#9744;  Use TinyStories dataset (lower entropy, works with smaller models)</div>
+      <div class="item">&#9744;  Decrease vocab_size: 8192 &rarr; 4096/2048/1024/256</div>
+      <div class="item">&#9744;  Lower MAX_SEQ_LEN (down to 256), increase DEVICE_BATCH_SIZE to compensate</div>
+      <div class="item">&#9744;  Decrease EVAL_TOKENS for faster validation</div>
+      <div class="item">&#9744;  Lower DEPTH (default 8 &rarr; 4)</div>
+      <div class="item">&#9744;  Use WINDOW_PATTERN &ldquo;L&rdquo; only (banded &ldquo;SSSL&rdquo; may be inefficient)</div>
+      <div class="item">&#9744;  Lower TOTAL_BATCH_SIZE (powers of 2, down to 2^14)</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="section-7">
+  <div class="section-label">
+    <span class="section-type">CATALOG</span>
+    <span class="section-format">&middot; Reference</span>
+  </div>
+  <h2>Notable Forks</h2>
+  <table class="data-table">
+    <thead><tr><th>Fork</th><th>Platform</th></tr></thead>
+    <tbody>
+      <tr><td>miolini/autoresearch-macos</td><td>macOS</td></tr>
+      <tr><td>trevin-creator/autoresearch-mlx</td><td>macOS (MLX)</td></tr>
+      <tr><td>jsegov/autoresearch-win-rtx</td><td>Windows</td></tr>
+      <tr><td>andyluo7/autoresearch</td><td>AMD</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    let lastActiveId = null;
+    var sectionTops = [];
+    sections.forEach(function(section) {
+      sectionTops.push({
+        id: section.id,
+        absTop: section.getBoundingClientRect().top + window.scrollY
+      });
+    });
+    function updateActiveSection() {
+      var scrollY = window.scrollY;
+      var maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) maxScroll = 1;
+      var readPos = (scrollY / maxScroll) * document.body.scrollHeight;
+      var current = sectionTops[0].id;
+      for (var i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].absTop <= readPos) {
+          current = sectionTops[i].id;
+        }
+      }
+      if (current !== lastActiveId) {
+        lastActiveId = current;
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('.sidebar a[href="#' + current + '"]');
+        if (active) active.classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
