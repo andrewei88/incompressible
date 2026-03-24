@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>It's Official: The World Order Has Broken Down — INCMPRSBL</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "—";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <a href="#section-1" class="active"><span class="num">1</span>The Trigger</a>
+<a href="#section-2"><span class="num">2</span>Power > Law</a>
+<a href="#section-3"><span class="num">3</span>5 War Types</a>
+<a href="#section-4"><span class="num">4</span>When Wars Start</a>
+<a href="#section-5"><span class="num">5</span>Avoiding War</a>
+<a href="#section-6"><span class="num">6</span>WWII Pattern</a>
+<a href="#section-7"><span class="num">7</span>War Economics</a>
+<a href="#section-8"><span class="num">8</span>Protect Wealth</a>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <div class="header-top">
+          <h1>It's Official: The World Order Has Broken Down</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="https://x.com/RayDalio/article/1902356553076658434" target="_blank" rel="noopener">x.com (@RayDalio)</a> · 7,106 → 1,050 words · 5 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>30 min</span> saved</span></div>
+      </div>
+
+      <div class="section" id="section-1">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>The Trigger: Munich 2026</h2>
+  <div class="key-points">
+    <ul>
+      <li>At the Munich Security Conference, the post-1945 world order was declared dead. The Security Report 2026 is titled "Under Destruction."</li>
+      <li>Merz (Germany): "The world order as it has stood for decades no longer exists." Macron (France): Europe must prepare for war. Rubio (US): We are in a "new geopolitics era."</li>
+      <li>In Dalio's framework, we are in Stage 6 of the Big Cycle: no rules, might is right, clash of great powers.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT-SEQUENTIAL</span>
+    <span class="section-format">· Chain</span>
+  </div>
+  <h2>Why International Law Fails</h2>
+  <div class="reasoning-chain">
+    <p>Governance requires laws, enforcement, courts, and consequences <span class="arrow">→</span> these either don't exist or are weak between countries <span class="arrow">→</span> international bodies (UN, League of Nations) lack more power than the most powerful countries <span class="arrow">→</span> when individual countries are stronger than collectives, individual countries rule <span class="arrow">→</span> "the international order follows the law of the jungle much more than it follows international law"</p>
+  </div>
+</div>
+
+<div class="section" id="section-3">
+  <div class="section-label">
+    <span class="section-type">CATALOG</span>
+    <span class="section-format">· Reference</span>
+  </div>
+  <h2>Five Types of Inter-State Conflict</h2>
+  <table class="data-table">
+    <thead><tr><th>Type</th><th>Mechanism</th></tr></thead>
+    <tbody>
+      <tr><td>Trade/economic</td><td>Tariffs, import/export restrictions, economic damage</td></tr>
+      <tr><td>Technology</td><td>Control which tech is shared vs. held as national security</td></tr>
+      <tr><td>Geopolitical</td><td>Territory and alliance disputes resolved through negotiation</td></tr>
+      <tr><td>Capital</td><td>Sanctions, cutting off money/credit, blocking capital markets</td></tr>
+      <tr><td>Military</td><td>Actual shooting and deployment of forces</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-4">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>When Wars Start</h2>
+  <div class="key-points">
+    <ul>
+      <li>Greatest risk of military war: both parties have roughly comparable military power AND irreconcilable existential differences. The most explosive current case: US vs. China over Taiwan.</li>
+      <li>The first four war types typically escalate over ~10 years before military war begins. Once shooting starts, all other dimensions are weaponized fully.</li>
+      <li>Wars slip into being "stupid" (costing more than they provide) because of: the prisoner's dilemma, tit-for-tat escalation, the perceived cost of backing down, and fast decisions under misunderstanding.</li>
+      <li>"The two things about war that one can be most confident in are 1) that it won't go as planned and 2) that it will be far worse than imagined."</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-5">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>Principles for Avoiding War</h2>
+  <div class="key-points">
+    <ul>
+      <li>Win-win requires negotiating with consideration for what matters most to each side and trading those things. See through your adversary's eyes. Clearly identify and communicate red lines.</li>
+      <li>Have power, respect power, use power wisely. Power wins over agreements, rules, and laws every time. But "soft power" is often more effective than "hard power" — generosity and trust produce win-win relationships that are far more rewarding than subjugation.</li>
+      <li>Power is best handled like a hidden knife. Showing it usually leads others to build counter-power and escalate. But sometimes showing power prevents a fight.</li>
+      <li>Fight early if your relative power is declining. Fight later if it's rising. If stuck in a lose-lose relationship, get out — preferably by separation, possibly by war.</li>
+      <li>"In war one's ability to withstand pain is even more important than one's ability to inflict pain."</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-6">
+  <div class="section-label">
+    <span class="section-type">SEQUENCE</span>
+    <span class="section-format">· Steps</span>
+  </div>
+  <h2>The WWII Pattern (1929-1945)</h2>
+  <div class="numbered-steps">
+    <ol>
+      <li>1929 crash creates global depression. Nearly all countries face internal wealth conflicts, turning to populist/autocratic/nationalistic leaders — fascist right (Germany, Japan, Italy, Spain) or communist left (USSR, China).</li>
+      <li>US raises tariffs (Smoot-Hawley 1930), which further depresses global conditions. Tariffs benefit protected entities but reduce overall efficiency — a pattern that repeats.</li>
+      <li>Hitler appointed chancellor 1933. German unemployment drops from 25% to zero by 1938, income up 22%, equities up 70% — financed by forcing banks to buy government bonds and Reichsbank monetization. Productive debt works when invested in things that raise productivity.</li>
+      <li>Japan, an island without natural resources, sees exports fall 50%. Goes broke in 1931, abandons gold standard. Turns to military seizure of resources — invades Manchuria (1931), then China (1937).</li>
+      <li>~10 years of economic/tech/capital/geopolitical war precede shooting. Germany tests limits by annexing Austria and part of Czechoslovakia. Japan expands through Southeast Asia.</li>
+      <li>US escalates economic war against Japan: freezes assets, closes Panama Canal, embargoes oil (cutting 80% of Japan's supply). Japan calculates 2 years until oil runs out — must choose between backing down or attacking. Attacks Pearl Harbor Dec 7, 1941.</li>
+      <li>War ends 1945. Axis stock markets close, virtually wiped out when reopened ~5 years later. US stocks extremely strong. New world order established with US at peak power.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="section" id="section-7">
+  <div class="section-label">
+    <span class="section-type">FRAMEWORK</span>
+    <span class="section-format">· Table</span>
+  </div>
+  <h2>What Governments Control During War</h2>
+  <table class="data-table">
+    <thead><tr><th>Control</th><th>Mechanism</th></tr></thead>
+    <tbody>
+      <tr><td>Production</td><td>Government determines what can be produced</td></tr>
+      <tr><td>Consumption</td><td>Rationing of goods and services</td></tr>
+      <tr><td>Trade</td><td>Import/export restrictions</td></tr>
+      <tr><td>Prices &amp; wages</td><td>Price controls, wage caps, profit limits</td></tr>
+      <tr><td>Capital</td><td>Restricted access to financial assets</td></tr>
+      <tr><td>Capital flight</td><td>Blocked ability to move money abroad</td></tr>
+      <tr><td>Debt financing</td><td>Massive debt issuance, monetized by central bank</td></tr>
+      <tr><td>International trade</td><td>Non-credit money (gold) required; credit not accepted</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-8">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>Protecting Wealth in Conflict</h2>
+  <div class="key-points">
+    <ul>
+      <li>Dalio's investment advice: "Sell out of all debt and buy gold." Wars are financed by borrowing and printing money, which devalues both debt and currency. Credit is not trusted between non-allied nations.</li>
+      <li>Protecting wealth during war is inherently difficult: normal economic activity is curtailed, traditionally safe investments aren't safe, capital mobility is limited, and high taxes are imposed. Wealth redistribution to fund war takes priority over preservation.</li>
+      <li>Losing a war typically leads to total wipeout of wealth and power. Axis stock markets closed at war's end, reopened ~5 years later virtually worthless. Allied equities rallied continuously from 1942 onward.</li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector('.sidebar a[href="#' + entry.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+      document.querySelectorAll('.mermaid').forEach(el => {
+        const code = el.getAttribute('data-original') || el.textContent;
+        el.setAttribute('data-original', code);
+        el.removeAttribute('data-processed');
+        el.innerHTML = code;
+      });
+      mermaid.init(undefined, '.mermaid');
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
