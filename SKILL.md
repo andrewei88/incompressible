@@ -65,10 +65,17 @@ Format mapping:
 - argument-parallel → key-points
 - framework → table
 - comparison → table
-- concept → concept-map
+- concept → concept-map (directional/causal relationships) or mindmap (hierarchical/categorical branching)
 - decision-tree → flowchart
 - action-items → checklist
 - sequence → numbered-steps
+- chronology → timeline
+- interaction → sequence-diagram
+- quadrant → quadrant-chart
+- data-breakdown → pie-chart
+- data-comparison → bar-chart
+- transformation → before-after
+- experience → user-journey
 
 Global preference: auto
 
@@ -87,21 +94,57 @@ Identify distinct sections of the article. Each section has one dominant informa
 | argument-parallel | Independent claims, observations, or insights that stand alone |
 | framework | Named components with parallel attributes (each has name + description + purpose, etc.) |
 | comparison | Evaluating options against the same criteria |
-| concept | Ideas defined by relationships to other ideas |
+| concept | Ideas defined by relationships to other ideas (use concept-map when directional/causal, mindmap when hierarchical/categorical) |
 | decision-tree | If/then branching logic, "do X when Y, do Z when W" |
 | action-items | Tasks, to-dos, things to do |
 | sequence | Ordered events where order is rigid and matters |
 | catalog | A list or collection of items meant as a reference (e.g., "100 mental models", "50 cognitive biases") |
+| chronology | Events anchored to dates or time periods (history of X, evolution of Y) |
+| interaction | Back-and-forth between entities: negotiations, API flows, conversations, cause-response chains between actors |
+| quadrant | 2x2 matrix frameworks: effort/impact, risk/reward, Eisenhower matrix |
+| data-breakdown | Percentages, proportions, share of a whole (budget splits, market share, survey results) |
+| data-comparison | Numeric values compared across categories (benchmarks, scores, rankings with numbers) |
+| transformation | Before/after, old vs new, problem vs solution — two-state comparisons |
+| experience | User journeys, day-in-the-life narratives, onboarding flows, emotional arcs through a process |
+
+**Framework vs concept rule:** If the named components only have parallel attributes (name, description, purpose) and no relationships between them, use `framework → table`. If the components interact, cause each other, compensate for each other, or fail in specific ways without each other, use `concept → concept-map` or `concept → mindmap`. The arrow test: would removing arrows from a diagram lose information? If yes, it's a concept. Use concept-map (graph TD) for directional/causal relationships. Use mindmap for hierarchical branching without directionality (e.g., a central topic with categories and subcategories). **Default to visual formats when the content has relationships.** Tables should be the fallback for truly flat, parallel data, not the default for any named set of things.
 
 **Argument subdivision rule:** When you encounter reasoning, ask: does each point depend on the previous? If yes → argument-sequential. If each point stands alone → argument-parallel. Most "here's why X works" or "here's what fails" sections are parallel.
 
+**Ordered content disambiguation:** Three formats handle ordered content. Pick based on what carries the meaning:
+- `sequence → numbered-steps`: Order matters but time markers don't. "First do X, then Y, then Z."
+- `chronology → timeline`: Dates or time periods are load-bearing. "In 2008 X happened, by 2012 Y had changed." If removing the dates loses meaning, it's a timeline.
+- `experience → user-journey`: The emotional/satisfaction dimension matters. "Onboarding was easy (5/5), then hit a wall at setup (1/5)." If the article describes how something *felt* at each stage, it's a journey.
+
+**Cycle detection rule:** If a sequence's final step feeds back into the first step (creating a loop), use `flowchart` instead of `numbered-steps`. Numbered steps imply a linear process with a terminus. Cycles are fundamentally different: the looping structure IS the insight. Look for language like "restarting the cycle," "feeds back into," "repeats," or any final step that references the first. A flowchart with an arrow from last node back to first communicates the loop visually; numbered steps hide it.
+
+**Dated events rule:** If ordered events include specific dates or years (1929, 2008, "by March"), use `timeline` instead of `numbered-steps`. The test: would removing the dates lose information? "1929 crash → 1933 Hitler → 1941 Pearl Harbor" loses meaning without dates. "First install, then configure, then deploy" doesn't. Dates are load-bearing → timeline. Order-only → numbered-steps.
+
+**Chart disambiguation:** Three chart types serve different data relationships:
+- `data-breakdown → pie-chart`: Parts of a whole that sum to 100%. "40% went to X, 35% to Y, 25% to Z."
+- `data-comparison → bar-chart`: Comparing quantities across categories that don't need to sum. "Framework A scored 85, B scored 62, C scored 90."
+- `framework → table`: Numbers exist but aren't the primary content. "Framework A is fast and simple. Framework B is slow but flexible." If removing the numbers wouldn't change the reader's takeaway, use a table.
+
+**Interaction disambiguation:** Two formats handle relationships between entities:
+- `interaction → sequence-diagram`: Multiple named actors exchanging messages or actions in order. "Client sends request to Server, Server queries Database, Database returns results." The actors and their exchanges are the point.
+- `concept → concept-map`: Concepts relate to each other but aren't actors exchanging messages. The relationships are structural, not temporal.
+
+**Comparison disambiguation:** Three formats handle comparisons:
+- `comparison → table`: Evaluating multiple options against the same set of criteria. Classic feature comparison.
+- `quadrant → quadrant-chart`: Exactly two dimensions that create four meaningful zones. Both axes must be continuous and the quadrant labels must carry meaning (e.g., "high effort / low impact" = don't do it).
+- `transformation → before-after`: Exactly two states of the same thing. Not comparing options but showing change.
+
 **Catalog rule:** If the article is primarily a catalog or reference list (many items with brief descriptions), use `catalog` type with `reference-table` format. Preserve breadth (all items) and compress depth (shorten descriptions). Don't compress a catalog into key themes — the value IS the list.
+
+**Visual format preference:** When a section could work as either text or visual, prefer the visual format. A flowchart communicates decision logic faster than prose. A timeline communicates chronology faster than numbered steps. The reader opened a compressed article to save time. Visual formats save more time than text.
 
 **Short article rule:** For articles under 2000 words with a single core argument, consider whether a single section (no breakdown) is more appropriate than forced multi-section structure.
 
 **Already-compressed rule:** If the original is under 300 words and already structured as a list, table, or numbered items, skip compression. Tell the user: "This content is already near its incompressible form" and render it directly in the appropriate format (usually catalog/reference-table) without attempting to reduce word count.
 
 ### Compression rules
+
+**Primary metric: accuracy.** The compression must be a faithful representation of the original. Every claim, framing, and characterization in the output must trace back to something the author actually wrote. Completeness (covering all key points) and compression ratio (brevity) matter, but never at the cost of accuracy. When accuracy and completeness conflict (e.g., adding context risks misrepresenting the author's intent), choose accuracy. When accuracy and compression conflict (e.g., the author's exact phrasing is needed to avoid distortion), keep the original wording.
 
 **Keep:**
 - Core claims and arguments (the "so what")
@@ -128,6 +171,7 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Each prose paragraph should contain ONE idea. Multiple ideas → split into separate paragraphs or switch to key-points
 - Table cells should be ≤15 words. If a cell needs more, the section may be better as key-points
 - Prefer chains (A → B → C) over prose when logical steps can be expressed as arrows without losing meaning
+- **Table semantic coherence:** Every row in a table must be an instance of the category declared by the section title. If a table is titled "Kill Criteria," every row must be a kill criterion from the original article. If titled "Evidence," every row must be evidence. Don't repurpose unrelated content to fill rows just because it fits the column structure. A true claim in the wrong structural slot is still a misrepresentation of the original's argument.
 
 **Style rules:**
 - Use short, concise sentences. If a sentence has a comma, ask whether it should be two sentences.
@@ -151,9 +195,19 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 3. **Most-quotable line test:** Identify the 1-2 lines from the original that a reader would most likely quote when sharing it. If those lines don't appear (verbatim or near-verbatim) in the compression, add them. These lines carry disproportionate meaning-per-word — they're often more compressed than anything you'd write as a summary.
 
+4. **Faithfulness check:** Read every claim in the compression and ask: "Did the author say this, or did I infer it?" If a phrase, analogy, framework name, or characterization does not appear in the original, remove it. Compression means selecting and condensing the author's words, not adding your own. Specific patterns to catch:
+   - Adding analogies the author didn't use (e.g., calling something "a Dunning-Kruger effect" when the author never used that term)
+   - Upgrading hedged language to definitive claims ("might" → "will")
+   - Attributing a named framework or concept the author didn't reference
+   - Inserting causal links the author left ambiguous
+   - Flattening probabilistic or hedged claims when compressing into table cells. ">50% probability by 2040" is not "Prediction: 2040". Tables compress phrasing but must not compress uncertainty. If the author hedged, the compression must hedge.
+   The compression must be a faithful subset of the original's claims, not a remix.
+
 **Visual/interactive content:** For articles with significant visual, interactive, or multimedia content (interactive demos, data visualizations, diagrams essential to understanding), add a `note` field to the top-level JSON output: `"note": "This compression captures text content only. The original includes [interactive demos / diagrams / videos] that cannot be represented in text."` This sets reader expectations without pretending the compression is complete.
 
 **Test:** if removing a sentence changes what the reader would do or believe, it stays. If it only changes how entertained or persuaded they feel, it goes.
+
+**Autoresearch after compression:** After the post-compression scan, run single-variable iteration to fix any issues found. For each issue: make ONE change, verify it improves accuracy or completeness without degrading compression ratio, keep or discard. Stop when no single change can improve overall quality by a meaningful margin (delta <0.3 on a 10-point scale). This is not optional. Every compression gets at least one autoresearch pass before rendering to HTML.
 
 ### Output JSON schema
 
@@ -222,6 +276,14 @@ Produce this exact JSON structure (do not wrap in markdown code fences, output r
       }
     },
     {
+      "type": "concept",
+      "format": "mindmap",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "mindmap\n  root((Central Concept))\n    Branch A\n      Sub A1\n      Sub A2\n    Branch B\n      Sub B1"
+      }
+    },
+    {
       "type": "decision-tree",
       "format": "flowchart",
       "title": "Section Title",
@@ -239,6 +301,70 @@ Produce this exact JSON structure (do not wrap in markdown code fences, output r
           ["Item 1", "Brief description"],
           ["Item 2", "Brief description"]
         ]
+      }
+    },
+    {
+      "type": "chronology",
+      "format": "timeline",
+      "title": "Section Title",
+      "content": {
+        "events": [
+          { "year": "2020", "items": ["Event A"] },
+          { "year": "2021", "items": ["Event B", "Event C"] },
+          { "year": "2023", "items": ["Event D"] }
+        ]
+      }
+    },
+    {
+      "type": "interaction",
+      "format": "sequence-diagram",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "sequenceDiagram\n  Actor A->>Actor B: Action 1\n  Actor B-->>Actor A: Response\n  Actor A->>Actor C: Action 2"
+      }
+    },
+    {
+      "type": "quadrant",
+      "format": "quadrant-chart",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "quadrantChart\n  title Title\n  x-axis Low X --> High X\n  y-axis Low Y --> High Y\n  quadrant-1 Q1 Label\n  quadrant-2 Q2 Label\n  quadrant-3 Q3 Label\n  quadrant-4 Q4 Label\n  Item A: [0.8, 0.7]\n  Item B: [0.3, 0.6]"
+      }
+    },
+    {
+      "type": "data-breakdown",
+      "format": "pie-chart",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "pie title Distribution\n  \"Category A\" : 45\n  \"Category B\" : 30\n  \"Category C\" : 25"
+      }
+    },
+    {
+      "type": "data-comparison",
+      "format": "bar-chart",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "xychart-beta\n  title Comparison\n  x-axis [\"A\", \"B\", \"C\", \"D\"]\n  y-axis \"Value\" 0 --> 100\n  bar [85, 62, 45, 90]"
+      }
+    },
+    {
+      "type": "transformation",
+      "format": "before-after",
+      "title": "Section Title",
+      "content": {
+        "headers": ["Before", "After"],
+        "rows": [
+          ["Old state 1", "New state 1"],
+          ["Old state 2", "New state 2"]
+        ]
+      }
+    },
+    {
+      "type": "experience",
+      "format": "user-journey",
+      "title": "Section Title",
+      "content": {
+        "mermaid": "journey\n  title User Journey\n  section Phase 1\n    Step A: 5: Actor\n    Step B: 3: Actor\n  section Phase 2\n    Step C: 1: Actor\n    Step D: 4: Actor"
       }
     }
   ]
@@ -357,12 +483,12 @@ Generate the HTML for each section based on its format. Each section div must in
 </div>
 ```
 
-**flowchart / concept-map:**
+**flowchart / concept-map / mindmap:**
 ```html
 <div class="section" id="section-N">
   <div class="section-label">
     <span class="section-type">{{TYPE}}</span>
-    <span class="section-format">· {{Flowchart|Concept Map}}</span>
+    <span class="section-format">· {{Flowchart|Concept Map|Mind Map}}</span>
   </div>
   <h2>{{TITLE}}</h2>
   <div class="mermaid-container">
@@ -386,6 +512,55 @@ Generate the HTML for each section based on its format. Each section div must in
 </div>
 ```
 
+**timeline** (custom HTML, not Mermaid — simpler, more legible, no external dependency):
+```html
+<div class="section" id="section-N">
+  <div class="section-label">
+    <span class="section-type">{{TYPE}}</span>
+    <span class="section-format">· Timeline</span>
+  </div>
+  <h2>{{TITLE}}</h2>
+  <div class="timeline">
+    <!-- For each event: -->
+    <div class="timeline-event">
+      <div class="timeline-year">{{YEAR}}</div>
+      <ul class="timeline-details">
+        <li>{{ITEM}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+```
+
+**sequence-diagram / quadrant-chart / pie-chart / bar-chart / user-journey** (all Mermaid-based — use same container as flowchart/concept-map):
+```html
+<div class="section" id="section-N">
+  <div class="section-label">
+    <span class="section-type">{{TYPE}}</span>
+    <span class="section-format">· {{Sequence|Quadrant|Pie Chart|Bar Chart|Journey}}</span>
+  </div>
+  <h2>{{TITLE}}</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">{{MERMAID_CODE}}</pre>
+  </div>
+</div>
+```
+
+**before-after** (uses table styling with two columns):
+```html
+<div class="section" id="section-N">
+  <div class="section-label">
+    <span class="section-type">{{TYPE}}</span>
+    <span class="section-format">· Before / After</span>
+  </div>
+  <h2>{{TITLE}}</h2>
+  <table class="data-table">
+    <thead><tr><th>Before</th><th>After</th></tr></thead>
+    <tbody><!-- tr/td for each row --></tbody>
+  </table>
+</div>
+```
+
 Replace the template placeholders:
 - `{{ARTICLE_TITLE}}` — from JSON `title`
 - `{{SOURCE}}` — display text for the source (e.g., "x.com (@RayDalio)")
@@ -394,7 +569,7 @@ Replace the template placeholders:
 - `{{ORIGINAL_WORDS}}` — from JSON `originalWordCount`, formatted with commas (e.g., "7,106")
 - `{{COMPRESSED_WORDS}}` — count all words in the rendered sections, formatted with commas
 - `{{TIME_SAVED}}` — per-article time saved: `(originalWordCount - compressedWordCount) / 200`, formatted as "X min" (under 60) or "X.Y hrs" (60+). Use 0 min floor (never negative)
-- `{{MERMAID_SCRIPTS}}` — if any section uses `concept-map` or `flowchart` format, replace with `<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>`. Otherwise replace with empty string. This avoids loading a ~700KB library on pages that don't need it.
+- `{{MERMAID_SCRIPTS}}` — if any section uses a Mermaid-based format (`concept-map`, `flowchart`, `mindmap`, `sequence-diagram`, `quadrant-chart`, `pie-chart`, `bar-chart`, `user-journey`), replace with `<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>`. Otherwise replace with empty string. Note: `timeline` is custom HTML, not Mermaid, so it does not trigger this script.
 - `{{SIDEBAR_NAV}}` — the sidebar navigation links
 - `{{SECTIONS}}` — the concatenated section HTML
 

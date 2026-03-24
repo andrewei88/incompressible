@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>They Should Be Afraid of the People Who Buy the AI — INCMPRSBL</title>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <title>How to Think for Yourself — INCMPRSBL</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -168,17 +167,6 @@
       text-decoration: underline;
     }
 
-    /* Back link */
-    .back-link {
-      display: inline-block;
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 12px;
-      margin-bottom: 12px;
-      transition: color 0.15s;
-    }
-    .back-link:hover { color: var(--accent); }
-
     /* Section */
     .section {
       padding: 24px 32px;
@@ -206,6 +194,61 @@
       font-size: 19px;
       font-weight: 600;
       margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
     }
 
     /* Key points (15px) */
@@ -237,33 +280,43 @@
       color: var(--text-dim);
     }
 
-    /* Table (14px) */
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
       font-size: 14px;
-    }
-    .data-table thead tr {
-      border-bottom: 1px solid var(--border);
-    }
-    .data-table th {
-      text-align: left;
-      padding: 9px 12px 9px 0;
-      color: var(--text-dim);
-      font-weight: 400;
-      font-size: 12px;
-    }
-    .data-table td {
-      padding: 9px 12px 9px 0;
       color: var(--text);
     }
-    .data-table td:first-child {
-      color: var(--text-bright);
-      font-weight: 500;
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
     }
-    .data-table tbody tr {
-      border-bottom: 1px solid var(--border-faint);
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
     }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
 
     /* Scroll highlight */
     .section:target h2 {
@@ -284,88 +337,89 @@
 <body>
   <div class="layout">
     <nav class="sidebar">
-      <a href="#section-1" class="active"><span class="num">1</span>The Grift</a>
-<a href="#section-2"><span class="num">2</span>The Tools</a>
-<a href="#section-3"><span class="num">3</span>Metrics Loop</a>
-<a href="#section-4"><span class="num">4</span>Weaponized Fear</a>
-<a href="#section-5"><span class="num">5</span>The Inversion</a>
+      <a href="#section-1" class="active"><span class="num">1</span>Career Match</a>
+<a href="#section-2"><span class="num">2</span>Three Parts</a>
+<a href="#section-3"><span class="num">3</span>How They Interact</a>
+<a href="#section-4"><span class="num">4</span>Cultivation</a>
     </nav>
 
     <div class="container">
       <div class="header">
-        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
+        <a href="index.html" class="back-link">← INCMPRSBL</a>
         <div class="header-top">
-          <h1>They Should Be Afraid of the People Who Buy the AI</h1>
+          <h1>How to Think for Yourself</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="#" target="_blank" rel="noopener">x.com (@gothburz)</a> · 1,480 &rarr; 280 words · 2 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>6 min</span> saved</span></div>
+        <div class="meta"><a href="https://paulgraham.com/think.html" target="_blank" rel="noopener">paulgraham.com</a> · 2,800 → 325 words · 2 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>13 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
   <div class="section-label">
-    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-type">Argument</span>
     <span class="section-format">· Key Points</span>
   </div>
-  <h2>The Grift</h2>
+  <h2>The Career Match Problem</h2>
   <div class="key-points">
     <ul>
-      <li>The "Chief AI Transformation Officer" role is 11 months old. The job: buy software nobody asked for and measure whether people use it. They never use it. Three promotions.</li>
-      <li>$14.2M spent on AI tools last year. Selection criteria: a 40-page matrix, three vendor dinners, and a 2024 Gartner printout taped to the wall. Two of the four quadrant leaders no longer exist.</li>
-      <li>95% of AI pilots fail to deliver measurable ROI. This stat is in the same Gartner report. He didn't print that page.</li>
+      <li>Some work demands novelty (science, investing, startups, essays). Most work only demands correctness. The distinction is sharp.</li>
+      <li>Independent-mindedness is largely innate. Choosing work that mismatches your disposition makes you miserable.</li>
+      <li>Schools test intelligence constantly but never test independent-mindedness. They sometimes suppress it.</li>
+      <li>Conventional people experience their conformity as independent thought. The most conventional are the most confident they're independent.</li>
+      <li>Nerds often succeed at independent thinking because they're unaware of conventions, making conformity impossible. You can't defer to beliefs you don't know about.</li>
     </ul>
   </div>
 </div>
 
 <div class="section" id="section-2">
   <div class="section-label">
-    <span class="section-type">FRAMEWORK</span>
+    <span class="section-type">Framework</span>
     <span class="section-format">· Table</span>
   </div>
-  <h2>What the $14.2M Tools Actually Do</h2>
+  <h2>Three Components</h2>
   <table class="data-table">
-    <thead><tr><th>Tool</th><th>Claimed Function</th><th>Actual Function</th><th>Cost</th></tr></thead>
+    <thead><tr><th>Component</th><th>What It Is</th><th>Key Insight</th></tr></thead>
     <tbody>
-      <tr><td>Email summarizer</td><td>Summarize emails</td><td>Repeats first 2 sentences in a blue box</td><td>$4.1M</td></tr>
-      <tr><td>Meeting notes</td><td>"Key Takeaways"</td><td>Transcript with formatting; flags non-decisions as decisions</td><td>$22/user/mo</td></tr>
-      <tr><td>Slack autocomplete</td><td>Predict next words</td><td>81% of suggestions are "sounds good to me"</td><td>$8/seat/mo</td></tr>
+      <tr><td>Fastidiousness about truth</td><td>Calibrating belief carefully instead of snapping to certainty or impossibility</td><td>Without this, you get conspiracy theorists: "subject to a much more exacting master than mere convention"</td></tr>
+      <tr><td>Resistance to being told what to think</td><td>Active delight in subversive ideas, not mere negation</td><td>Correlates with humor. Most innate of the three. Visible in children early.</td></tr>
+      <tr><td>Curiosity</td><td>Persistent questioning that never stops at convention</td><td>Conventional people learned conventions then stopped asking. Independent people are "gluttons of curiosity, who keep eating even after they're full."</td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="section" id="section-3">
   <div class="section-label">
-    <span class="section-type">ARGUMENT-SEQUENTIAL</span>
-    <span class="section-format">· Chain</span>
+    <span class="section-type">Concept</span>
+    <span class="section-format">· Concept Map</span>
   </div>
-  <h2>The Metrics Loop</h2>
-  <div class="reasoning-chain">
-    <p>Build "AI Fluency Index" from login frequency + training quiz + undefined "AI-forward mindset" rating <span class="arrow">&rarr;</span> managers don't understand rubric, give everyone 3/5 <span class="arrow">&rarr;</span> report "78% meet expectations" to board <span class="arrow">&rarr;</span> nobody is fluent, but the number exists <span class="arrow">&rarr;</span> number justifies budget <span class="arrow">&rarr;</span> budget funds more tools <span class="arrow">&rarr;</span> tools generate more logins <span class="arrow">&rarr;</span> logins are "adoption"</p>
+  <h2>How the Three Components Interact</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">graph TD
+    F["Fastidiousness about Truth<br/><i>Calibrate belief carefully</i>"] -->|creates space for| N["Novel Ideas"]
+    R["Resistance to Being Told<br/>What to Think<br/><i>Delight in subversion</i>"] -->|creates space for| N
+    C["Curiosity<br/><i>Never stop questioning</i>"] -->|fills space with| N
+    F -->|without this| CT["Conspiracy Theorists<br/><i>Subject to a more exacting<br/>master than convention</i>"]
+    R -->|without this| CONF["Conformity<br/><i>Conventional thought<br/>experienced as independent</i>"]
+    C -->|without this| STAG["Stagnation<br/><i>Learned conventions,<br/>stopped asking</i>"]
+    N -->|expressed as| SUB["Openly Subversive"]
+    N -->|expressed as| QC["Quietly Curious"]
+    N -->|all share| SH["The Secret Handshake"]</pre>
   </div>
 </div>
 
 <div class="section" id="section-4">
   <div class="section-label">
-    <span class="section-type">ARGUMENT-PARALLEL</span>
+    <span class="section-type">Argument</span>
     <span class="section-format">· Key Points</span>
   </div>
-  <h2>Weaponized Anxiety</h2>
+  <h2>How to Cultivate It</h2>
   <div class="key-points">
     <ul>
-      <li>57% of employees report AI replacement anxiety. He commissioned the survey, then put the number on slide 6 under "Urgency Indicators." Their fear is his business case.</li>
-      <li>A senior analyst presented a time study showing 11 min/day net productivity loss from autocomplete. He forwarded it to HR as "change resistance." She received a meeting titled "Aligning with Organizational Transformation Priorities." She stopped presenting time studies.</li>
-      <li>Training quiz includes: "True or false: AI can help improve your daily workflow." The answer is true. It was true before the tools existed.</li>
+      <li>Surround yourself with independent thinkers. They self-segregate when possible. Even one or two confidants help.</li>
+      <li>Seek people with unusual knowledge, not just demographic diversity. Read history to triangulate past perspectives against present orthodoxy.</li>
+      <li>Actively ask "Is that true?" about accepted ideas. Treat it as a puzzle, not tedious criticism. Notice how ideas spread through groups like waves. "Unfashionable ideas are disproportionately likely to lead somewhere interesting."</li>
+      <li>Indulge curiosity. It increases rather than sates. "Questions lead to more questions."</li>
+      <li>Rather than "do what you love," consider "do what you're curious about." Curiosity is a better compass than passion.</li>
     </ul>
-  </div>
-</div>
-
-<div class="section" id="section-5">
-  <div class="section-label">
-    <span class="section-type">ARGUMENT-SEQUENTIAL</span>
-    <span class="section-format">· Chain</span>
-  </div>
-  <h2>The Inversion</h2>
-  <div class="reasoning-chain">
-    <p>Workers fear AI will replace them <span class="arrow">&rarr;</span> but the AI summarizes emails by repeating them and autocompletes "sounds good to me" <span class="arrow">&rarr;</span> the real threat is the executive who bought the tools, made training mandatory, tied fluency to performance reviews, and labeled dissent as "resistance" <span class="arrow">&rarr;</span> they are afraid of the wrong thing</p>
   </div>
 </div>
 
@@ -421,14 +475,16 @@
       html.dataset.theme = newTheme;
       updateToggleIcon(newTheme);
       localStorage.setItem('incmprsbl-theme', newTheme);
-      mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
-      document.querySelectorAll('.mermaid').forEach(el => {
-        const code = el.getAttribute('data-original') || el.textContent;
-        el.setAttribute('data-original', code);
-        el.removeAttribute('data-processed');
-        el.innerHTML = code;
-      });
-      mermaid.init(undefined, '.mermaid');
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
     }
 
     // Restore saved theme
@@ -437,7 +493,7 @@
       if (saved && saved !== document.documentElement.dataset.theme) {
         document.documentElement.dataset.theme = saved;
         updateToggleIcon(saved);
-        if (saved === 'light') {
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
           mermaid.initialize({ startOnLoad: true, theme: 'default' });
         }
       }

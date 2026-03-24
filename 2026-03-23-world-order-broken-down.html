@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>It's Official: The World Order Has Broken Down — INCMPRSBL</title>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
-  <style>
+<style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     /* Theme variables */
@@ -300,12 +298,52 @@
       font-size: 13px;
     }
 
-    /* Mermaid diagrams */
-    .mermaid-container {
-      background: var(--bg-subtle);
-      border-radius: 6px;
-      padding: 16px;
-      overflow-x: auto;
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
     }
 
     /* Back link */
@@ -355,7 +393,7 @@
           <h1>It's Official: The World Order Has Broken Down</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://x.com/RayDalio/article/1902356553076658434" target="_blank" rel="noopener">x.com (@RayDalio)</a> · 7,106 → 1,050 words · 5 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>30 min</span> saved</span></div>
+        <div class="meta"><a href="https://x.com/RayDalio/status/2022788750388998543" target="_blank" rel="noopener">x.com (@RayDalio)</a> · 7,106 → 1,050 words · 5 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>30 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
@@ -412,6 +450,7 @@
     <ul>
       <li>Greatest risk of military war: both parties have roughly comparable military power AND irreconcilable existential differences. The most explosive current case: US vs. China over Taiwan.</li>
       <li>The first four war types typically escalate over ~10 years before military war begins. Once shooting starts, all other dimensions are weaponized fully.</li>
+      <li>Tariffs reduce overall efficiency but benefit protected entities and create political support for leaders who impose them. This is why bad economic policy persists: the beneficiaries are concentrated and motivated; the losers are diffuse.</li>
       <li>Wars slip into being "stupid" (costing more than they provide) because of: the prisoner's dilemma, tit-for-tat escalation, the perceived cost of backing down, and fast decisions under misunderstanding.</li>
       <li>"The two things about war that one can be most confident in are 1) that it won't go as planned and 2) that it will be far worse than imagined."</li>
     </ul>
@@ -437,20 +476,75 @@
 
 <div class="section" id="section-6">
   <div class="section-label">
-    <span class="section-type">SEQUENCE</span>
-    <span class="section-format">· Steps</span>
+    <span class="section-type">Chronology</span>
+    <span class="section-format">· Timeline</span>
   </div>
   <h2>The WWII Pattern (1929-1945)</h2>
-  <div class="numbered-steps">
-    <ol>
-      <li>1929 crash creates global depression. Nearly all countries face internal wealth conflicts, turning to populist/autocratic/nationalistic leaders — fascist right (Germany, Japan, Italy, Spain) or communist left (USSR, China).</li>
-      <li>US raises tariffs (Smoot-Hawley 1930), which further depresses global conditions. Tariffs benefit protected entities but reduce overall efficiency — a pattern that repeats.</li>
-      <li>Hitler appointed chancellor 1933. German unemployment drops from 25% to zero by 1938, income up 22%, equities up 70% — financed by forcing banks to buy government bonds and Reichsbank monetization. Productive debt works when invested in things that raise productivity.</li>
-      <li>Japan, an island without natural resources, sees exports fall 50%. Goes broke in 1931, abandons gold standard. Turns to military seizure of resources — invades Manchuria (1931), then China (1937).</li>
-      <li>~10 years of economic/tech/capital/geopolitical war precede shooting. Germany tests limits by annexing Austria and part of Czechoslovakia. Japan expands through Southeast Asia.</li>
-      <li>US escalates economic war against Japan: freezes assets, closes Panama Canal, embargoes oil (cutting 80% of Japan's supply). Japan calculates 2 years until oil runs out — must choose between backing down or attacking. Attacks Pearl Harbor Dec 7, 1941.</li>
-      <li>War ends 1945. Axis stock markets close, virtually wiped out when reopened ~5 years later. US stocks extremely strong. New world order established with US at peak power.</li>
-    </ol>
+  <div class="timeline">
+    <div class="timeline-event">
+      <div class="timeline-year">1929</div>
+      <ul class="timeline-details">
+        <li>Stock market crash</li>
+        <li>Global depression begins</li>
+        <li>Countries turn to populist/autocratic leaders</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1930</div>
+      <ul class="timeline-details">
+        <li>US raises tariffs (Smoot-Hawley)</li>
+        <li>Further depresses global trade</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1931</div>
+      <ul class="timeline-details">
+        <li>Japan goes broke, abandons gold standard</li>
+        <li>Japan invades Manchuria</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1933</div>
+      <ul class="timeline-details">
+        <li>Hitler appointed chancellor</li>
+        <li>Fascism defined: autocratic + capitalist + collectivist</li>
+        <li>German unemployment drops from 25% to near zero</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1933-36</div>
+      <ul class="timeline-details">
+        <li>US top tax rate rises from 25% to 75%, stock market returns 200%</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1937</div>
+      <ul class="timeline-details">
+        <li>Japan invades China</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1938</div>
+      <ul class="timeline-details">
+        <li>Germany annexes Austria, part of Czechoslovakia</li>
+        <li>~10 years of economic/tech/capital war precede shooting</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1941</div>
+      <ul class="timeline-details">
+        <li>US freezes Japanese assets, embargoes oil (80% of supply)</li>
+        <li>Japan attacks Pearl Harbor (Dec 7)</li>
+      </ul>
+    </div>
+    <div class="timeline-event">
+      <div class="timeline-year">1945</div>
+      <ul class="timeline-details">
+        <li>War ends</li>
+        <li>Axis stock markets wiped out</li>
+        <li>New world order established with US at peak power</li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -542,14 +636,6 @@
       html.dataset.theme = newTheme;
       updateToggleIcon(newTheme);
       localStorage.setItem('incmprsbl-theme', newTheme);
-      mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
-      document.querySelectorAll('.mermaid').forEach(el => {
-        const code = el.getAttribute('data-original') || el.textContent;
-        el.setAttribute('data-original', code);
-        el.removeAttribute('data-processed');
-        el.innerHTML = code;
-      });
-      mermaid.init(undefined, '.mermaid');
     }
 
     // Restore saved theme
@@ -558,9 +644,6 @@
       if (saved && saved !== document.documentElement.dataset.theme) {
         document.documentElement.dataset.theme = saved;
         updateToggleIcon(saved);
-        if (saved === 'light') {
-          mermaid.initialize({ startOnLoad: true, theme: 'default' });
-        }
       }
     })();
   </script>

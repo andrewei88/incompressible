@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RTO Is About Control, Not Productivity — INCMPRSBL</title>
+  <title>The AI Revolution: Road to Superintelligence — INCMPRSBL</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
   <style>
@@ -308,6 +308,54 @@
       overflow-x: auto;
     }
 
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
+    }
+
     /* Back link */
     .back-link {
       display: inline-block;
@@ -338,79 +386,153 @@
 <body>
   <div class="layout">
     <nav class="sidebar">
-      <a href="#section-1" class="active"><span class="num">1</span>Real Purpose</a>
-<a href="#section-2"><span class="num">2</span>Metrics Loop</a>
-<a href="#section-3"><span class="num">3</span>Human Cost</a>
-<a href="#section-4"><span class="num">4</span>The Quiet Part</a>
+      <a href="#section-1" class="active"><span class="num">1</span>Blind Spots</a>
+      <a href="#section-2"><span class="num">2</span>Three Calibers</a>
+      <a href="#section-3"><span class="num">3</span>Hardware Race</a>
+      <a href="#section-4"><span class="num">4</span>Paths to AGI</a>
+      <a href="#section-5"><span class="num">5</span>The Stakes</a>
     </nav>
 
     <div class="container">
       <div class="header">
-        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
         <div class="header-top">
-          <h1>RTO Is About Control, Not Productivity</h1>
+          <h1>The AI Revolution: Road to Superintelligence</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="#" target="_blank" rel="noopener">x.com (@PeterGirnus)</a> · 1,120 → 195 words · 1 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>5 min</span> saved</span></div>
+        <div class="meta"><a href="https://waitbutwhy.com/2015/01/artificial-intelligence-revolution-1.html" target="_blank" rel="noopener">waitbutwhy.com</a> &middot; 8,000 &rarr; 390 words &middot; 3 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>38 min</span> saved</span></div>
       </div>
 
+      <!-- Section 1: Why We Can't See It Coming -->
       <div class="section" id="section-1">
-  <div class="section-label">
-    <span class="section-type">ARGUMENT-PARALLEL</span>
-    <span class="section-format">· Key Points</span>
-  </div>
-  <h2>The Real Purpose</h2>
-  <div class="key-points">
-    <ul>
-      <li>RTO mandates are about executive control and visibility, not productivity or culture</li>
-      <li>"Serendipitous collisions" and "culture" are unfalsifiable justifications — chosen because they can't be measured or disproved</li>
-      <li>Executives who mandate RTO exempt themselves ("strategic leaders require location flexibility")</li>
-    </ul>
-  </div>
-</div>
+        <div class="section-label">
+          <span class="section-type">Argument</span>
+          <span class="section-format">Key Points</span>
+        </div>
+        <h2>Why We Can't See It Coming</h2>
+        <div class="key-points">
+          <ul>
+            <li>Progress accelerates: the 20th century's progress could be achieved in 20 years at year 2000's rate. The 21st century may produce 1,000x the progress of the 20th.</li>
+            <li>Three blind spots: linear thinking (we extrapolate from recent decades), S-curve distortion (exponential curves look linear up close), experience bias (we can't imagine what we haven't lived).</li>
+            <li>"AI has succeeded in doing everything requiring 'thinking' but failed at what people and animals do 'without thinking.'" (Donald Knuth)</li>
+          </ul>
+        </div>
+      </div>
 
-<div class="section" id="section-2">
-  <div class="section-label">
-    <span class="section-type">ARGUMENT-SEQUENTIAL</span>
-    <span class="section-format">· Chain</span>
-  </div>
-  <h2>The Metrics Loop</h2>
-  <div class="reasoning-chain">
-    <p>Empty office is a cost liability <span class="arrow">→</span> mandate RTO to justify $4.2M/yr lease <span class="arrow">→</span> install $380K badge tracking <span class="arrow">→</span> measure badge swipes as proxy for "culture" <span class="arrow">→</span> report presence metrics to board <span class="arrow">→</span> claim success despite zero productivity change</p>
-  </div>
-</div>
+      <!-- Section 2: The Three Calibers of AI -->
+      <div class="section" id="section-2">
+        <div class="section-label">
+          <span class="section-type">Framework</span>
+          <span class="section-format">Table</span>
+        </div>
+        <h2>The Three Calibers of AI</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Definition</th>
+              <th>Current State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ANI (Narrow)</td>
+              <td>Single-domain specialist</td>
+              <td>Everywhere: spam filters, Siri, Google Translate, chess engines, self-driving cars</td>
+            </tr>
+            <tr>
+              <td>AGI (General)</td>
+              <td>Human-level across all domains. "Ability to reason, plan, solve problems, think abstractly."</td>
+              <td>Not yet achieved. Scientists estimate >50% probability by 2040</td>
+            </tr>
+            <tr>
+              <td>ASI (Super)</td>
+              <td>"An intellect much smarter than best human brains in practically every field." (Bostrom)</td>
+              <td>Could follow AGI within decades</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-<div class="section" id="section-3">
-  <div class="section-label">
-    <span class="section-type">ARGUMENT-PARALLEL</span>
-    <span class="section-format">· Key Points</span>
-  </div>
-  <h2>The Human Cost</h2>
-  <div class="key-points">
-    <ul>
-      <li>340 employees flagged "Open to Work" within days; 47 engineers quit month one — reframed as "natural attrition" and "alignment correction"</li>
-      <li>Productivity was up 23% remote but dismissed because "productivity isn't everything"</li>
-      <li>Remaining employees aren't loyal — they have mortgages, school districts, unvested RSUs. On paper it looks like retention.</li>
-      <li>Managers weaponize flexibility by tying personal leave requests to performance reviews</li>
-    </ul>
-  </div>
-</div>
+      <!-- Section 3: The Hardware Race -->
+      <div class="section" id="section-3">
+        <div class="section-label">
+          <span class="section-type">Sequence</span>
+          <span class="section-format">Timeline</span>
+        </div>
+        <h2>The Hardware Race</h2>
+        <div class="timeline">
+          <div class="timeline-event">
+            <div class="timeline-year">1985</div>
+            <ul class="timeline-details">
+              <li>$1,000 computer at one trillionth of human brain power</li>
+            </ul>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-year">1995</div>
+            <ul class="timeline-details">
+              <li>One billionth of human brain</li>
+            </ul>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-year">2005</div>
+            <ul class="timeline-details">
+              <li>One millionth of human brain</li>
+            </ul>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-year">2015</div>
+            <ul class="timeline-details">
+              <li>One thousandth of human brain</li>
+              <li>China's Tianhe-2 hits 34 quadrillion cps (but costs $390M, uses 24MW)</li>
+            </ul>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-year">2025</div>
+            <ul class="timeline-details">
+              <li>$1,000 computer projected to match human brain (~10^16 cps)</li>
+              <li>Human brain: same power on 20 watts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-<div class="section" id="section-4">
-  <div class="section-label">
-    <span class="section-type">ARGUMENT-PARALLEL</span>
-    <span class="section-format">· Key Points</span>
-  </div>
-  <h2>The Quiet Part</h2>
-  <div class="key-points">
-    <ul>
-      <li>CEO was shown a stock photo as evidence RTO worked. Real occupancy: 40% on a good day.</li>
-      <li>Employees commute 45 min to take 7.4 Zoom calls/day they could take from home</li>
-      <li>"Hybrid" = 3 mandatory days + 2 days with mandatory "anchor meetings" that are "strongly encouraged" (mandatory without liability)</li>
-      <li>$2K "collaboration bonus" for badge compliance costs less than turnover — framing coercion as incentive</li>
-    </ul>
-  </div>
-</div>
+      <!-- Section 4: Three Paths to AGI -->
+      <div class="section" id="section-4">
+        <div class="section-label">
+          <span class="section-type">Concept</span>
+          <span class="section-format">Concept Map</span>
+        </div>
+        <h2>Three Paths to AGI</h2>
+        <div class="mermaid-container">
+          <div class="mermaid">
+graph TD
+    AGI["Artificial General<br/>Intelligence"] --> RE["Brain Reverse<br/>Engineering<br/><i>Replicate neural<br/>architecture</i>"]
+    AGI --> EV["Evolutionary<br/>Simulation<br/><i>Genetic algorithms<br/>breed better AI</i>"]
+    AGI --> SI["Self-Improving AI<br/><i>Systems that research<br/>themselves</i>"]
+    RE --> PROG["Progress: flatworm's<br/>302 neurons emulated<br/><i>Human brain: 100 billion</i>"]
+    SI --> IE["Intelligence Explosion<br/><i>Smarter → bigger improvements<br/>→ exponential acceleration</i>"]
+    IE --> ASI["ASI<br/><i>Superintelligence</i>"]
+    ASI --> ADV["Advantages over humans:<br/>10M× faster processors<br/>light-speed communication<br/>expandable memory, 24/7"]
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: The Stakes -->
+      <div class="section" id="section-5">
+        <div class="section-label">
+          <span class="section-type">Argument</span>
+          <span class="section-format">Key Points</span>
+        </div>
+        <h2>The Stakes</h2>
+        <div class="key-points">
+          <ul>
+            <li>Intelligence correlates with dominance. Humans vs animals demonstrates the gap. We cannot comprehend superintelligence any more than a bumblebee understands economics.</li>
+            <li>ASI could cure aging, disease, hunger, and death. It could also end all life on Earth. Both outcomes are plausible.</li>
+            <li>"Will it be a nice God?"</li>
+          </ul>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -464,14 +586,16 @@
       html.dataset.theme = newTheme;
       updateToggleIcon(newTheme);
       localStorage.setItem('incmprsbl-theme', newTheme);
-      mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
-      document.querySelectorAll('.mermaid').forEach(el => {
-        const code = el.getAttribute('data-original') || el.textContent;
-        el.setAttribute('data-original', code);
-        el.removeAttribute('data-processed');
-        el.innerHTML = code;
-      });
-      mermaid.init(undefined, '.mermaid');
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
     }
 
     // Restore saved theme
@@ -480,7 +604,7 @@
       if (saved && saved !== document.documentElement.dataset.theme) {
         document.documentElement.dataset.theme = saved;
         updateToggleIcon(saved);
-        if (saved === 'light') {
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
           mermaid.initialize({ startOnLoad: true, theme: 'default' });
         }
       }
