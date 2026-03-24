@@ -306,6 +306,25 @@
       padding: 16px;
       overflow-x: auto;
     }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
 
     /* Custom HTML timeline */
     .timeline {
