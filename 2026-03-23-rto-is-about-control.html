@@ -417,16 +417,34 @@
   <script>
     const sections = document.querySelectorAll('.section[id]');
     const links = document.querySelectorAll('.sidebar a');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          links.forEach(a => a.classList.remove('active'));
-          const active = document.querySelector('.sidebar a[href="#' + entry.target.id + '"]');
-          if (active) active.classList.add('active');
-        }
+    let lastActiveId = null;
+    var sectionTops = [];
+    sections.forEach(function(section) {
+      sectionTops.push({
+        id: section.id,
+        absTop: section.getBoundingClientRect().top + window.scrollY
       });
-    }, { rootMargin: '0px 0px -60% 0px' });
-    sections.forEach(s => observer.observe(s));
+    });
+    function updateActiveSection() {
+      var scrollY = window.scrollY;
+      var maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) maxScroll = 1;
+      var readPos = (scrollY / maxScroll) * document.body.scrollHeight;
+      var current = sectionTops[0].id;
+      for (var i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].absTop <= readPos) {
+          current = sectionTops[i].id;
+        }
+      }
+      if (current !== lastActiveId) {
+        lastActiveId = current;
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('.sidebar a[href="#' + current + '"]');
+        if (active) active.classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
 
     function updateToggleIcon(theme) {
       const sun = document.querySelector('.sun-icon');
