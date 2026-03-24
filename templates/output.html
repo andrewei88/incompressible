@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ARTICLE_TITLE}} — INCMPRSBL</title>
+  {{MERMAID_SCRIPTS}}
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "—";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      {{SIDEBAR_NAV}}
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <div class="header-top">
+          <h1>{{ARTICLE_TITLE}}</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="{{SOURCE_URL}}" target="_blank" rel="noopener">{{SOURCE}}</a> · {{ORIGINAL_WORDS}} → {{COMPRESSED_WORDS}} words · {{READ_TIME}} min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>{{TIME_SAVED}}</span> saved</span></div>
+      </div>
+
+      {{SECTIONS}}
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    let lastActiveId = sections.length ? sections[0].id : null;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) lastActiveId = entry.target.id;
+      });
+      links.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector('.sidebar a[href="#' + lastActiveId + '"]');
+      if (active) active.classList.add('active');
+    }, { rootMargin: '0px 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
