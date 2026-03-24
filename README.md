@@ -105,6 +105,18 @@ After compression, three checks catch what the first pass misses:
 - **Beneficiary/stakes:** if the original names a person and a specific reward, both must appear
 - **Most-quotable line:** lines a reader would quote when sharing the article are kept verbatim
 
+## How the rules were developed
+
+The compression rules and format mappings were optimized using single-variable iteration (inspired by Karpathy's autoresearch pattern): change one thing in the skill prompt, compress an article, score the output, keep or revert. No batching multiple changes.
+
+Tested against 19 articles across 5 rounds:
+- **Rounds 1-2:** Training on Paul Graham essays to tune compression and format rules
+- **Round 3:** Adversarial testing with edge cases (catalogs, already-compressed content, satirical writing)
+- **Round 4:** Single-variable optimization, one change per cycle
+- **Round 5:** Validation on 7 articles never seen during tuning (Quanta Magazine, technical tutorials, X threads, opinion pieces)
+
+Results: training average 93.5%, validation average 91.1%. Scoring rubric: Accuracy 40%, Format choice 25%, Compression ratio 15%, Style 20%.
+
 ## Output
 
 Each compressed article is a self-contained HTML file saved to `~/Projects/incompressible/`. No server, no database, no build step. Mermaid.js loads via CDN only on pages that use flowcharts or concept maps.
