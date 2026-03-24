@@ -47,17 +47,8 @@
       margin-bottom: 8px;
     }
     .page-header .logo {
-      color: var(--text-bright);
-      font-size: 21px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      transform: scaleX(0.85);
-      transform-origin: left center;
-      display: inline-block;
-      border: 1px solid var(--accent);
-      padding: 3px 6px;
-      margin-left: 4px;
-      margin-right: -8px;
+      height: 28px;
+      display: block;
     }
     .theme-toggle {
       background: none;
@@ -161,7 +152,7 @@
 <body>
   <div class="page">
     <div class="page-header">
-      <span class="logo">INCMPRSBL</span>
+      <img class="logo" src="logo_compressed_cropped.png" alt="INCMPRSBL">
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
     </div>
     <div class="page-meta">{{ARTICLE_COUNT}} articles · <span>{{TOTAL_TIME_SAVED}}</span> saved</div>
