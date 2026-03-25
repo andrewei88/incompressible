@@ -411,7 +411,8 @@
 <a href="#section-5"><span class="num">5</span>Quick Start</a>
 <a href="#section-6"><span class="num">6</span>Agent Usage</a>
 <a href="#section-7"><span class="num">7</span>Small Hardware</a>
-<a href="#section-8"><span class="num">8</span>Forks</a>
+<a href="#section-8"><span class="num">8</span>Results</a>
+<a href="#section-9"><span class="num">9</span>Forks</a>
     </nav>
 
     <div class="container">
@@ -421,7 +422,7 @@
           <h1>Autoresearch: Autonomous AI Research</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener">github.com/karpathy</a> &middot; 1223 &rarr; 350 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>4 min</span> saved</span></div>
+        <div class="meta"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener">github.com/karpathy</a> &middot; 1,223 &rarr; 460 words &middot; 3 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>4 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
@@ -541,6 +542,22 @@
 </div>
 
 <div class="section" id="section-8">
+  <div class="section-label">
+    <span class="section-type">DATA-COMPARISON</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Results: 83 Experiments, 15 Kept</h2>
+  <div class="key-points">
+    <ul>
+      <li>Validation BPB (bits per byte, lower is better) dropped from ~0.995 baseline to ~0.977 over 83 experiments. 15 changes were kept; 68 were discarded.</li>
+      <li>Progress follows a staircase pattern: long runs of discarded experiments punctuated by sudden drops when a kept change improves the metric. Most individual experiments fail.</li>
+      <li>Kept changes include: expanding future word token context (128 to 256), adjusting depth/width ratios, switching activation functions (GELU), changing evaluation periods, tuning softmax and learning rate schedules. Each annotation on the progress chart describes exactly what the agent tried.</li>
+      <li>The chart is the project's core proof of concept: an AI agent, left alone overnight, produced a measurably better model through autonomous single-variable iteration.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-9">
   <div class="section-label">
     <span class="section-type">CATALOG</span>
     <span class="section-format">&middot; Reference</span>
