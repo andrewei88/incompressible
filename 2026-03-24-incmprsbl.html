@@ -405,9 +405,10 @@
   <div class="layout">
     <nav class="sidebar">
       <a href="#section-1" class="active"><span class="num">1</span>What It Does</a>
-<a href="#section-2"><span class="num">2</span>Rules</a>
-<a href="#section-3"><span class="num">3</span>Evaluation</a>
-<a href="#section-4"><span class="num">4</span>Results</a>
+<a href="#section-2"><span class="num">2</span>Formats</a>
+<a href="#section-3"><span class="num">3</span>Rules</a>
+<a href="#section-4"><span class="num">4</span>Evaluation</a>
+<a href="#section-5"><span class="num">5</span>Results</a>
     </nav>
 
     <div class="container">
@@ -417,7 +418,7 @@
           <h1>I Can't Read Long Articles, So I Built a Tool to Fix That</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://x.com/w3n_AGI/status/2036254981930754480" target="_blank" rel="noopener">x.com (@w3n_AGI)</a> &middot; 531 &rarr; 162 words &middot; 1 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>2 min</span> saved</span></div>
+        <div class="meta"><a href="https://x.com/w3n_AGI/status/2036254981930754480" target="_blank" rel="noopener">x.com (@w3n_AGI)</a> &middot; 673 &rarr; 304 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>2 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
@@ -436,6 +437,36 @@
 </div>
 
 <div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">catalog</span>
+    <span class="section-format">&middot; Reference</span>
+  </div>
+  <h2>Format Mapping</h2>
+  <table class="data-table">
+    <thead><tr><th>Information Shape</th><th>Format</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Linear process</td><td>Checklist / numbered steps</td><td>Order matters, track progress</td></tr>
+      <tr><td>Parallel arguments</td><td>Bullet points</td><td>Independent claims, order doesn't matter</td></tr>
+      <tr><td>Sequential reasoning</td><td>Chain (A &rarr; B &rarr; C)</td><td>Each point builds on the last</td></tr>
+      <tr><td>Framework / comparison</td><td>Table</td><td>Shared attributes, scan and compare</td></tr>
+      <tr><td>Catalog / reference list</td><td>Reference table</td><td>The value IS the list</td></tr>
+      <tr><td>Before / after</td><td>Side-by-side table</td><td>Two-state comparison</td></tr>
+      <tr><td>Dated events</td><td>Timeline</td><td>Years are load-bearing</td></tr>
+      <tr><td>Branching decisions</td><td>Flowchart</td><td>If X, do Y</td></tr>
+      <tr><td>Cycles</td><td>Flowchart with loop-back</td><td>The loop IS the insight</td></tr>
+      <tr><td>Interconnected concepts</td><td>Concept map</td><td>Relationships are the point</td></tr>
+      <tr><td>Hierarchical concepts</td><td>Mindmap</td><td>Categories and subcategories</td></tr>
+      <tr><td>Interactions</td><td>Sequence diagram</td><td>Back-and-forth flows</td></tr>
+      <tr><td>2x2 frameworks</td><td>Quadrant chart</td><td>Effort/impact, risk/reward</td></tr>
+      <tr><td>Proportions</td><td>Pie chart</td><td>Budget splits, market share</td></tr>
+      <tr><td>Numeric comparisons</td><td>Bar chart</td><td>Benchmarks, rankings</td></tr>
+      <tr><td>User journeys</td><td>Journey map</td><td>Emotional arc matters</td></tr>
+      <tr><td>Persuasive prose</td><td>Prose</td><td>Logical thread breaks if unbundled</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-3">
   <div class="section-label">
     <span class="section-type">process</span>
     <span class="section-format">&middot; Checklist</span>
@@ -463,7 +494,7 @@
   </div>
 </div>
 
-<div class="section" id="section-3">
+<div class="section" id="section-4">
   <div class="section-label">
     <span class="section-type">framework</span>
     <span class="section-format">&middot; Table</span>
@@ -480,7 +511,7 @@
   </table>
 </div>
 
-<div class="section" id="section-4">
+<div class="section" id="section-5">
   <div class="section-label">
     <span class="section-type">argument-parallel</span>
     <span class="section-format">&middot; Key Points</span>

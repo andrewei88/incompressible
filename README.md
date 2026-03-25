@@ -127,6 +127,8 @@ After compression, four checks catch what the first pass misses:
 - **Most-quotable line:** lines a reader would quote when sharing the article are kept verbatim
 - **Faithfulness:** no invented claims, no shifted framing, no flattened probabilities (">50% chance by 2040" stays hedged, not "prediction: 2040")
 
+Articles with embedded images (tables, charts, diagrams) go through a mandatory image extraction gate before compression. Every image is listed, classified as decorative or data-bearing, and data-bearing images are screenshot-extracted using Claude's multimodal capability. Compression cannot proceed until all data-bearing images are processed. This prevents silent data loss from text-only extraction.
+
 Every compression then gets an autoresearch pass: single-variable iteration to fix any issues found. Change one thing, verify it improves accuracy without degrading compression, keep or discard.
 
 Evaluation uses a separate agent from the compressor. Self-evaluation is inherently generous (the agent that wrote the compression has already committed to its framing). The independent evaluator reads only the compressed output and the original article, with no memory of the compression process. It does claim-by-claim tracing: for each claim in the output, find the specific sentence in the original that supports it. Claims without a traceable source are hallucinations, even if factually correct.

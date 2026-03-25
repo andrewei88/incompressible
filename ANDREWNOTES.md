@@ -82,3 +82,26 @@ Evidence across articles:
 After evaluating a batch (5+ articles), not after every article. Individual articles have too much noise. Batch evaluation surfaces patterns:
 - Single-article issues = execution errors (fix the article)
 - Multi-article issues = process errors (fix the skill)
+
+## Phase 4: Image Extraction Gate (2026-03-25)
+
+### What happened
+
+The INCMPRSBL article contained a format mapping table as an embedded image. The accessibility snapshot showed `[Image]` but the compressor skipped past it without extracting the content. The compression was missing the entire 17-row format mapping table, which is the core reference of how the tool works.
+
+The skill already had a "Data-bearing images" section with extraction instructions. The instructions were correct and thorough. The compressor just didn't follow them.
+
+### The insight
+
+There's no such thing as an execution error that isn't a process error. If the process was good enough, you'd follow it every time. The image extraction instructions were written as guidance buried in the middle of Step 1, easy to skip because nothing enforced them.
+
+### The fix
+
+Restructured image extraction from a sub-section of Step 1 into a mandatory gate (Step 1B) between fetching and compressing. The gate:
+1. Forces explicit listing of every image found
+2. Forces classification of each as decorative or data-bearing
+3. Forces extraction of all data-bearing images before proceeding
+4. Requires a verbal checkpoint: "Image gate: N images found, M data-bearing, all extracted"
+5. Defines a failure condition: you cannot proceed to Step 2 with unextracted data-bearing images
+
+The key structural change: moving from "check for images" (optional-sounding) to "you are blocked until images are processed" (mandatory gate). Same content, different control flow.
