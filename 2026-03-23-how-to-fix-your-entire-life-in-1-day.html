@@ -307,6 +307,25 @@
       padding: 16px;
       overflow-x: auto;
     }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
 
     /* Back link */
     .back-link {
@@ -349,27 +368,27 @@
 
     <div class="container">
       <div class="header">
-        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
         <div class="header-top">
           <h1>How to Fix Your Entire Life in 1 Day</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://x.com/thedankoe/status/2010751592346030461" target="_blank" rel="noopener">x.com (@thedankoe)</a> · 4,500 → 590 words · 3 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>20 min</span> saved</span></div>
+        <div class="meta"><a href="https://x.com/thedankoe/status/2010751592346030461" target="_blank" rel="noopener">x.com (@thedankoe)</a> &middot; 4,500 &rarr; 1,400 words &middot; 6 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>12 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
         <div class="section-label">
           <span class="section-type">Argument</span>
-          <span class="section-format">· Key Points</span>
+          <span class="section-format">&middot; Key Points</span>
         </div>
         <h2>Why You're Stuck</h2>
         <div class="key-points">
           <ul>
-            <li>Most people try to change actions without changing identity. This builds a new life on a rotting foundation.</li>
-            <li>If you want a specific outcome, you must adopt the lifestyle that creates it — permanently — before you reach it.</li>
-            <li>All behavior is goal-oriented (teleological). Procrastination isn't laziness; it's pursuing a different goal — usually self-protection from judgment or failure.</li>
-            <li>Staying in a dead-end job isn't cowardice. It's actively pursuing safety, predictability, and an excuse not to look like a failure. Your actions reveal your real goals; your words don't.</li>
-            <li>Real change requires changing your unconscious goals, not setting new surface-level ones. Setting a goal can itself be an act of self-protection.</li>
+            <li>People try to change actions without changing identity. They "build a great life on a rotting foundation," stay disciplined for weeks, then revert.</li>
+            <li>Someone who truly changed can't see themselves living any other way. The bodybuilder has to grind to eat unhealthily. If you want a specific outcome, you must adopt the lifestyle that creates it long before you reach it.</li>
+            <li>All behavior is goal-oriented (teleological). Procrastination isn't laziness; it's pursuing a different goal, like protecting yourself from the judgment that comes from finishing and sharing your work.</li>
+            <li>Staying in a dead-end job isn't cowardice. You're pursuing safety, predictability, and an excuse not to look like a failure. Your actions reveal your real goals; your words don't.</li>
+            <li>Real change requires changing your unconscious goals, not setting surface-level ones. A goal is a projection into the future that acts as a lens of perception, determining what information you notice.</li>
           </ul>
         </div>
       </div>
@@ -377,24 +396,35 @@
       <div class="section" id="section-2">
         <div class="section-label">
           <span class="section-type">Concept</span>
-          <span class="section-format">· Flowchart</span>
+          <span class="section-format">&middot; Flowchart</span>
         </div>
         <h2>How Identity Forms (and Traps You)</h2>
         <div class="mermaid-container">
           <pre class="mermaid">graph TD
-    A["Pursue a goal<br/><i>often assigned by parents/culture</i>"] --> B["Perceive reality through<br/>that goal's lens"]
-    B --> C["Only notice information<br/>that serves the goal"]
-    C --> D["Repeated action becomes<br/>automatic & unconscious"]
-    D --> E["Behavior becomes identity<br/><i>you defend it for consistency</i>"]
-    E --> F["Identity shapes<br/>new goals"]
-    F -->|"Cycle restarts — bad identity<br/>= compounding loop"| A</pre>
+    A["1. You want to achieve a goal"] --> B["2. Perceive reality through<br/>that goal's lens"]
+    B --> C["3. Only notice information<br/>that serves the goal (learning)"]
+    C --> D["4. Act toward goal,<br/>receive feedback"]
+    D --> E["5. Repeat until behavior is<br/>automatic & unconscious (conditioning)"]
+    E --> F["6. Behavior becomes identity<br/><i>'I am the type of person who...'</i>"]
+    F --> G["7. Defend identity for<br/>psychological consistency"]
+    G --> H["8. Identity shapes new goals"]
+    H -->|"Cycle restarts — bad identity<br/>= compounding loop"| A
+    style F fill:#2a1a3a,stroke:#b4a0d4
+    style G fill:#2a1a3a,stroke:#b4a0d4</pre>
+        </div>
+        <div class="key-points" style="margin-top: 16px;">
+          <ul>
+            <li>Break the cycle between steps 6 and 7: after behavior becomes identity, intervene before that identity shapes your next goals.</li>
+            <li>This cycle starts in childhood. You conformed to your parents' beliefs through reward and punishment. Your parents inherited conditioning from the Industrial age and their own parents.</li>
+            <li>Once physical survival is met, you survive on the conceptual level: you protect and reproduce your mind, not just your body. When identity feels threatened, you go into fight or flight the same as when your body is threatened.</li>
+          </ul>
         </div>
       </div>
 
       <div class="section" id="section-3">
         <div class="section-label">
-          <span class="section-type">CATALOG</span>
-          <span class="section-format">· Reference</span>
+          <span class="section-type">Catalog</span>
+          <span class="section-format">&middot; Reference</span>
         </div>
         <h2>Nine Stages of Ego Development</h2>
         <table class="data-table">
@@ -415,16 +445,17 @@
 
       <div class="section" id="section-4">
         <div class="section-label">
-          <span class="section-type">ARGUMENT-PARALLEL</span>
-          <span class="section-format">· Key Points</span>
+          <span class="section-type">Argument</span>
+          <span class="section-format">&middot; Key Points</span>
         </div>
         <h2>Intelligence as Iteration</h2>
         <div class="key-points">
           <ul>
-            <li>Success requires three ingredients: agency (willingness to act), opportunity (digital abundance counts), and intelligence (ability to iterate).</li>
-            <li>Intelligence (via cybernetics): set a goal, act, sense where you are, compare to the goal, act again. The mark of high intelligence is learning from feedback. The mark of low intelligence is quitting at the first roadblock.</li>
-            <li>Any problem can be solved on a large enough timescale. There exists a series of choices that leads to any goal — you just haven't found it yet.</li>
-            <li>Goals are lenses of perception. They determine what you notice, what you call success or failure, and whether you enjoy the process.</li>
+            <li>Success requires three ingredients: agency (willingness to act), opportunity (digital abundance counts), and intelligence (ability to iterate toward what you want).</li>
+            <li>Intelligence via cybernetics (Greek: "the art of steering"): set a goal, act, sense where you are, compare to the goal, act again. High intelligence is the ability to iterate, persist, and understand the big picture. Low intelligence is quitting at the first roadblock.</li>
+            <li>Any problem can be solved on a large enough timescale. There exists a series of choices that leads to any goal; you just haven't found it yet. Even seemingly impossible goals may just need resources not yet invented.</li>
+            <li>Goals determine how you see the world, what you call success or failure, and whether you enjoy the process. If you pursue the wrong goal, you won't enjoy the journey. Your mind is the operating system for reality, and that system is composed of goals.</li>
+            <li>For most people, goals are assigned: "Go to school. Get the job. Retire at 65." A known path that doesn't work. To become more intelligent: reject the known path, dive into the unknown, set higher goals, study generalized principles, become a deep generalist.</li>
           </ul>
         </div>
       </div>
@@ -432,57 +463,71 @@
       <div class="section" id="section-5">
         <div class="section-label">
           <span class="section-type">Argument</span>
-          <span class="section-format">· Key Points</span>
+          <span class="section-format">&middot; Key Points</span>
         </div>
         <h2>How Identity Flips</h2>
         <div class="key-points">
           <ul>
-            <li>Identity change follows three phases: Dissonance (you feel you don't belong in your current life), Uncertainty (you don't know what's next, so you experiment or spiral), Discovery (you find what you want and make six years of progress in six months).</li>
-            <li>The protocol below is designed to force dissonance, navigate uncertainty, and reach discovery in a single day. Break the identity cycle between steps 6 and 7: after behavior becomes identity, intervene before that identity shapes your next goals.</li>
+            <li>Identity change follows three phases: Dissonance (you feel you don't belong, you're fed up with lack of progress), Uncertainty (you don't know what's next, so you experiment or spiral), Discovery (you find what you want and make 6 years of progress in 6 months).</li>
+            <li>Change happens fast after a buildup of tension. The protocol below forces dissonance, navigates uncertainty, and reaches discovery in a single day.</li>
+            <li>Structure: morning psychological excavation to uncover hidden motives, daytime interrupts to break autopilot, evening synthesis to set a direction you start moving in tomorrow.</li>
           </ul>
         </div>
       </div>
 
       <div class="section" id="section-6">
         <div class="section-label">
-          <span class="section-type">PROCESS</span>
-          <span class="section-format">· Checklist</span>
+          <span class="section-type">Process</span>
+          <span class="section-format">&middot; Checklist</span>
         </div>
         <h2>The 1-Day Protocol</h2>
         <div class="checklist">
           <div class="group">
-            <div class="group-label">Morning — Psychological Excavation (15-30 min)</div>
-            <div class="item">☐  What dull dissatisfaction have you learned to tolerate?</div>
-            <div class="item">☐  What do you complain about but never change? For each: what would your behavior (not words) tell an observer you actually want?</div>
-            <div class="item">☐  What truth about your life would be unbearable to admit to someone you respect?</div>
-            <div class="item">☐  If nothing changes for 5 years, describe an average Tuesday in detail. Now do 10 years. Now end of life — what did you never try?</div>
-            <div class="item">☐  What identity would you have to give up to change? What's the embarrassing reason you haven't?</div>
-            <div class="item">☐  Forget practicality: what do you actually want in 3 years? What would you have to believe about yourself for that to feel natural?</div>
+            <div class="group-label">Part 1: Morning, Psychological Excavation (15-30 min)</div>
+            <div class="item">☐ 1. What dull, persistent dissatisfaction have you learned to live with?</div>
+            <div class="item">☐ 2. What do you complain about repeatedly but never change? Write down the three complaints you've voiced most often this past year.</div>
+            <div class="item">☐ 3. For each complaint: what would someone watching your behavior (not words) conclude you actually want?</div>
+            <div class="item">☐ 4. What truth about your current life would be unbearable to admit to someone you deeply respect?</div>
+            <div class="item">☐ 5. If nothing changes for 5 years, describe an average Tuesday in detail. Where do you wake up? What does your body feel like? Who's around you? What do you do 9am-6pm? How do you feel at 10pm?</div>
+            <div class="item">☐ 6. Now do 10 years. What have you missed? What opportunities closed? Who gave up on you?</div>
+            <div class="item">☐ 7. End of life: you lived the safe version. What was the cost? What did you never let yourself feel, try, or become?</div>
+            <div class="item">☐ 8. Who in your life is already living the future you just described? What do you feel when you think about becoming them?</div>
+            <div class="item">☐ 9. What identity would you have to give up to change? ("I am the type of person who...") What would it cost you socially?</div>
+            <div class="item">☐ 10. What is the most embarrassing reason you haven't changed? The one that makes you sound weak, scared, or lazy rather than reasonable?</div>
+            <div class="item">☐ 11. If your current behavior is self-protection, what exactly are you protecting? What is that protection costing you?</div>
+            <div class="item">☐ 12. Forget practicality. If you could snap your fingers and live a different life in 3 years, what do you actually want? Describe an average Tuesday with the same detail as question 5.</div>
+            <div class="item">☐ 13. What would you have to believe about yourself for that life to feel natural? Write the identity statement: "I am the type of person who..."</div>
+            <div class="item">☐ 14. What is one thing you'd do this week if you were already that person?</div>
           </div>
           <div class="group">
-            <div class="group-label">Throughout the Day — Autopilot Interrupts (set phone reminders)</div>
-            <div class="item">☐  11am: What am I avoiding right now by doing what I'm doing?</div>
-            <div class="item">☐  1:30pm: If someone filmed the last two hours, what would they conclude I want from life?</div>
-            <div class="item">☐  3:15pm: Am I moving toward the life I hate or the life I want?</div>
-            <div class="item">☐  5pm: What's the most important thing I'm pretending isn't important?</div>
-            <div class="item">☐  7:30pm: What did I do today out of identity protection rather than genuine desire?</div>
-            <div class="item">☐  9pm: When did I feel most alive today? When did I feel most dead?</div>
+            <div class="group-label">Part 2: Throughout the Day, Autopilot Interrupts (set phone reminders)</div>
+            <div class="item">☐ 11:00am: What am I avoiding right now by doing what I'm doing?</div>
+            <div class="item">☐ 1:30pm: If someone filmed the last two hours, what would they conclude I want from life?</div>
+            <div class="item">☐ 3:15pm: Am I moving toward the life I hate or the life I want?</div>
+            <div class="item">☐ 5:00pm: What's the most important thing I'm pretending isn't important?</div>
+            <div class="item">☐ 7:30pm: What did I do today out of identity protection rather than genuine desire?</div>
+            <div class="item">☐ 9:00pm: When did I feel most alive today? When did I feel most dead?</div>
+            <div class="item">☐ Bonus: What would change if I stopped needing people to see me as [the identity from Q10]?</div>
+            <div class="item">☐ Bonus: Where in my life am I trading aliveness for safety?</div>
+            <div class="item">☐ Bonus: What's the smallest version of the person I want to become that I could be tomorrow?</div>
           </div>
           <div class="group">
-            <div class="group-label">Evening — Synthesis</div>
-            <div class="item">☐  What feels most true about why you've been stuck?</div>
-            <div class="item">☐  Name the actual enemy — not circumstances, not people. The internal pattern running the show.</div>
-            <div class="item">☐  Write one sentence: what you refuse to let your life become (anti-vision).</div>
-            <div class="item">☐  Write one sentence: what you're building toward (vision MVP).</div>
-            <div class="item">☐  Set three lenses: 1-year (what's different?), 1-month (what makes the year possible?), daily (2-3 actions you'd simply do as that person).</div>
+            <div class="group-label">Part 3: Evening, Synthesis</div>
+            <div class="item">☐ 1. After today, what feels most true about why you've been stuck?</div>
+            <div class="item">☐ 2. Name the actual enemy. Not circumstances, not people. The internal pattern or belief running the show.</div>
+            <div class="item">☐ 3. Write one sentence: what you refuse to let your life become (anti-vision). It should make you feel something when you read it.</div>
+            <div class="item">☐ 4. Write one sentence: what you're building toward, knowing it will evolve (vision MVP).</div>
+            <div class="item">☐ 1-year lens: What would have to be true in one year for you to know you've broken the old pattern? One concrete thing.</div>
+            <div class="item">☐ 1-month lens: What would have to be true in one month for the 1-year lens to remain possible?</div>
+            <div class="item">☐ Daily lens: What are 2-3 actions you can timeblock tomorrow that the person you're becoming would simply do?</div>
           </div>
         </div>
       </div>
 
       <div class="section" id="section-7">
         <div class="section-label">
-          <span class="section-type">FRAMEWORK</span>
-          <span class="section-format">· Table</span>
+          <span class="section-type">Framework</span>
+          <span class="section-format">&middot; Table</span>
         </div>
         <h2>Life as Video Game</h2>
         <table class="data-table">
@@ -490,12 +535,17 @@
           <tbody>
             <tr><td>Anti-vision</td><td>Stakes</td><td>What happens if you lose or give up</td></tr>
             <tr><td>Vision</td><td>Win condition</td><td>How you define winning (evolves over time)</td></tr>
-            <tr><td>1-year goal</td><td>Mission</td><td>Your sole priority</td></tr>
-            <tr><td>1-month project</td><td>Boss fight</td><td>How you gain XP and acquire skills</td></tr>
-            <tr><td>Daily levers</td><td>Quests</td><td>Needle-moving tasks that unlock opportunity</td></tr>
+            <tr><td>1-year goal</td><td>Mission</td><td>Your sole priority in life</td></tr>
+            <tr><td>1-month project</td><td>Boss fight</td><td>How you gain XP and acquire loot/skills</td></tr>
+            <tr><td>Daily levers</td><td>Quests</td><td>Needle-moving tasks that unlock new opportunities</td></tr>
             <tr><td>Constraints</td><td>Rules</td><td>Limitations that encourage creativity</td></tr>
           </tbody>
         </table>
+        <div class="key-points" style="margin-top: 16px;">
+          <ul>
+            <li>These six components create your own world. They act as concentric circles, like a forcefield, guarding your mind from distractions. The more you play, the stronger this force becomes, until it becomes who you are.</li>
+          </ul>
+        </div>
       </div>
 
     </div>

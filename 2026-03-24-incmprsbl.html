@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I Can't Read Long Articles, So I Built INCMPRSBL — INCMPRSBL</title>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <title>I Can't Read Long Articles, So I Built a Tool to Fix That — INCMPRSBL</title>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -263,7 +263,7 @@
       line-height: 1.6;
     }
     .key-points li::before {
-      content: "\2014";
+      content: "—";
       color: var(--text-dim);
       margin-right: 10px;
     }
@@ -405,94 +405,91 @@
   <div class="layout">
     <nav class="sidebar">
       <a href="#section-1" class="active"><span class="num">1</span>What It Does</a>
-<a href="#section-2"><span class="num">2</span>The Test</a>
-<a href="#section-3"><span class="num">3</span>What Survives</a>
-<a href="#section-4"><span class="num">4</span>Evaluation</a>
-<a href="#section-5"><span class="num">5</span>Results</a>
+<a href="#section-2"><span class="num">2</span>Rules</a>
+<a href="#section-3"><span class="num">3</span>Evaluation</a>
+<a href="#section-4"><span class="num">4</span>Results</a>
     </nav>
 
     <div class="container">
       <div class="header">
         <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
         <div class="header-top">
-          <h1>I Can't Read Long Articles, So I Built INCMPRSBL</h1>
+          <h1>I Can't Read Long Articles, So I Built a Tool to Fix That</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://x.com/w3n_AGI/status/2036254981930754480" target="_blank" rel="noopener">x.com (@w3n_AGI)</a> &middot; 506 &rarr; 236 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>1 min</span> saved</span></div>
+        <div class="meta"><a href="https://x.com/w3n_AGI/status/2036254981930754480" target="_blank" rel="noopener">x.com (@w3n_AGI)</a> &middot; 531 &rarr; 162 words &middot; 1 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>2 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
   <div class="section-label">
-    <span class="section-type">ARGUMENT</span>
+    <span class="section-type">argument-parallel</span>
     <span class="section-format">&middot; Key Points</span>
   </div>
   <h2>What INCMPRSBL Does</h2>
   <div class="key-points">
     <ul>
-      <li>Claude Code skill that compresses articles to the point where removing anything else would lose meaning.</li>
-      <li>Outputs self-contained HTML with each section in its optimal format: 17 formats mapped to information shapes (tables for comparisons, checklists for processes, flowcharts for decisions, timelines for chronology, concept maps for relationships).</li>
-      <li>Typography signals reading mode: 14px for scannable formats (tables, checklists), 17px with wider line-height for prose.</li>
+      <li>Claude Code skill that compresses articles to where removing anything else loses meaning.</li>
+      <li>Different types of information have natural formats depending on the shape of the information.</li>
+      <li>Typography adapts: 14px for scannable formats (tables, checklists), 17px for prose (reduces fatigue).</li>
     </ul>
   </div>
 </div>
 
 <div class="section" id="section-2">
   <div class="section-label">
-    <span class="section-type">DECISION</span>
-    <span class="section-format">&middot; Flowchart</span>
+    <span class="section-type">process</span>
+    <span class="section-format">&middot; Checklist</span>
   </div>
-  <h2>The Compression Test</h2>
-  <div class="mermaid-container">
-    <pre class="mermaid">graph TD
-  A{"Remove this sentence?"} -->|"Reader does or believes<br/>something different"| B["Keep"]
-  A -->|"Reader just feels less<br/>entertained or persuaded"| C["Cut"]</pre>
+  <h2>Compression Rules</h2>
+  <div class="checklist">
+    <div class="group">
+      <div class="group-label">The Test</div>
+      <div class="item">&#9744;  Does removing it change what the reader does or believes? Keep.</div>
+      <div class="item">&#9744;  Does it only reduce entertainment or persuasion? Cut.</div>
+    </div>
+    <div class="group">
+      <div class="group-label">Survives</div>
+      <div class="item">&#9744;  Numbers ("incompressible by nature"), named beneficiaries, quotable lines.</div>
+      <div class="item">&#9744;  Satirical phrasing where the wording IS the argument.</div>
+    </div>
+    <div class="group">
+      <div class="group-label">Gets Cut</div>
+      <div class="item">&#9744;  Anecdotes (keep the point), repetition, social proof, SEO.</div>
+    </div>
+    <div class="group">
+      <div class="group-label">Faithfulness</div>
+      <div class="item">&#9744;  Every claim traces to the original. Autoresearch pass catches accuracy issues.</div>
+    </div>
   </div>
 </div>
 
 <div class="section" id="section-3">
   <div class="section-label">
-    <span class="section-type">ARGUMENT</span>
-    <span class="section-format">&middot; Key Points</span>
-  </div>
-  <h2>What Survives Compression</h2>
-  <div class="key-points">
-    <ul>
-      <li>Cut: anecdotes used for color, repetition, social proof, credibility markers, SEO intros.</li>
-      <li>Keep: numbers, data, named beneficiaries, quotable lines. Numbers are incompressible by nature: &ldquo;$340K bonus&rdquo; &gt; &ldquo;large financial incentive.&rdquo;</li>
-      <li>Satire exception: when phrasing IS the argument, preserve verbatim. &ldquo;Logging in and closing the tab is usage&rdquo; can't be paraphrased.</li>
-      <li>Faithfulness is non-negotiable. Every claim must trace to the original. After compression, autoresearch pass: single-variable iteration to fix accuracy issues.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="section" id="section-4">
-  <div class="section-label">
-    <span class="section-type">FRAMEWORK</span>
+    <span class="section-type">framework</span>
     <span class="section-format">&middot; Table</span>
   </div>
-  <h2>Evaluation: 19 Articles, 5 Rounds</h2>
+  <h2>Evaluation (19 Articles, 5 Rounds)</h2>
   <table class="data-table">
-    <thead><tr><th>Round</th><th>Method</th><th>Purpose</th></tr></thead>
+    <thead><tr><th>Round</th><th>Method</th></tr></thead>
     <tbody>
-      <tr><td>1-2</td><td>Paul Graham essays</td><td>Tune compression and format rules</td></tr>
-      <tr><td>3</td><td>Adversarial testing</td><td>Edge cases: catalogs, pre-compressed, satire</td></tr>
-      <tr><td>4</td><td>Single-variable optimization</td><td>One change, measure, keep or revert</td></tr>
-      <tr><td>5</td><td>Validation (7 unseen articles)</td><td>Quanta, tutorials, X threads, opinion pieces</td></tr>
+      <tr><td>1-2</td><td>Training on Paul Graham essays. Tuned compression and format rules.</td></tr>
+      <tr><td>3</td><td>Adversarial: catalogs, already-compressed content, satirical writing.</td></tr>
+      <tr><td>4</td><td>Autoresearch: one change at a time, measure, keep or revert.</td></tr>
+      <tr><td>5</td><td>Validation: 7 unseen articles (Quanta, tutorials, X threads, opinion).</td></tr>
     </tbody>
   </table>
 </div>
 
-<div class="section" id="section-5">
+<div class="section" id="section-4">
   <div class="section-label">
-    <span class="section-type">ARGUMENT</span>
+    <span class="section-type">argument-parallel</span>
     <span class="section-format">&middot; Key Points</span>
   </div>
   <h2>Results</h2>
   <div class="key-points">
     <ul>
-      <li>Training: 93.5%. Validation: 91.1%. 2.4-point gap confirmed no overfitting to Paul Graham's style.</li>
-      <li>Rubric: Accuracy 40%, Format choice 25%, Compression 15%, Style 20%.</li>
-      <li>&ldquo;Why waste time say lot word when few word do trick?&rdquo; &mdash; Kevin Malone</li>
+      <li>Training: 93.5%. Validation: 91.1%. Gap of 2.4 points = not overfitting to Paul Graham's style.</li>
+      <li>Scoring rubric: Accuracy 40%, Format choice 25%, Compression ratio 15%, Style 20%.</li>
     </ul>
   </div>
 </div>
@@ -549,16 +546,6 @@
       html.dataset.theme = newTheme;
       updateToggleIcon(newTheme);
       localStorage.setItem('incmprsbl-theme', newTheme);
-      if (typeof mermaid !== 'undefined') {
-        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
-        document.querySelectorAll('.mermaid').forEach(el => {
-          const code = el.getAttribute('data-original') || el.textContent;
-          el.setAttribute('data-original', code);
-          el.removeAttribute('data-processed');
-          el.innerHTML = code;
-        });
-        mermaid.init(undefined, '.mermaid');
-      }
     }
 
     // Restore saved theme
@@ -567,9 +554,6 @@
       if (saved && saved !== document.documentElement.dataset.theme) {
         document.documentElement.dataset.theme = saved;
         updateToggleIcon(saved);
-        if (saved === 'light' && typeof mermaid !== 'undefined') {
-          mermaid.initialize({ startOnLoad: true, theme: 'default' });
-        }
       }
     })();
   </script>

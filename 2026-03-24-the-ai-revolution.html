@@ -307,6 +307,25 @@
       padding: 16px;
       overflow-x: auto;
     }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
 
     /* Custom HTML timeline */
     .timeline {
@@ -390,7 +409,8 @@
       <a href="#section-2"><span class="num">2</span>Three Calibers</a>
       <a href="#section-3"><span class="num">3</span>Hardware Race</a>
       <a href="#section-4"><span class="num">4</span>Paths to AGI</a>
-      <a href="#section-5"><span class="num">5</span>The Stakes</a>
+      <a href="#section-5"><span class="num">5</span>The Explosion</a>
+      <a href="#section-6"><span class="num">6</span>The Stakes</a>
     </nav>
 
     <div class="container">
@@ -400,7 +420,7 @@
           <h1>The AI Revolution: Road to Superintelligence</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://waitbutwhy.com/2015/01/artificial-intelligence-revolution-1.html" target="_blank" rel="noopener">waitbutwhy.com</a> &middot; 8,000 &rarr; 390 words &middot; 3 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>38 min</span> saved</span></div>
+        <div class="meta"><a href="https://waitbutwhy.com/2015/01/artificial-intelligence-revolution-1.html" target="_blank" rel="noopener">waitbutwhy.com</a> &middot; 8,000 &rarr; 410 words &middot; 3 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>29 min</span> saved</span></div>
       </div>
 
       <!-- Section 1: Why We Can't See It Coming -->
@@ -412,9 +432,9 @@
         <h2>Why We Can't See It Coming</h2>
         <div class="key-points">
           <ul>
-            <li>Progress accelerates: the 20th century's progress could be achieved in 20 years at year 2000's rate. The 21st century may produce 1,000x the progress of the 20th.</li>
-            <li>Three blind spots: linear thinking (we extrapolate from recent decades), S-curve distortion (exponential curves look linear up close), experience bias (we can't imagine what we haven't lived).</li>
-            <li>"AI has succeeded in doing everything requiring 'thinking' but failed at what people and animals do 'without thinking.'" (Donald Knuth)</li>
+            <li>Progress accelerates: Kurzweil estimates the entire 20th century's progress could be achieved in just 20 years at year-2000 rates. The 21st century will produce 1,000 times the progress of the 20th.</li>
+            <li>We predict linearly because "we look back to the progress of the previous 30 as an indicator" of the next 30. But progress compounds. A Die Progress Unit (enough change to kill a time-traveler from shock) once took 100,000+ years. Post-agriculture: 12,000. Post-industry: 200.</li>
+            <li>S-curves create a second trap: each technology follows slow growth, explosive growth, then leveling off. Up close, the explosive phase looks linear.</li>
           </ul>
         </div>
       </div>
@@ -431,24 +451,24 @@
             <tr>
               <th>Level</th>
               <th>Definition</th>
-              <th>Current State</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>ANI (Narrow)</td>
               <td>Single-domain specialist</td>
-              <td>Everywhere: spam filters, Siri, Google Translate, chess engines, self-driving cars</td>
+              <td>Everywhere: spam filters, Siri, Google Translate, self-driving cars, high-frequency traders (over half of US equity trades)</td>
             </tr>
             <tr>
               <td>AGI (General)</td>
-              <td>Human-level across all domains. "Ability to reason, plan, solve problems, think abstractly."</td>
-              <td>Not yet achieved. Scientists estimate >50% probability by 2040</td>
+              <td>Human-level across all cognitive domains: "reason, plan, solve problems, think abstractly"</td>
+              <td>Not achieved. Median survey of hundreds of scientists: more likely than not by 2040</td>
             </tr>
             <tr>
               <td>ASI (Super)</td>
-              <td>"An intellect much smarter than best human brains in practically every field." (Bostrom)</td>
-              <td>Could follow AGI within decades</td>
+              <td>"An intellect much smarter than the best human brains in practically every field" (Bostrom)</td>
+              <td>Could follow AGI within hours (see Section 5)</td>
             </tr>
           </tbody>
         </table>
@@ -465,7 +485,7 @@
           <div class="timeline-event">
             <div class="timeline-year">1985</div>
             <ul class="timeline-details">
-              <li>$1,000 computer at one trillionth of human brain power</li>
+              <li>$1,000 computer: one trillionth of human brain power</li>
             </ul>
           </div>
           <div class="timeline-event">
@@ -483,14 +503,14 @@
           <div class="timeline-event">
             <div class="timeline-year">2015</div>
             <ul class="timeline-details">
-              <li>One thousandth of human brain</li>
-              <li>China's Tianhe-2 hits 34 quadrillion cps (but costs $390M, uses 24MW)</li>
+              <li>One thousandth of human brain (~10 trillion cps)</li>
+              <li>Tianhe-2 supercomputer: 34 quadrillion cps, 720 sq meters, 24 megawatts, $390M</li>
             </ul>
           </div>
           <div class="timeline-event">
             <div class="timeline-year">2025</div>
             <ul class="timeline-details">
-              <li>$1,000 computer projected to match human brain (~10^16 cps)</li>
+              <li>$1,000 computer projected to match human brain (~10 quadrillion cps)</li>
               <li>Human brain: same power on 20 watts</li>
             </ul>
           </div>
@@ -507,19 +527,31 @@
         <div class="mermaid-container">
           <div class="mermaid">
 graph TD
-    AGI["Artificial General<br/>Intelligence"] --> RE["Brain Reverse<br/>Engineering<br/><i>Replicate neural<br/>architecture</i>"]
-    AGI --> EV["Evolutionary<br/>Simulation<br/><i>Genetic algorithms<br/>breed better AI</i>"]
-    AGI --> SI["Self-Improving AI<br/><i>Systems that research<br/>themselves</i>"]
-    RE --> PROG["Progress: flatworm's<br/>302 neurons emulated<br/><i>Human brain: 100 billion</i>"]
-    SI --> IE["Intelligence Explosion<br/><i>Smarter → bigger improvements<br/>→ exponential acceleration</i>"]
-    IE --> ASI["ASI<br/><i>Superintelligence</i>"]
-    ASI --> ADV["Advantages over humans:<br/>10M× faster processors<br/>light-speed communication<br/>expandable memory, 24/7"]
+    AGI["Artificial General<br/>Intelligence"] --> PL["Plagiarize the Brain<br/><i>Reverse-engineer neural<br/>architecture</i>"]
+    AGI --> EV["Simulate Evolution<br/><i>Genetic algorithms<br/>breed better AI</i>"]
+    AGI --> SI["Make It the<br/>Computer's Problem<br/><i>Systems that improve<br/>themselves</i>"]
+    PL --> PROG["Progress: flatworm's<br/>302 neurons emulated<br/><i>Human brain: 100 billion</i>"]
+    SI --> IE["Intelligence Explosion<br/><i>Term coined by I.J. Good, 1965</i>"]
           </div>
         </div>
       </div>
 
-      <!-- Section 5: The Stakes -->
+      <!-- Section 5: The Intelligence Explosion -->
       <div class="section" id="section-5">
+        <div class="section-label">
+          <span class="section-type">Argument</span>
+          <span class="section-format">Reasoning Chain</span>
+        </div>
+        <h2>The Intelligence Explosion</h2>
+        <div class="reasoning-chain">
+          <p>It takes decades for AI to reach low-level general intelligence (a four-year-old). <span class="arrow">&rarr;</span> Within one hour of that milestone, it produces the grand unified theory of physics. <span class="arrow">&rarr;</span> 90 minutes later, it is 170,000 times more intelligent than a human.</p>
+          <p>Why so fast? Processors run at 2 GHz vs the brain's 200 Hz (10 million times faster). Hardware can expand to any physical size. Software can receive updates and fixes. One tweak to the system could make it 1,000 times more effective, zooming upward.</p>
+          <p>All humans, "from the village idiot to Einstein," occupy a tiny band on the intelligence spectrum. ASI races past that entire range almost instantly.</p>
+        </div>
+      </div>
+
+      <!-- Section 6: The Stakes -->
+      <div class="section" id="section-6">
         <div class="section-label">
           <span class="section-type">Argument</span>
           <span class="section-format">Key Points</span>
@@ -527,8 +559,8 @@ graph TD
         <h2>The Stakes</h2>
         <div class="key-points">
           <ul>
-            <li>Intelligence correlates with dominance. Humans vs animals demonstrates the gap. We cannot comprehend superintelligence any more than a bumblebee understands economics.</li>
-            <li>ASI could cure aging, disease, hunger, and death. It could also end all life on Earth. Both outcomes are plausible.</li>
+            <li>Intelligence correlates with dominance. Humans rule Earth not because of strength but because of cognitive advantage. We cannot comprehend ASI "any more than a bumblebee can wrap its head around Keynesian Economics."</li>
+            <li>ASI could reverse aging, cure disease and hunger, and end mortality. Also possible: the immediate end of all life on Earth.</li>
             <li>"Will it be a nice God?"</li>
           </ul>
         </div>

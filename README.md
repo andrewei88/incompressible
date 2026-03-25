@@ -129,6 +129,8 @@ After compression, four checks catch what the first pass misses:
 
 Every compression then gets an autoresearch pass: single-variable iteration to fix any issues found. Change one thing, verify it improves accuracy without degrading compression, keep or discard.
 
+Evaluation uses a separate agent from the compressor. Self-evaluation is inherently generous (the agent that wrote the compression has already committed to its framing). The independent evaluator reads only the compressed output and the original article, with no memory of the compression process. It does claim-by-claim tracing: for each claim in the output, find the specific sentence in the original that supports it. Claims without a traceable source are hallucinations, even if factually correct.
+
 ## How the rules were developed
 
 The compression rules and format mappings were optimized using single-variable iteration (inspired by Karpathy's autoresearch pattern): change one thing in the skill prompt, compress an article, score the output, keep or revert. No batching multiple changes.
@@ -139,7 +141,7 @@ Tested against 19 articles across 5 rounds:
 - **Round 4:** Single-variable optimization, one change per cycle
 - **Round 5:** Validation on 7 articles never seen during tuning (Quanta Magazine, technical tutorials, X threads, opinion pieces)
 
-Results: training average 93.4%, validation average 92.3%. Scoring rubric: Accuracy 40%, Format choice 25%, Compression ratio 15%, Style 20%.
+Results: training average 93.5%, validation average 91.1%. The 2.4-point gap confirmed the rules weren't overfitting to Paul Graham's writing style. Scoring rubric: Accuracy 40%, Format choice 25%, Compression ratio 15%, Style 20%.
 
 ## Output
 

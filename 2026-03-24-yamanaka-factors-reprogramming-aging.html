@@ -306,6 +306,25 @@
       padding: 16px;
       overflow-x: auto;
     }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
 
     /* Custom HTML timeline */
     .timeline {
@@ -385,139 +404,96 @@
 <body>
   <div class="layout">
     <nav class="sidebar">
-      <a href="#section-1" class="active"><span class="num">1</span>The Factors</a>
-<a href="#section-2"><span class="num">2</span>Timeline</a>
-<a href="#section-3"><span class="num">3</span>Mechanism</a>
-<a href="#section-4"><span class="num">4</span>Evidence</a>
-<a href="#section-5"><span class="num">5</span>Challenges</a>
+      <a href="#section-1" class="active"><span class="num">1</span>Core Idea</a>
+<a href="#section-2"><span class="num">2</span>Mechanism</a>
+<a href="#section-3"><span class="num">3</span>Evidence</a>
+<a href="#section-4"><span class="num">4</span>Obstacles</a>
+<a href="#section-5"><span class="num">5</span>Outlook</a>
     </nav>
 
     <div class="container">
       <div class="header">
-        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
         <div class="header-top">
           <h1>Yamanaka Factors: Reprogramming Aging</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://www.fightaging.org/archives/2025/10/a-review-of-the-present-state-of-epigenetic-reprogramming-to-treat-aging/" target="_blank" rel="noopener">fightaging.org</a> · 4,000 → 390 words · 2 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>18 min</span> saved</span></div>
+        <div class="meta"><a href="https://www.fightaging.org/archives/2025/10/a-review-of-the-present-state-of-epigenetic-reprogramming-to-treat-aging/" target="_blank" rel="noopener">fightaging.org</a> &middot; 4,000 &rarr; 290 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>18 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
   <div class="section-label">
-    <span class="section-type">Concept</span>
-    <span class="section-format">· Concept Map</span>
+    <span class="section-type">Summary</span>
+    <span class="section-format">&middot; Prose</span>
   </div>
-  <h2>The Four Yamanaka Factors</h2>
-  <div class="mermaid-container">
-    <pre class="mermaid">graph TD
-    OSKM["Yamanaka Factors<br/>(OSKM)"] --> O["OCT4<br/><i>Master pluripotency<br/>regulator</i>"]
-    OSKM --> S["SOX2<br/><i>Maintains stem<br/>cell state</i>"]
-    OSKM --> K["KLF4<br/><i>Controls cell<br/>proliferation</i>"]
-    OSKM --> M["c-MYC<br/><i>Amplifies gene<br/>expression (oncogene)</i>"]
-    O & S & K --> OSK["OSK<br/><i>Safer 3-factor subset<br/>drops the oncogene</i>"]
-    OSKM --> FULL["Full Reprogramming<br/><i>Adult cell → iPSC</i>"]
-    OSK --> PARTIAL["Partial Reprogramming<br/><i>Rejuvenation without<br/>identity loss</i>"]</pre>
+  <h2>The Core Idea</h2>
+  <div class="prose">
+    <p>The Yamanaka factors (Oct4, Sox2, Klf4, c-Myc) can convert any somatic cell into an induced pluripotent stem cell. After nearly twenty years of development, the first therapies transplanting iPSC-derived cells have reached clinical trials, though regulatory progress remains slow.</p>
+    <p>The surprise: reprogramming doesn't just change cell type. It rejuvenates cells by restoring youthful epigenetic control over gene expression, including youthful mitochondrial function. But it cannot repair DNA damage or help cells break down molecular waste they already struggle with.</p>
   </div>
 </div>
 
 <div class="section" id="section-2">
   <div class="section-label">
-    <span class="section-type">Chronology</span>
-    <span class="section-format">· Timeline</span>
+    <span class="section-type">Concept</span>
+    <span class="section-format">&middot; Flowchart</span>
   </div>
-  <h2>Key Milestones</h2>
-  <div class="timeline">
-    <div class="timeline-event">
-      <div class="timeline-year">2006</div>
-      <ul class="timeline-details">
-        <li>Shinya Yamanaka shows 4 factors (OSKM) reprogram adult cells to iPSCs</li>
-      </ul>
-    </div>
-    <div class="timeline-event">
-      <div class="timeline-year">2012</div>
-      <ul class="timeline-details">
-        <li>Yamanaka wins Nobel Prize (shared with John Gurdon)</li>
-      </ul>
-    </div>
-    <div class="timeline-event">
-      <div class="timeline-year">2016</div>
-      <ul class="timeline-details">
-        <li>Belmonte lab shows partial reprogramming reverses aging in progeria mice</li>
-      </ul>
-    </div>
-    <div class="timeline-event">
-      <div class="timeline-year">2020</div>
-      <ul class="timeline-details">
-        <li>Sinclair lab restores vision in old mice using OSK gene therapy</li>
-      </ul>
-    </div>
-    <div class="timeline-event">
-      <div class="timeline-year">2024</div>
-      <ul class="timeline-details">
-        <li>OSK via AAV9 extends remaining lifespan by 109% in 124-week-old mice</li>
-      </ul>
-    </div>
-    <div class="timeline-event">
-      <div class="timeline-year">2026</div>
-      <ul class="timeline-details">
-        <li>First clinical trial (ER-100 for optic neuropathies) planned by Life Biosciences</li>
-      </ul>
-    </div>
+  <h2>Partial vs Full Reprogramming</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">graph TD
+    A["Expose cell to<br/>Yamanaka Factors (OSKM)"] --> B{"Duration?"}
+    B -->|"Brief exposure"| C["Partial Reprogramming"]
+    C --> D["Epigenetic rejuvenation<br/>Cell retains identity<br/>Mitochondrial function restored"]
+    B -->|"Prolonged exposure"| E["Full Reprogramming"]
+    E --> F["Cell becomes iPSC<br/>Loses identity<br/>Cancer risk"]</pre>
   </div>
 </div>
 
 <div class="section" id="section-3">
   <div class="section-label">
-    <span class="section-type">Decision-Tree</span>
-    <span class="section-format">· Flowchart</span>
+    <span class="section-type">Evidence</span>
+    <span class="section-format">&middot; Key Points</span>
   </div>
-  <h2>Partial vs Full Reprogramming</h2>
-  <div class="mermaid-container">
-    <pre class="mermaid">graph TD
-    A["Administer Yamanaka Factors<br/>(via AAV gene therapy)"] --> B{"Duration of<br/>exposure?"}
-    B -->|"Brief: days to 1 week"| C["Partial Reprogramming"]
-    C --> D["Epigenetic age reversal<br/>Cell retains identity<br/>Mitochondrial function restored"]
-    B -->|"Prolonged: weeks+"| E["Full Reprogramming"]
-    E --> F["Cell loses identity<br/>Becomes iPSC<br/>Tumor risk"]
-    D --> G["Goal: Rejuvenation<br/><i>Cells young again,<br/>still doing their job</i>"]
-    F --> H["Risk: Cancer,<br/>organ failure,<br/>tissue dysfunction"]</pre>
+  <h2>What Animal Studies Show</h2>
+  <div class="key-points">
+    <ul>
+      <li>Long-term cyclic OSKM induction restores youthful DNA methylation, transcriptomic, and lipidomic profiles across spleen, liver, skin, kidney, lung, and skeletal muscle</li>
+      <li>Short-term reprogramming enhances muscle repair through local niche control; sustained cyclic reprogramming improves wound healing and reduces fibrosis in muscle and skin</li>
+      <li>A single 1-week OSKM cycle in aged mice (55 weeks old) produced systemic rejuvenation, shown by DNA methylation reprogramming across pancreas, liver, spleen, and blood</li>
+    </ul>
   </div>
 </div>
 
 <div class="section" id="section-4">
   <div class="section-label">
     <span class="section-type">Framework</span>
-    <span class="section-format">· Table</span>
+    <span class="section-format">&middot; Table</span>
   </div>
-  <h2>Key Evidence</h2>
+  <h2>Why Whole-Body Reprogramming Fails</h2>
   <table class="data-table">
-    <thead><tr><th>Study</th><th>Factors</th><th>Subject</th><th>Result</th></tr></thead>
+    <thead><tr><th>Obstacle</th><th>Detail</th></tr></thead>
     <tbody>
-      <tr><td>Ocampo et al 2016</td><td>OSKM</td><td>Progeria mice</td><td>Reversed aging markers, extended lifespan</td></tr>
-      <tr><td>Lu et al 2020</td><td>OSK</td><td>Aged mice (retina)</td><td>Restored youthful vision, reversed glaucoma damage</td></tr>
-      <tr><td>Macip et al 2024</td><td>OSK</td><td>124-week-old mice</td><td>109% median remaining lifespan extension, improved frailty scores</td></tr>
-      <tr><td>Macip et al 2024</td><td>OSK</td><td>Human keratinocytes (65yo)</td><td>Significant epigenetic markers of age reversal</td></tr>
-      <tr><td>Cyclic OSKM studies</td><td>OSKM</td><td>Aged mice</td><td>Single 1-week cycle: systemic rejuvenation across pancreas, liver, spleen, blood</td></tr>
+      <tr><td>Tissue variability</td><td>What works for lung cells is bad for liver cells. What works for one liver cell type is bad for its neighbor.</td></tr>
+      <tr><td>Cancer and organ failure</td><td>Challenges include tumor formation, intestinal and liver failure, and loss of cellular identity.</td></tr>
+      <tr><td>All-or-nothing dilemma</td><td>No current method enables whole-body partial reprogramming without either diluting the therapy to negligible benefit or causing severe tissue damage.</td></tr>
+      <tr><td>Narrow successes only</td><td>Positive results have been produced in animal studies, but progress has been limited to isolated tissues like the retina.</td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="section" id="section-5">
   <div class="section-label">
-    <span class="section-type">Framework</span>
-    <span class="section-format">· Table</span>
+    <span class="section-type">Outlook</span>
+    <span class="section-format">&middot; Key Points</span>
   </div>
-  <h2>Critical Challenges</h2>
-  <table class="data-table">
-    <thead><tr><th>Challenge</th><th>Detail</th></tr></thead>
-    <tbody>
-      <tr><td>Tissue variability</td><td>Different cell types need different parameters. What benefits lung may cause cell death in liver.</td></tr>
-      <tr><td>Cancer risk</td><td>Prolonged exposure causes tumor formation, intestinal and liver failure, loss of cellular identity.</td></tr>
-      <tr><td>Delivery</td><td>No current method for safe whole-body partial reprogramming. Most progress limited to isolated tissues (retina).</td></tr>
-      <tr><td>Dosing precision</td><td>Must be precisely timed (1 week on/off via doxycycline control). Too little = no effect. Too much = dedifferentiation.</td></tr>
-      <tr><td>Translation gap</td><td>Sizable hurdles between mouse rejuvenation and human clinical application.</td></tr>
-    </tbody>
-  </table>
+  <h2>What Comes Next</h2>
+  <div class="key-points">
+    <ul>
+      <li>Researchers need precise spatiotemporal control over reprogramming to handle tissue-specific differences</li>
+      <li>Future strategies should explore safer alternatives: small molecules or modified gene sets rather than direct transcription factor delivery</li>
+      <li>Interest in the field is growing rapidly within the biotech sector</li>
+    </ul>
+  </div>
 </div>
 
     </div>

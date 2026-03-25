@@ -263,7 +263,7 @@
       line-height: 1.6;
     }
     .key-points li::before {
-      content: "\2014";
+      content: "—";
       color: var(--text-dim);
       margin-right: 10px;
     }
@@ -404,13 +404,14 @@
 <body>
   <div class="layout">
     <nav class="sidebar">
-      <a href="#section-1" class="active"><span class="num">1</span>Core Concept</a>
+      <a href="#section-1" class="active"><span class="num">1</span>Vision</a>
 <a href="#section-2"><span class="num">2</span>The Loop</a>
 <a href="#section-3"><span class="num">3</span>Three Files</a>
 <a href="#section-4"><span class="num">4</span>Design</a>
 <a href="#section-5"><span class="num">5</span>Quick Start</a>
-<a href="#section-6"><span class="num">6</span>Small Hardware</a>
-<a href="#section-7"><span class="num">7</span>Forks</a>
+<a href="#section-6"><span class="num">6</span>Agent Usage</a>
+<a href="#section-7"><span class="num">7</span>Small Hardware</a>
+<a href="#section-8"><span class="num">8</span>Forks</a>
     </nav>
 
     <div class="container">
@@ -420,7 +421,7 @@
           <h1>Autoresearch: Autonomous AI Research</h1>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
         </div>
-        <div class="meta"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener">github.com/karpathy</a> &middot; 990 &rarr; 273 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>4 min</span> saved</span></div>
+        <div class="meta"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noopener">github.com/karpathy</a> &middot; 1223 &rarr; 350 words &middot; 2 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>4 min</span> saved</span></div>
       </div>
 
       <div class="section" id="section-1">
@@ -428,13 +429,12 @@
     <span class="section-type">ARGUMENT</span>
     <span class="section-format">&middot; Key Points</span>
   </div>
-  <h2>Core Concept</h2>
+  <h2>Vision</h2>
   <div class="key-points">
     <ul>
-      <li>Karpathy's premise: autonomous AI agent swarms will run all research. &ldquo;This repo is the story of how it all began.&rdquo;</li>
-      <li>Give an AI agent a real LLM training setup. It modifies code, trains 5 minutes, checks if val_bpb improved, keeps or discards, repeats. ~12 experiments/hour, ~100 overnight.</li>
-      <li>You don't edit Python. You program program.md files that instruct agents. The agent edits train.py autonomously.</li>
-      <li>val_bpb (validation bits per byte): the single metric. Lower is better, vocab-size-independent, so architectural changes are fairly compared.</li>
+      <li>Karpathy's framing: research was once done by &ldquo;meat computers&rdquo; synchronizing via &ldquo;sound wave interconnect&rdquo; in &ldquo;group meeting.&rdquo; That era is gone. Research is now &ldquo;the domain of autonomous swarms of AI agents running across compute cluster megastructures.&rdquo; &ldquo;This repo is the story of how it all began.&rdquo;</li>
+      <li>The idea: give an AI agent a small but real LLM training setup, let it experiment autonomously overnight. It modifies code, trains 5 minutes, checks if the result improved, keeps or discards, repeats. You wake up to a log of experiments and hopefully a better model.</li>
+      <li>You don't touch the Python files. You program program.md Markdown files that provide context to AI agents. The agent edits train.py autonomously.</li>
     </ul>
   </div>
 </div>
@@ -466,9 +466,9 @@
   <table class="data-table">
     <thead><tr><th>File</th><th>Role</th><th>Modified by</th></tr></thead>
     <tbody>
-      <tr><td>prepare.py</td><td>Data prep, tokenizer, dataloader, eval</td><td>Human (once)</td></tr>
-      <tr><td>train.py</td><td>GPT model, optimizer (Muon + AdamW), training loop</td><td>Agent</td></tr>
-      <tr><td>program.md</td><td>Agent instructions, research direction</td><td>Human</td></tr>
+      <tr><td>prepare.py</td><td>Fixed constants, one-time data prep (downloads data, trains BPE tokenizer), runtime utilities (dataloader, evaluation)</td><td>Not modified</td></tr>
+      <tr><td>train.py</td><td>Full GPT model, optimizer (Muon + AdamW), training loop. Everything fair game: architecture, hyperparameters, optimizer, batch size</td><td>Agent</td></tr>
+      <tr><td>program.md</td><td>Baseline instructions for one agent</td><td>Human</td></tr>
     </tbody>
   </table>
 </div>
@@ -480,11 +480,11 @@
   </div>
   <h2>Design Choices</h2>
   <table class="data-table">
-    <thead><tr><th>Choice</th><th>Why</th></tr></thead>
+    <thead><tr><th>Choice</th><th>Why</th><th>Tradeoff</th></tr></thead>
     <tbody>
-      <tr><td>Single file to modify</td><td>Scope manageable, diffs reviewable</td></tr>
-      <tr><td>Fixed 5-min time budget</td><td>Experiments comparable regardless of changes; finds optimal model for your platform</td></tr>
-      <tr><td>Self-contained</td><td>One GPU, one file, one metric. No distributed training</td></tr>
+      <tr><td>Single file to modify</td><td>Keeps scope manageable and diffs reviewable</td><td></td></tr>
+      <tr><td>Fixed 5-min time budget</td><td>Experiments directly comparable regardless of what agent changes. Finds optimal model for your platform. ~12 experiments/hour, ~100 overnight</td><td>Results not comparable across different compute platforms</td></tr>
+      <tr><td>Self-contained</td><td>No distributed training, no complex configs. One GPU, one file, one metric</td><td></td></tr>
     </tbody>
   </table>
 </div>
@@ -497,11 +497,10 @@
   <h2>Quick Start</h2>
   <div class="numbered-steps">
     <ol>
-      <li>Requires: single NVIDIA GPU (H100 tested), Python 3.10+, uv</li>
-      <li>uv sync (install deps)</li>
-      <li>uv run prepare.py (data + tokenizer, ~2 min, one-time)</li>
-      <li>uv run train.py (test single run, ~5 min)</li>
-      <li>Point Claude/Codex at repo, prompt to read program.md</li>
+      <li>Requirements: single NVIDIA GPU (tested on H100), Python 3.10+, uv</li>
+      <li>uv sync (install dependencies)</li>
+      <li>uv run prepare.py (download data + train tokenizer, one-time, ~2 min)</li>
+      <li>uv run train.py (single training run, ~5 min)</li>
     </ol>
   </div>
 </div>
@@ -509,24 +508,39 @@
 <div class="section" id="section-6">
   <div class="section-label">
     <span class="section-type">PROCESS</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Running the Agent</h2>
+  <div class="key-points">
+    <ul>
+      <li>Spin up Claude/Codex (or whatever you want) in this repo, disable all permissions, prompt it to read program.md.</li>
+      <li>program.md is &ldquo;a super lightweight skill&rdquo; providing context and setting up the autonomous research org.</li>
+      <li>The default program.md is kept as a &ldquo;bare bones baseline&rdquo; though one would iterate on it to find the research org code that achieves the fastest progress.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-7">
+  <div class="section-label">
+    <span class="section-type">PROCESS</span>
     <span class="section-format">&middot; Checklist</span>
   </div>
   <h2>Tuning for Smaller Hardware</h2>
   <div class="checklist">
     <div class="group">
-      <div class="group-label">Adjustments for non-H100</div>
-      <div class="item">&#9744;  Use TinyStories dataset (lower entropy, works with smaller models)</div>
-      <div class="item">&#9744;  Decrease vocab_size: 8192 &rarr; 4096/2048/1024/256</div>
-      <div class="item">&#9744;  Lower MAX_SEQ_LEN (down to 256), increase DEVICE_BATCH_SIZE to compensate</div>
-      <div class="item">&#9744;  Decrease EVAL_TOKENS for faster validation</div>
-      <div class="item">&#9744;  Lower DEPTH (default 8 &rarr; 4)</div>
-      <div class="item">&#9744;  Use WINDOW_PATTERN &ldquo;L&rdquo; only (banded &ldquo;SSSL&rdquo; may be inefficient)</div>
-      <div class="item">&#9744;  Lower TOTAL_BATCH_SIZE (powers of 2, down to 2^14)</div>
+      <div class="group-label">Recommendations for non-H100 platforms</div>
+      <div class="item">&#9744;  Use TinyStories dataset (lower entropy, GPT-4 generated short stories, reasonable results with smaller models)</div>
+      <div class="item">&#9744;  Decrease vocab_size: 8192 down to 4096, 2048, 1024, or 256 (byte-level tokenizer)</div>
+      <div class="item">&#9744;  Lower MAX_SEQ_LEN (down to 256); increase DEVICE_BATCH_SIZE to compensate (tokens per pass = product of both)</div>
+      <div class="item">&#9744;  Decrease EVAL_TOKENS so validation evaluates on less data</div>
+      <div class="item">&#9744;  Lower DEPTH (default 8, try 4). Many variables are functions of DEPTH</div>
+      <div class="item">&#9744;  Use WINDOW_PATTERN &ldquo;L&rdquo; only (&ldquo;SSSL&rdquo; alternating banded attention may be very inefficient)</div>
+      <div class="item">&#9744;  Lower TOTAL_BATCH_SIZE (powers of 2, down to 2^14 / ~16K)</div>
     </div>
   </div>
 </div>
 
-<div class="section" id="section-7">
+<div class="section" id="section-8">
   <div class="section-label">
     <span class="section-type">CATALOG</span>
     <span class="section-format">&middot; Reference</span>
@@ -535,8 +549,8 @@
   <table class="data-table">
     <thead><tr><th>Fork</th><th>Platform</th></tr></thead>
     <tbody>
-      <tr><td>miolini/autoresearch-macos</td><td>macOS</td></tr>
-      <tr><td>trevin-creator/autoresearch-mlx</td><td>macOS (MLX)</td></tr>
+      <tr><td>miolini/autoresearch-macos</td><td>MacOS</td></tr>
+      <tr><td>trevin-creator/autoresearch-mlx</td><td>MacOS (MLX)</td></tr>
       <tr><td>jsegov/autoresearch-win-rtx</td><td>Windows</td></tr>
       <tr><td>andyluo7/autoresearch</td><td>AMD</td></tr>
     </tbody>
