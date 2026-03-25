@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>I Can't Read Long Articles, So I Built a Tool to Fix That — INCMPRSBL</title>
-
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -468,29 +468,21 @@
 
 <div class="section" id="section-3">
   <div class="section-label">
-    <span class="section-type">process</span>
-    <span class="section-format">&middot; Checklist</span>
+    <span class="section-type">decision</span>
+    <span class="section-format">&middot; Flowchart</span>
   </div>
-  <h2>Compression Rules</h2>
-  <div class="checklist">
-    <div class="group">
-      <div class="group-label">The Test</div>
-      <div class="item">&#9744;  Does removing it change what the reader does or believes? Keep.</div>
-      <div class="item">&#9744;  Does it only reduce entertainment or persuasion? Cut.</div>
-    </div>
-    <div class="group">
-      <div class="group-label">Survives</div>
-      <div class="item">&#9744;  Numbers ("incompressible by nature"), named beneficiaries, quotable lines.</div>
-      <div class="item">&#9744;  Satirical phrasing where the wording IS the argument.</div>
-    </div>
-    <div class="group">
-      <div class="group-label">Gets Cut</div>
-      <div class="item">&#9744;  Anecdotes (keep the point), repetition, social proof, SEO.</div>
-    </div>
-    <div class="group">
-      <div class="group-label">Faithfulness</div>
-      <div class="item">&#9744;  Every claim traces to the original. Autoresearch pass catches accuracy issues.</div>
-    </div>
+  <h2>The Compression Test</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">graph TD
+  A{"Remove this sentence?"} -->|"Reader does or believes<br/>something different"| B["Keep"]
+  A -->|"Reader just feels less<br/>entertained or persuaded"| C["Cut"]</pre>
+  </div>
+  <div class="key-points" style="margin-top: 16px;">
+    <ul>
+      <li><strong>Survives:</strong> Numbers ("incompressible by nature"), named beneficiaries, quotable lines, satirical phrasing where the wording IS the argument.</li>
+      <li><strong>Gets cut:</strong> Anecdotes (keep the point), repetition, social proof, SEO.</li>
+      <li><strong>Faithfulness:</strong> Every claim traces to the original. Autoresearch pass catches accuracy issues.</li>
+    </ul>
   </div>
 </div>
 
