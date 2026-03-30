@@ -11,7 +11,7 @@ When evaluating compressed articles, the evaluator must be a separate agent from
 - Stats: `stats.json` tracks all articles, word counts, time saved
 - Index: `index.html` is regenerated from `templates/index.html` after each compression
 - Articles: `YYYY-MM-DD-slug.html` generated from `templates/output.html`
-- Settings: `settings.json` maps 17 content types to visual formats
+- Settings: `settings.json` maps 18 content types to visual formats
 
 ## Index page rules
 - Only list articles that are tracked in git (not gitignored)

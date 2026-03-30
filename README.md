@@ -90,7 +90,8 @@ Edit `~/Projects/incompressible/settings.json` to customize format mappings:
     "argument-parallel": "key-points",
     "framework": "table",
     "comparison": "table",
-    "concept": "concept-map",
+    "concept-causal": "concept-map",
+    "concept-hierarchical": "mindmap",
     "decision-tree": "flowchart",
     "action-items": "checklist",
     "sequence": "numbered-steps",
@@ -109,7 +110,7 @@ Edit `~/Projects/incompressible/settings.json` to customize format mappings:
 
 `globalPreference` options:
 - `auto` (default): picks the best format for each section
-- `visual`: biases toward concept maps and flowcharts
+- `visual`: biases toward concept maps, mind maps, and flowcharts
 - `text`: biases toward prose and lists
 
 ## How compression works
