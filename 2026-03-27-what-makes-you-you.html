@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Makes You You? — INCMPRSBL</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script><script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "—";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
+
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <a href="#section-1" class="active"><span class="num">1</span>Theories</a>
+<a href="#section-2"><span class="num">2</span>Experiment Map</a>
+<a href="#section-3"><span class="num">3</span>Thought Expts</a>
+<a href="#section-4"><span class="num">4</span>Continuity</a>
+<a href="#section-5"><span class="num">5</span>Takeaway</a>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <div class="header-top">
+          <h1>What Makes You You?</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="https://waitbutwhy.com/2014/12/what-makes-you-you.html" target="_blank" rel="noopener">waitbutwhy.com</a> · 3,800 → 470 words · 3 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>17 min</span> saved</span></div>
+      </div>
+
+      <div class="section" id="section-1">
+  <div class="section-label">
+    <span class="section-type">framework</span>
+    <span class="section-format">· Table</span>
+  </div>
+  <h2>Three Theories of Personal Identity</h2>
+  <table class="data-table">
+    <thead><tr><th>Theory</th><th>Core Claim</th><th>Key Problem</th></tr></thead>
+    <tbody>
+      <tr><td>Body Theory</td><td>Your physical body makes you you</td><td>Organ transplants don't change identity. Identical twins share DNA but are different people.</td></tr>
+      <tr><td>Brain Theory</td><td>Your brain (consciousness + memories) makes you you</td><td>Split brain: if half your brain goes to another body, both halves feel normal, but "you" stayed in one body. Brain Theory can't explain why.</td></tr>
+      <tr><td>Data Theory</td><td>Your memories and personality make you you, regardless of physical substrate</td><td>Teletransporter: a perfect molecular copy has all your data, but if the original survives, the copy isn't you. Data alone isn't enough.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">concept</span>
+    <span class="section-format">· Concept Map</span>
+  </div>
+  <h2>Thought Experiments vs. Theories</h2>
+  <div class="mermaid-container">
+    <pre class="mermaid">graph TD
+  BT[Body Theory] -->|Disproved by| BS[Brain Swap]
+  BS -->|Supports| BrT[Brain Theory]
+  BrT -->|Extended by| DC[Data Copy]
+  DC -->|Supports| DT[Data Theory]
+  DT -->|Contradicted by| TT[Torture Test]
+  BrT -->|Contradicted by| TT
+  DT -->|Disproved by| TP[Teletransporter]
+  BrT -->|Disproved by| SB[Split Brain]
+  SB -->|Rehabilitates| BT
+  TP -->|Leads to| CT[Continuity Theory]
+  CR[Cell Replacement] -->|Supports| CT
+  BSc[Body Scattering] -->|Supports| CT</pre>
+  </div>
+</div>
+
+<div class="section" id="section-3">
+  <div class="section-label">
+    <span class="section-type">argument-parallel</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>The Thought Experiments</h2>
+  <div class="key-points">
+    <ul>
+      <li>Brain swap: a mad scientist puts your brain in Bill Clinton's body. You wake feeling like yourself in his body. Your family would eventually accept you're alive, just relocated. Supports Brain Theory over Body Theory.</li>
+      <li>Data copy: instead of transplanting the brain, the scientist copies your data onto Clinton's brain. All your memories, personality, fears in a different physical brain. Locke's memory theory says this is still you.</li>
+      <li>Torture test: after the data transfer, the scientist asks which body to torture. You choose your original body (you believe your identity followed the data to Clinton's body). But in a second scenario, told your memories will be wiped and replaced before transfer, you choose Clinton's body (you believe you stay with your physical brain). The two intuitions contradict.</li>
+      <li>Teletransporter: a machine scans and destroys your body in Boston, rebuilds it perfectly in London. One day the destroyer breaks. You're still in Boston. A copy walks London with all your memories. "That's not me, that's a replica." Data transfer alone doesn't preserve identity.</li>
+      <li>Split brain: you donate half your brain to your identical twin Bob. Both wake feeling normal. You panic: "Why did I stay in my body?" Brain Theory can't explain this. Body Theory can: you're your body, period.</li>
+      <li>Cell replacement: scientists replace your cells 1% at a time with identical replicas. At what point do you die? Gradual replacement feels survivable. Instant replacement (teletransporter) doesn't. The difference: continuity.</li>
+      <li>Body scattering: a machine disassembles you atom by atom, then reassembles you perfectly. If the teletransporter copy is a replica, reassembled-you has the same problem. Destruction and reconstruction, even with original atoms, breaks continuity.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-4">
+  <div class="section-label">
+    <span class="section-type">argument-sequential</span>
+    <span class="section-format">· Chain</span>
+  </div>
+  <h2>The Continuity Theory</h2>
+  <div class="reasoning-chain">
+    <p>Identity isn't specific atoms, brain halves, or psychological data alone <span class="arrow">→</span> Urban's grandfather at 90, looking at a childhood photo: "That's me." The six-year-old and ninety-year-old share almost nothing physically or psychologically. They'd be strangers if they met. <span class="arrow">→</span> But they're connected by unbroken continuity: the six-year-old became a seven-year-old who remembered being six. A long chain of overlapping memories and gradual change links them. <span class="arrow">→</span> You're less a static thing and more a progression, a story. Like a wooden boat where every plank is eventually replaced: still the same boat because replacement was continuous. <span class="arrow">→</span> This is what "soul" might mean: not supernatural, but the intangible thread connecting you across time and change.</p>
+  </div>
+</div>
+
+<div class="section" id="section-5">
+  <div class="section-label">
+    <span class="section-type">argument-parallel</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>The Takeaway</h2>
+  <div class="key-points">
+    <ul>
+      <li>No satisfying final answer exists. Examining clones, merged brains, and consciousness transfer left Urban "completely off-balance."</li>
+      <li>Philosopher Derek Parfit: "The early Buddhist view is that much or most of the misery of human life resulted from the false view of self."</li>
+      <li>Understanding that "you" are less a fixed entity and more a continuous process might reduce suffering created by ego attachment.</li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    let lastActiveId = null;
+    var sectionTops = [];
+    sections.forEach(function(section) {
+      sectionTops.push({
+        id: section.id,
+        absTop: section.getBoundingClientRect().top + window.scrollY
+      });
+    });
+    function updateActiveSection() {
+      var scrollY = window.scrollY;
+      var maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) maxScroll = 1;
+      var readPos = (scrollY / maxScroll) * document.body.scrollHeight;
+      var current = sectionTops[0].id;
+      for (var i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].absTop <= readPos) {
+          current = sectionTops[i].id;
+        }
+      }
+      if (current !== lastActiveId) {
+        lastActiveId = current;
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('.sidebar a[href="#' + current + '"]');
+        if (active) active.classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
