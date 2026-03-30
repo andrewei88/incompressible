@@ -57,27 +57,7 @@ If the input is raw text:
 
 ## Step 2: Read settings
 
-Read `~/Projects/incompressible/settings.json` if it exists. If it doesn't, use these defaults:
-
-Format mapping:
-- process → checklist
-- argument-sequential → key-points (short declarative sentences; use reasoning-chain with → arrows only for strict causal chains where A directly causes B)
-- argument-parallel → key-points
-- framework → table
-- comparison → table
-- concept → concept-map (directional/causal relationships) or mindmap (hierarchical/categorical branching)
-- decision-tree → flowchart
-- action-items → checklist
-- sequence → numbered-steps
-- chronology → timeline
-- interaction → sequence-diagram
-- quadrant → quadrant-chart
-- data-breakdown → pie-chart
-- data-comparison → bar-chart
-- transformation → before-after
-- experience → user-journey
-
-Global preference: auto
+Read `~/Projects/incompressible/settings.json`. This file is the single source of truth for format mappings (content type → visual format) and global preference. The `formatMapping` object maps each content type to its rendering format. `globalPreference` controls bias: `auto` picks the best format per section, `visual` biases toward diagrams and maps, `text` biases toward prose and lists.
 
 ## Step 3: Classify and compress
 
@@ -94,7 +74,8 @@ Identify distinct sections of the article. Each section has one dominant informa
 | argument-parallel | Independent claims, observations, or insights that stand alone |
 | framework | Named components with parallel attributes (each has name + description + purpose, etc.) |
 | comparison | Evaluating options against the same criteria |
-| concept | Ideas defined by relationships to other ideas (use concept-map when directional/causal, mindmap when hierarchical/categorical) |
+| concept-causal | Ideas defined by directional or causal relationships (A causes B, A enables B). The arrow test: removing arrows loses information. |
+| concept-hierarchical | Ideas organized as a hierarchy branching from a central topic. Categories and subcategories, not directional relationships. |
 | decision-tree | If/then branching logic, "do X when Y, do Z when W" |
 | action-items | Tasks, to-dos, things to do |
 | sequence | Ordered events where order is rigid and matters |
@@ -107,9 +88,11 @@ Identify distinct sections of the article. Each section has one dominant informa
 | transformation | Before/after, old vs new, problem vs solution — two-state comparisons |
 | experience | User journeys, day-in-the-life narratives, onboarding flows, emotional arcs through a process |
 
-**Framework vs concept rule:** If the named components only have parallel attributes (name, description, purpose) and no relationships between them, use `framework → table`. If the components interact, cause each other, compensate for each other, or fail in specific ways without each other, use `concept → concept-map` or `concept → mindmap`. The arrow test: would removing arrows from a diagram lose information? If yes, it's a concept. Use concept-map (graph TD) for directional/causal relationships. Use mindmap for hierarchical branching without directionality (e.g., a central topic with categories and subcategories). **Default to visual formats when the content has relationships.** Tables should be the fallback for truly flat, parallel data, not the default for any named set of things.
+**Framework vs concept rule:** If the named components only have parallel attributes (name, description, purpose) and no relationships between them, use `framework → table`. If the components interact, cause each other, compensate for each other, or fail in specific ways without each other, use a concept type. The arrow test determines which: would removing arrows from a diagram lose information? If yes, use `concept-causal → concept-map` (graph TD). If the structure is hierarchical branching without directionality (a central topic with categories and subcategories), use `concept-hierarchical → mindmap`. **Default to visual formats when the content has relationships.** Tables should be the fallback for truly flat, parallel data, not the default for any named set of things.
 
 **Argument subdivision rule:** When you encounter reasoning, ask: does each point depend on the previous? If yes → argument-sequential. If each point stands alone → argument-parallel. Most "here's why X works" or "here's what fails" sections are parallel.
+
+**Argument-sequential format rule:** The default format for argument-sequential is key-points (short declarative sentences). Use reasoning-chain (→ arrows) only for strict causal chains where A directly causes B. Most sequential arguments build on each other conceptually but aren't strict causation. Key-points preserves the content of each point; chain notation compresses too aggressively for anything other than direct cause-and-effect.
 
 **Ordered content disambiguation:** Three formats handle ordered content. Pick based on what carries the meaning:
 - `sequence → numbered-steps`: Order matters but time markers don't. "First do X, then Y, then Z."
@@ -127,7 +110,7 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 **Interaction disambiguation:** Two formats handle relationships between entities:
 - `interaction → sequence-diagram`: Multiple named actors exchanging messages or actions in order. "Client sends request to Server, Server queries Database, Database returns results." The actors and their exchanges are the point.
-- `concept → concept-map`: Concepts relate to each other but aren't actors exchanging messages. The relationships are structural, not temporal.
+- `concept-causal → concept-map`: Concepts relate to each other but aren't actors exchanging messages. The relationships are structural, not temporal. (Use `concept-hierarchical → mindmap` if the structure is a branching hierarchy rather than a directional graph.)
 
 **Comparison disambiguation:** Three formats handle comparisons:
 - `comparison → table`: Evaluating multiple options against the same set of criteria. Classic feature comparison.
@@ -268,7 +251,7 @@ Produce this exact JSON structure (do not wrap in markdown code fences, output r
       }
     },
     {
-      "type": "concept",
+      "type": "concept-causal",
       "format": "concept-map",
       "title": "Section Title",
       "content": {
@@ -276,7 +259,7 @@ Produce this exact JSON structure (do not wrap in markdown code fences, output r
       }
     },
     {
-      "type": "concept",
+      "type": "concept-hierarchical",
       "format": "mindmap",
       "title": "Section Title",
       "content": {
@@ -371,7 +354,7 @@ Produce this exact JSON structure (do not wrap in markdown code fences, output r
 }
 ```
 
-The `format` field should reflect the user's settings. If `globalPreference` is `visual`, prefer concept-map and flowchart when a section could go either way. If `text`, prefer prose and checklist.
+The `format` field should reflect the user's settings. If `globalPreference` is `visual`, prefer concept-map, mindmap, and flowchart when a section could go either way. If `text`, prefer prose and checklist.
 
 ## Step 4: Render HTML
 

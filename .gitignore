@@ -2,6 +2,7 @@
 .playwright-mcp/
 BUILD_STORY.md
 FORANDREW.md
+ANDREWNOTES.md
 logo.png
 logo.svg
 logo_compressed.png
@@ -9,7 +10,6 @@ logo_compressed.svg
 logo_compressed_x.jpeg
 format-chart.jpeg
 eval/
-settings.json
 stats.json
 2026-03-23-rto-is-about-control.html
 2026-03-23-fireship-2026-tech-predictions.html

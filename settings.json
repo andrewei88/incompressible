@@ -1,0 +1,23 @@
+{
+  "formatMapping": {
+    "process": "checklist",
+    "argument-sequential": "key-points",
+    "argument-parallel": "key-points",
+    "framework": "table",
+    "comparison": "table",
+    "concept-causal": "concept-map",
+    "concept-hierarchical": "mindmap",
+    "decision-tree": "flowchart",
+    "action-items": "checklist",
+    "sequence": "numbered-steps",
+    "catalog": "reference-table",
+    "chronology": "timeline",
+    "interaction": "sequence-diagram",
+    "quadrant": "quadrant-chart",
+    "data-breakdown": "pie-chart",
+    "data-comparison": "bar-chart",
+    "transformation": "before-after",
+    "experience": "user-journey"
+  },
+  "globalPreference": "auto"
+}
