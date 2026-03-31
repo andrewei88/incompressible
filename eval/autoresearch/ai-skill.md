@@ -56,6 +56,8 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Generic filler transitions and introductions that make no new claims
 - Social proof and credibility markers
 
+**Disambiguation:** When an article describes an automated or autonomous system, its tooling choices (e.g., git for versioning, Docker for isolation, cron for scheduling) are architectural decisions, not filler. Keep them.
+
 **Post-compression check for systems:** If the article describes a system with an autonomous or automated loop, verify your compression preserves: (1) what the loop does, (2) how it manages state between iterations (e.g., git commits, checkpointing, logging), and (3) how it handles failure (e.g., revert, retry, alert). These mechanisms are architectural, not implementation details.
 
 **Style:**
