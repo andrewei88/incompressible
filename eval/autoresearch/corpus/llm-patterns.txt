@@ -1,0 +1,612 @@
+# Patterns for Building LLM-based Systems & Products - Full Article
+
+## Introduction
+
+"There is a large class of problems that are easy to imagine and build demos for, but extremely hard to make products out of. For example, self-driving: It's easy to demo a car self-driving around a block, but making it into a product takes a decade." - Karpathy
+
+This write-up covers practical patterns for integrating large language models into systems and products, drawing on academic research, industry resources, and practitioner experience. Seven key patterns are presented, organized along spectrums of performance improvement versus cost/risk reduction, and proximity to data versus proximity to users.
+
+The seven patterns are:
+- Evals: To measure performance
+- RAG: To add recent, external knowledge
+- Fine-tuning: To get better at specific tasks
+- Caching: To reduce latency and cost
+- Guardrails: To ensure output quality
+- Defensive UX: To anticipate and handle errors gracefully
+- Collect user feedback: To build data flywheel
+
+---
+
+## Evals: To Measure Performance
+
+Evaluations are measurements assessing a model's performance on tasks, including benchmark data and metrics. From HackerNews: "How important evals are to the team is a major differentiator between folks rushing out hot garbage and those seriously building products in the space."
+
+### Why Evals?
+
+Evals measure system performance and detect regressions. Without them, teams would either fly blind or manually inspect outputs with each change, making it impossible to measure system changes at scale.
+
+### Notable Benchmarks
+
+**MMLU**: A set of 57 tasks spanning elementary math, US history, computer science, law, and more. Models must possess extensive world knowledge and problem-solving ability.
+
+**EleutherAI Eval**: Unified framework testing models via zero/few-shot settings on 200 tasks, incorporating BigBench, MMLU, and others.
+
+**HELM**: Comprehensive LLM assessment across domains, evaluating accuracy, calibration, robustness, fairness, bias, toxicity. Tasks include Q&A, information retrieval, summarization, text classification.
+
+**AlpacaEval**: Automated framework measuring how often a strong LLM (e.g., GPT-4) prefers one model's output over another. Includes win rate, bias, latency, price, variance metrics. Validated with 20k human annotations showing high agreement.
+
+### Metric Categories
+
+Metrics fall into two types:
+
+**Context-dependent metrics** consider context and are task-specific. Repurposing them requires adjustment.
+
+**Context-free metrics** aren't tied to context when evaluating output; they only compare output against gold references. Task-agnostic, they're easier to apply broadly.
+
+### Common Metrics Explained
+
+**BLEU (Bilingual Evaluation Understudy)**: Precision-based metric counting n-grams in generated output appearing in references, divided by total output words. Predominantly used in machine translation. Includes brevity penalty to prevent short outputs from achieving high scores artificially.
+
+Formula: BLEU-N = BP · exp(Σ W_n log(precision_n))
+
+**ROUGE (Recall-Oriented Understudy for Gisting Evaluation)**: Recall-oriented, counting reference words appearing in output. Used for summarization tasks.
+
+Variants include:
+- ROUGE-N: Matching n-grams
+- ROUGE-L: Longest common subsequence
+- ROUGE-S: Skip-bigram pairs
+
+**BERTScore**: Embedding-based metric using cosine similarity comparing tokens/n-grams between output and reference. Three components: recall, precision, F1. Accounts for synonyms and paraphrasing, unlike BLEU/ROUGE.
+
+Formulas:
+- Recall_BERT = (1/|r|) Σ max_j (i·j)
+- Precision_BERT = (1/|p|) Σ max_i (i·j)
+- BERTscore = F_BERT = (2·P·R)/(P+R)
+
+**MoverScore**: Uses contextualized embeddings like BERTScore but enables many-to-one matching instead of one-to-one. Solves constrained optimization finding minimum effort transforming one text to another. Enables mapping semantically related words across sequences.
+
+### Metric Pitfalls
+
+**Poor correlation with human judgments**: BLEU, ROUGE show negative correlation with fluency assessment. Moderate-to-low correlation with human adequacy scores. Poor fit for creative, diverse tasks.
+
+**Poor adaptability**: Metrics proposed for one task don't transfer well. Exact match metrics (BLEU, ROUGE) fail for abstractive summarization or dialogue where diverse responses are valid.
+
+**Poor reproducibility**: High variance reported across studies due to variations in human judgment collection or metric parameters. ROUGE scores across 2,000 studies were hard to reproduce and often incorrect from untested implementations.
+
+**Implementation sensitivity**: Same model gets significantly different scores based on eval implementation. Huggingface comparison of original MMLU with HELM and EleutherAI implementations found same examples had different prompts across providers.
+
+Different evaluation approaches:
+- Original MMLU: Compares predicted probabilities on answers only (A, B, C, D)
+- HELM: Uses next token probabilities, picks highest probability token even if not among options
+- EleutherAI: Computes full answer sequence probability for each option, picks highest
+
+Result: Absolute scores and model ranking fluctuate widely. QLoRA author concluded "do not work with/report or trust MMLU scores."
+
+### Emerging Trend: LLM-Based Evaluation
+
+**G-Eval**: Framework applying LLMs with Chain-of-Thought and form-filling to evaluate LLM outputs. Process: provide task introduction and evaluation criteria; generate CoT evaluation steps; concatenate prompt, CoT, article, summary; output score 1-5; use token output probabilities to normalize and weight.
+
+Found GPT-4 as evaluator had high Spearman correlation with human judgments (0.514), outperforming previous methods. Outperformed traditional metrics on coherence, consistency, fluency, relevance. On topical chat, performed better than ROUGE-L, BLEU-4, BERTScore on naturalness, coherence, engagingness, groundedness.
+
+**Vicuna paper**: Defined eight categories (writing, roleplay, extraction, reasoning, math, coding, STEM, humanities/social science); developed 10 questions per category; generated answers from five chatbots (LLaMA, Alpaca, ChatGPT, Bard, Vicuna); asked GPT-4 to rate based on helpfulness, relevance, accuracy, detail.
+
+Found GPT-4 provided consistent scores with detailed explanations. Under single answer grading, GPT-4 had higher agreement with humans (85%) than humans had among themselves (81%).
+
+**QLoRA**: Asked GPT-4 to rate performance of various models against gpt-3.5-turbo on Vicuna benchmark. Given responses from both models, GPT-4 scored both out of 10 with explanations. Measured via direct comparisons using three-class rating (including ties).
+
+Validated against Mechanical Turk human judgments (two annotators for comparisons, three for pairwise). Found Spearman rank correlation of 0.55 at model level, suggesting LLM-based evals could cost-effectively replace human evals.
+
+### How to Apply Evals
+
+**Start with task-specific evals**: Collect prompts, context, expected outputs as references. Use evals to guide prompt engineering, model selection, fine-tuning. Run evals with changes to quickly measure improvements/regressions. Think "Eval Driven Development" (EDD).
+
+**Choose useful metrics**: Help distill performance changes into comparable numbers across eval runs. If possible, simplify to use easier metrics.
+
+For **classification or extractive QA without dialogue**: Use standard classification metrics (recall, precision, PRAUC).
+
+For **tasks with references but no correct answer** (machine translation, extractive summarization): Use reference metrics (BLEU, ROUGE, BERTScore, MoverScore).
+
+For **open-ended tasks** (abstractive summarization, dialogue): Consider automated LLM evaluation since collecting human judgments is expensive.
+
+**LLM judgment advantages and biases**:
+
+Relative to noisy human judgments, LLM judgments tend less noisy (bias more systematic) but more biased. Mitigate biases:
+
+- **Position bias**: LLMs favor first position. Evaluate same pair twice with swapped order—same response preferred both times = win; else = tie.
+- **Verbosity bias**: Favor longer responses. Ensure comparison responses similar length.
+- **Self-enhancement bias**: Slight bias toward own answers. GPT-4 favors itself 10% higher, Claude-v1 25% higher. Don't use same LLM for evaluation.
+
+**Tip**: Rather than direct LLM scoring, ask for comparisons with references, reducing noise.
+
+**Sometimes best eval is human eval** ("vibe check"): Watch model answers change during training on meaningful prompts. One team found "suggest games for a 3-year-old and 7-year-old to play" more valuable than any metric during training.
+
+---
+
+## Retrieval-Augmented Generation: To Add Knowledge
+
+RAG fetches relevant data from outside the foundation model and enhances input with this data, providing richer context to improve output.
+
+### Why RAG?
+
+RAG helps reduce hallucination by grounding models on retrieved context, increasing factuality. It's cheaper to keep retrieval indices updated than continuously pre-train LLMs. Cost efficiency enables providing LLMs access to recent data. Updating or removing data (biased or toxic documents) is simpler than fine-tuning or prompting LLMs not to generate such content.
+
+RAG applies mature, simpler information retrieval ideas to support LLM generation. Recent Sequoia survey: 88% of respondents believe retrieval will be key stack component.
+
+### Text Embeddings Background
+
+**Text embedding**: Compressed, abstract text representation where arbitrary-length text becomes fixed-size number vector. Usually learned from corpus like Wikipedia. Similar items positioned close; dissimilar items farther apart.
+
+**Good embedding**: Performs well on downstream tasks like similar item retrieval. Huggingface's MTEB scores models on diverse tasks (classification, clustering, retrieval, summarization).
+
+**Note on modalities**: While primarily discussing text embeddings, embeddings handle multiple modalities. CLIP is multimodal, embedding images and text identically, finding images most similar to input text. Products can embed based on user behavior (clicks, purchases). Graph relationships can be embedded.
+
+### RAG Historical Development
+
+**Early Meta paper**: Showed retrieving relevant documents via TF-IDF and providing as context to language model (BERT) improved open-domain QA. Converted tasks to cloze statements, queried models for missing tokens.
+
+**Dense Passage Retrieval (DPR)**: Showed dense embeddings (instead of sparse TF-IDF) for document retrieval outperform strong baselines like Lucene BM25 (65.2% vs. 42.9% top-5 accuracy). Higher retrieval precision translates to higher end-to-end QA accuracy, highlighting upstream retrieval importance.
+
+Trained two independent BERT-based encoders on existing question-answer pairs. Passage encoder (E_p) embeds text passages; query encoder (E_q) embeds questions. Query embedding retrieves k passages most similar.
+
+Encoders trained for dot-product similarity as ranking function. Loss optimized as negative log-likelihood of positive passage. DPR embeddings optimize maximum inner product between question and relevant passage vectors, learning space where question-passage pairs cluster together.
+
+Inference: Embed all passages (E_p), index in FAISS offline. At query time, compute question embedding (E_q), retrieve top k passages via approximate nearest neighbors, provide to language model outputting answer.
+
+**Retrieval Augmented Generation (RAG)**: Highlighted pre-trained LLM downsides: inability to expand/revise memory, inability to provide output generation insights, hallucinations.
+
+Introduced RAG (semi-parametric models): Dense vector retrieval as non-parametric component; pre-trained LLM as parametric component. Reused DPR encoders initializing retriever, built document index. For LLM used BART (400M parameters, seq2seq model).
+
+Inference: Concatenate input with retrieved document. LLM generates token_i based on original input, retrieved document, previous i-1 tokens. Proposed two generation approaches varying document usage:
+
+**RAG-Sequence**: Uses same document generating complete sequence. For k retrieved documents, generates output for each. Probability of each output sequence marginalized (sum probabilities, weight by document retrieval probability). Highest probability sequence selected.
+
+**RAG-Token**: Generates each token from _different_ document. For k retrieved documents, generates next token distribution for each document before marginalizing. Process repeats next token. For each token generation, can retrieve different k documents based on original input _and_ previously generated tokens. Documents have different retrieval/contribution probabilities.
+
+**Fusion-in-Decoder (FiD)**: Also uses retrieval with generative models for open-domain QA. Supports BM25 or DPR retrieval. Named for fusion on retrieved documents in decoder only.
+
+For each passage: concatenates title, passage with question. Pairs processed independently in encoder. Adds special tokens (question:, title:, context:) before sections. Decoder attends concatenation of retrieved passages.
+
+Processes passages independently in encoder—scales to large passage numbers, only needing self-attention over one context. Compute grows linearly (not quadratically) with passages versus alternatives like RAG-Token. During decoding, decoder processes encoded passages jointly, aggregating context across multiple retrieved passages better.
+
+**Retrieval-Enhanced Transformer (RETRO)**: Combines frozen BERT retriever, differentiable encoder, chunked cross-attention for output generation. Difference: Does retrieval throughout pre-training (not just inference). Fetches relevant documents based input chunks enabling finer-grained, repeated retrieval during generation instead of once per query.
+
+For each input chunk (C_u), k retrieved chunks RET(C_u) fed to encoder. Output: encoded neighbors E^j_u = Encoder(RET(C_u)^j, H_u) ∈ ℝ^(r × d_0). Each chunk encoding conditioned on H_u (intermediate activations) and activations of chunk C_u via cross-attention layers. Encoded neighbor chunks condition next chunk generation.
+
+During retrieval: RETRO splits input into 64-token chunks. Finds text similar to _previous_ chunk providing context to _current_ chunk. Retrieval index: two contiguous chunk pairs—N (neighbor chunk, 64 tokens) computing key; F (continuation chunk, 64 tokens) in original document.
+
+Retrieval via approximate k-NN using L_2 distance (euclidean) on BERT embeddings (interesting departure from usual cosine/dot product). Index via SCaNN queries 2T token database in 10ms.
+
+Demonstrated RETRO-fitting existing models: Freeze pre-trained weights, train chunked cross-attention and neighbor encoder parameters (< 10% weights for 7B model). Enhance transformers with retrieval requiring only 6M training sequences (3% pre-training sequences). RETRO-fitted models surpass baseline performance, achieving near RETRO-from-scratch performance.
+
+**Internet-augmented LMs**: Proposes using "off-the-shelf" search engine augmenting LLMs. Retrieve relevant documents via Google Search. Retrieved documents typically long (average 2,056 words), chunk into paragraphs (six sentences each). Embed questions and paragraphs via TF-IDF, apply cosine similarity ranking most relevant paragraphs per query.
+
+Retrieved paragraphs condition LLM via few-shot prompting. Adopt conventional k-shot prompting (k=15) from closed-book QA (question-answer pairs) extended with evidence paragraph—each context: evidence, question, answer triplet.
+
+Used Gopher (280B parameters, trained 300B tokens) as generator. For each question, generate four candidate answers based on each 50 retrieved paragraphs. Select best answer estimating probability via: direct inference, RAG, noisy channel inference, Product-of-Experts (PoE). PoE consistently best.
+
+**RAG applied to code generation**: **CodeT5+** can standalone generate but combined with RAG significantly outperforms similar models.
+
+Assessment in three settings:
+- Retrieval-based: Fetch top-1 code sample as prediction
+- Generative-only: Output code via decoder only
+- Retrieval-augmented: Append top-1 code sample to encoder input before generation via decoder
+
+Showed retrieved code provides crucial context (e.g., use urllib3 for HTTP requests) guiding generative process toward correct predictions. Generative-only returns incorrect output capturing only "download" and "compress" concepts.
+
+**Hypothetical Document Embeddings (HyDE)**: Addresses: What without relevance judgments for query-passage pairs? Can't train bi-encoders embedding queries/documents identically where relevance = inner product.
+
+Process: Given query, HyDE prompts LLM (InstructGPT) generating hypothetical document. Unsupervised encoder (Contriver) encodes document to embedding vector. Inner product computed between _hypothetical_ document and corpus; most similar _real_ documents retrieved.
+
+Expectation: Encoder's dense bottleneck serves as lossy compressor, extraneous non-factual details excluded via embedding. Reframes relevance modeling from representation learning task to generation task.
+
+### How to Apply RAG
+
+From **Obsidian-Copilot** experience: Hybrid retrieval (traditional search index + embedding-based search) works better than either alone. Complemented classical retrieval (BM25 via OpenSearch) with semantic search (e5-small-v2).
+
+Why not embedding-based only? Falls short in:
+- Person/object name searching (e.g., Eugene, Kaptir 2.0)
+- Acronym/phrase searching (e.g., RAG, RLHF)
+- ID searching (e.g., gpt-3.5-turbo, titan-xlarge-v1.01)
+
+Keyword search limitations: Only models simple word frequencies, doesn't capture semantic/correlation information. Doesn't handle synonyms or hypernyms.
+
+Combined approaches complementary. Conventional search index enables metadata refining results: date filters prioritizing newer documents, category narrowing, e-commerce rating/category filters. Metadata helpful downstream ranking: citation frequency prioritization, product sales volume boosting.
+
+**Regarding embeddings**: Popular approach: text-embedding-ada-002. Benefits: API ease, no self-hosting embedding infrastructure. However, personal experience and anecdotes suggest better alternatives.
+
+Original embedding approaches: Word2vec, fastText. FastText is open-source, lightweight library enabling pre-trained embeddings or training new models. Comes with 157-language pre-trained embeddings, extremely fast without GPU. Go-to for early-stage proofs of concept.
+
+Solid baseline: **sentence-transformers**. Simplifies sentence/paragraph/image embeddings. Based on BERT/RoBERTA workhorse transformers, available in 100+ languages.
+
+Recent standouts: **Instructor models** show SOTA performance. During training, prepend task descriptions to text. When embedding new text, simply describe task getting task-specific embeddings. Not different from instruction-tuned embedding models.
+
+Example: **E5 family** of models. For open QA/information retrieval, prepend documents with "passage:", queries with "query:". For symmetric tasks (semantic similarity, paraphrase retrieval) or feature embeddings (classification, clustering), use "query:" prefix.
+
+**Instructor model** goes further, allowing customized prepended prompts: "Represent the `domain` `task_type` for the `task_objective`:" Example: "Represent the Wikipedia document for retrieval:". (Domain and task objective optional). Brings prompt tuning concept to text embedding field.
+
+As of Aug 1st, **MTEB Leaderboard** top embedding model: **GTE family** by Alibaba DAMO Academy. Top model is half size of next best (e5-large-v2): 0.67GB vs 1.34GB. Second position: gte-base at 0.22GB, 768 embedding dimension.
+
+**Low-latency scale retrieval**: Use approximate nearest neighbors (ANN) optimizing speed, returning approximate (not exact) top k, trading minor accuracy for large speedup.
+
+**ANN indices**: Data structures enabling efficient ANN searches. At high level, build embedding space partitions enabling quick specific space zooming. Popular techniques:
+
+**Locality Sensitive Hashing (LSH)**: Creates hash functions so similar items likely hash identically. Only checking relevant buckets enables efficient ANN queries.
+
+**Facebook AI Similarity Search (FAISS)**: Combines quantization and indexing for efficient retrieval. Supports CPU/GPU, handles billions of vectors via efficient memory use.
+
+**Hierarchical Navigable Small Worlds (HNSW)**: Inspired by "six degrees of separation." Builds hierarchical graph embodying small world phenomenon—most nodes reachable from any other via minimum hops. Initiates coarse approximation queries progressively narrowing search at lower levels.
+
+**Scalable Nearest Neighbors (ScaNN)**: Two-step process: coarse quantization reduces search space, then fine-grained search within reduced set. Best recall/latency tradeoff observed.
+
+**ANN index evaluation factors**:
+- Recall: How does it compare against exact nearest neighbors?
+- Latency/throughput: Queries per second handled?
+- Memory footprint: RAM required serving index?
+- Adding new items: Can be added without full reindex (LSH) or requires rebuild (ScaNN)?
+
+No single framework best in every aspect. Define functional/non-functional requirements before benchmarking. ScaNN personally found outstanding in recall-latency tradeoff.
+
+---
+
+## Fine-tuning: To Get Better at Specific Tasks
+
+Fine-tuning: Taking pre-trained models (already trained on vast data) and refining on specific tasks. Intent: harness pre-training knowledge, apply to specific tasks usually involving smaller, task-specific datasets.
+
+"Fine-tuning" used loosely, referring to several concepts:
+
+**Continued pre-training**: Apply same pre-training regime (next token prediction, masked language modeling) with domain-specific data on base model.
+
+**Instruction fine-tuning**: Pre-trained base models fine-tuned on instruction-output pair examples to follow instructions, answer questions, etc.
+
+**Single-task fine-tuning**: Pre-trained models honed for narrow, specific tasks (toxicity detection, summarization), similar to BERT and T5.
+
+**Reinforcement Learning with Human Feedback (RLHF)**: Combines instruction fine-tuning with reinforcement learning. Requires collecting human preferences (pairwise comparisons) training reward models. Reward models further fine-tune instructed LLMs via RL techniques (proximal policy optimization/PPO).
+
+Focus primarily on single-task and instruction fine-tuning.
+
+### Why Fine-tuning?
+
+Fine-tuning open LLMs increasingly viable alternative to third-party, cloud-based LLMs:
+
+**Performance & control**: Fine-tuning improves off-the-shelf base model performance, potentially surpassing third-party LLMs. Provides greater LLM behavior control, enabling robust systems/products. Enables differentiated products beyond simply using third-party/open LLMs.
+
+**Modularization**: Single-task fine-tuning enables using army of smaller models each specializing on tasks. Via this setup, modularize systems into individual models for content moderation, extraction, summarization, etc. Each model focuses narrow task set, avoiding alignment tax where fine-tuning one task reduces other task performance.
+
+**Reduced dependencies**: Fine-tuning and hosting own models reduces proprietary data legal concerns (PII, internal documents/code) exposed to external APIs. Avoids third-party LLM constraints: rate-limiting, high costs, overly restrictive safety filters. Own LLM hosting ensures data network containment, scales throughput as needed.
+
+### More About Fine-tuning
+
+Why fine-tune _base_ models? Oversimplifying: base models primarily optimize next-word prediction from training corpus. Aren't naturally adept following instructions or answering questions. When posed questions, tend responding with more questions. Instruction fine-tuning teaches appropriate responses.
+
+Fine-tuning challenges:
+
+**Significant demonstration data needed**: InstructGPT paper used 13k instruction-output samples for supervised fine-tuning, 33k output comparisons for reward modeling, 31k prompts without human labels for RLHF.
+
+**Alignment tax**: Fine-tuning causes **lower performance on critical tasks**. InstructGPT found RLHF led performance regressions (relative to GPT-3 base) on public NLP tasks (SQuAD, HellaSwag, WMT 2015 French-English). Workaround: several smaller, specialized models excelling at narrow tasks.
+
+Fine-tuning similar to transfer learning concept. Per Wikipedia: "Transfer learning is technique reusing knowledge learned from task boosting performance on related task." Previously, transfer learning simplified applying ResNet models trained on ImageNet to fashion product classification and building image search.
+
+**ULMFit**: Early paper applying transfer learning to text. Established self-supervised pre-training (unlabeled data) followed by fine-tuning (labeled data) protocol. Used AWS-LSTM (LSTM variant with dropout at various gates).
+
+Process: Pre-training (next word prediction) on wikitext-103 (28.6 Wikipedia articles, 103M words). Target task fine-tuning: LM fine-tuned with task-domain data. Classifier fine-tuning: model augmented with two additional linear blocks, fine-tuned on target classification tasks (sentiment analysis, question classification, topic classification).
+
+Since then, pre-training followed by fine-tuning paradigm drove language modeling progress.
+
+**BERT (Bidirectional Encoder Representations from Transformers; encoder only)**: Pre-trained on masked language modeling and next sentence prediction on English Wikipedia and BooksCorpus. Fine-tuned on task-specific inputs/labels for: single-sentence classification, sentence pair classification, single-sentence tagging, question & answering.
+
+**GPT (Generative Pre-trained Transformers; decoder only)**: Pre-trained on BooksCorpus via next token prediction. Followed by single-task fine-tuning for text classification, textual entailment, similarity, Q&A. Interestingly, including language modeling as auxiliary objective helped models generalize and converge faster.
+
+**T5 (Text-to-text Transfer Transformer; encoder-decoder)**: Pre-trained on Colossal Clean Crawled Corpus (C4, cleaned Common Crawl from April 2019). Employed denoising objective (masked language modeling). Fine-tuned on text classification, abstractive summarization, Q&A, machine translation.
+
+Unlike ULMFit, BERT, GPT using different classifier heads for downstream tasks, T5 represented downstream tasks as text-to-text only. Translation task input: "Translation English to German:"; summarization: "Summarize:" or "TL;DR:". Prefix essentially hyperparameter (first instance prompt engineering?). Single fine-tuned model across variety downstream tasks enabled.
+
+**InstructGPT**: Expanded single-task fine-tuning to instruction fine-tuning. Base model: GPT-3 pre-trained on internet data (Common Crawl, WebText, Books, Wikipedia). Applied supervised fine-tuning on desired behavior demonstrations (instruction and output). Trained reward model on comparison dataset. Optimized instructed model against reward model via PPO, focusing more on alignment than specific task performance.
+
+### Fine-tuning Techniques
+
+**Soft prompt tuning**: Prepends trainable tensor to model's input embeddings, creating soft prompt. Unlike discrete text prompts, soft prompts learn via backpropagation, fine-tuned incorporating labeled example signals.
+
+**Prefix tuning**: Instead of adding soft prompt to model input, prepends trainable parameters to all transformer block hidden states. During fine-tuning, LM original parameters frozen while prefix parameters updated.
+
+Achieved performance comparable to full fine-tuning updating just 0.1% parameters. Limited data and new topic extrapolation settings outperformed full fine-tuning. Hypothesis: Fewer parameter training reduces smaller target dataset overfitting.
+
+**Adapter**: Adds fully connected network layers twice to each transformer block (after attention layer, after feed-forward network layer). On GLUE, achieves within 0.4% full fine-tuning performance adding just 3.6% parameters per task.
+
+**Low-Rank Adaptation (LoRA)**: Adapters designed as two low-rank matrices product. Inspired by Aghajanyan et al. showing pre-trained language models have low intrinsic dimension when adapting to specific tasks, learning efficiently despite random projection into smaller subspace. LoRA hypothesized weight updates during adaption also have low intrinsic rank.
+
+Outperformed several baselines including full fine-tuning. Hypothesis: LoRA thanks reduced rank provides implicit regularization. Full fine-tuning updating all weights prone overfitting.
+
+**QLoRA**: Builds on LoRA concept. Instead of using full 16-bit model during fine-tuning, applies 4-bit quantized model. Introduced innovations: 4-bit NormalFloat (model quantization), double quantization (additional memory savings), paged optimizers (prevent OOM errors transferring data to CPU RAM when GPU runs out).
+
+Reduced average memory requirements fine-tuning 65B models from > 780GB to manageable 48GB without degrading runtime or predictive performance versus 16-bit fully fine-tuned baseline.
+
+### How to Apply Fine-tuning
+
+**Collect demonstration data/labels**: Could be straightforward tasks (document classification, entity extraction, summarization) or complex (Q&A, dialogue). Collection methods:
+
+**Via experts or crowd-sourced annotators**: Expensive, slow, usually higher-quality data with good guidelines.
+
+**Via user feedback**: Simple selection (product attributes), rating responses (thumbs up/down like ChatGPT), logging choices (Midjourney image downloads).
+
+**Query larger open models with permissive licenses**: With prompt engineering, elicit reasonable demonstration data from larger models (Falcon 40B Instruct) fine-tuning smaller models.
+
+**Reuse open-source data**: Frame tasks as natural language inference (NLI), fine-tune models performing NLI using MNLI data, continue fine-tuning on internal data classifying entailment, neutral, contradiction.
+
+**Note**: Some LLM terms prevent using their output developing competing models.
+
+OpenAI Terms of Use (Section 2c, iii): "You may not use output from the Services to develop models that compete with OpenAI."
+
+LLaMA 2 Community License Agreement (Section 1b-v): "You will not use the Llama Materials or any output or results of the Llama Materials to improve any other large language model (excluding Llama 2 or derivative works thereof)."
+
+**Define evaluation metrics**: Discussed in previous evals section.
+
+**Select pre-trained model**: Several open LLMs with permissive licenses available. Excluding Llama 2 (non-fully commercial), Falcon-40B best-performing. However, unwieldy fine-tuning and serving in production given weight.
+
+Inclined toward smaller models like Falcon-7B. Simplifying/narrowing tasks: BERT (340M params), RoBERTA (355M params), BART (406M params) solid for classification and natural language inference. Beyond: Flan-T5 (770M and 3B variants) reliable baseline for translation, abstractive summarization, headline generation.
+
+May need **updating model architecture** when pre-trained architecture misaligns task. For example, update BERT or T5 classification heads matching task. **Tip**: Simple binary classification tasks: NLI models work out-of-box. Entailment = positive, contradiction = negative, neutral = uncertainty indication.
+
+**Pick fine-tuning approach**: LoRA and QLoRA good starting points. More intensive fine-tuning, like continued pre-training on new domain knowledge, may require full fine-tuning.
+
+**Basic hyperparameter tuning**: Most papers focus learning rate, batch size, number of epochs (LoRA, QLoRA). Using LoRA might tune rank parameter (though QLoRA found different rank/alpha led similar results). Other hyperparameters: input sequence length, loss type (contrastive loss vs. token match), data ratios (pre-training/demonstration mix, positive-to-negative example ratios).
+
+---
+
+## Caching: To Reduce Latency and Cost
+
+Caching: storing previously retrieved or computed data. Future requests for same data served faster. LLM generation space popularized approach: cache LLM response keyed on input embedding. For new requests, semantically similar requests serve cached responses.
+
+For some practitioners, this sounds like "[a disaster waiting to happen.](https://twitter.com/HanchungLee/status/1681146845186363392)" Inclined agreeing. Key: figuring how to cache safely instead solely depending semantic similarity.
+
+### Why Caching?
+
+Caching significantly reduces latency serving previously served responses. Eliminating same input response computation again saves LLM requests and cost. Certain use cases don't support second-order latency. Pre-computing and caching may be only way serving.
+
+### More About Caching
+
+Cache: high-speed storage storing frequently-accessed data subset. Serves requests faster via cache versus primary storage (search index, relational database). Overall, caching enables previously fetched/computed data efficient reuse.
+
+**GPTCache example**: When new request received:
+
+- **Embedding generator**: Embeds request via various models (OpenAI text-embedding-ada-002, FastText, Sentence Transformers, more).
+- **Similarity evaluator**: Computes request similarity via vector store providing distance metric. Vector store: local (FAISS, Hnswlib) or cloud-based. Can compute similarity via model.
+- **Cache storage**: If request similar, cached response fetched and served.
+- **LLM**: If request isn't similar enough, passes to LLM generating result. Response served and cached future use.
+
+Redis shared similar example mentioning some teams precompute all anticipated queries. Set similarity thresholds on which queries similar enough warranting cached responses.
+
+### How to Apply Caching
+
+**Understand user request patterns**: Allows thoughtful cache design enabling reliable application.
+
+**Non-LLM example**: Caching product prices for e-commerce checkout. Is displaying possibly-outdated cached price safe? Probably not—customer checkout price should match charged amount. Caching inappropriate ensuring customer consistency.
+
+**LLM responses**: Imagine request summary "Mission Impossible 2" semantically similar "Mission Impossible 3." Cache serving wrong response via semantic similarity.
+
+**Consider cache effectiveness for usage pattern**: Quantify via cache hit rate (percentage requests served directly from cache). Uniformly random usage: cache requires frequent updates, negating benefits. Power law usage (small proportion unique requests accounting majority traffic—search queries, product views): caching effective strategy.
+
+**Beyond semantic similarity**, explore caching based on:
+
+- **Item IDs**: Pre-compute product review summaries or entire trilogy summaries.
+- **Pairs of Item IDs**: Generate movie comparisons (appears O(N²), but small combination majority traffic, like popular movie series/genre comparisons).
+- **Constrained input**: Variables like genre, director, lead actor. Pre-computing verified working code, cache reliable reuse. Drop-down generated code examples.
+
+**Caching doesn't only occur on-the-fly**: Pre-compute LLM generations offline/asynchronously before serving. Shift latency generation (seconds) to cache lookup (milliseconds). Batch pre-computing reduces cost relative real-time serving.
+
+While listed approaches less flexible than semantically caching natural language inputs, provides good efficiency/reliability balance.
+
+---
+
+## Guardrails: To Ensure Output Quality
+
+In LLM context, guardrails validate LLM output ensuring not just sounding good but syntactically correct, factual, harmful-content-free. Includes guarding against adversarial input.
+
+### Why Guardrails?
+
+First, ensure model outputs reliable and consistent enough for production. May require specific JSON schema output for machine-readability, or generated code executability. Guardrails help syntactic validation.
+
+Second, provide additional safety layer and quality control over LLM output. Verify generated content appropriateness, check factual accuracy, ensure context coherence.
+
+### More About Guardrails
+
+**One approach**: Control model responses via prompts. Anthropic shared prompts guiding models toward "[helpful, harmless, and honest](https://arxiv.org/abs/2204.05862)" (HHH) responses. Found Python fine-tuning with HHH prompt better than RLHF fine-tuning.
+
+**More common approach**: Validate output. **Guardrails package** allows adding structural, type, quality requirements on LLM outputs via Pydantic-style validation. Failed checks trigger corrective action: output filtering or response regeneration.
+
+Most validation logic in **validators.py**. Broadly, validators fall into categories:
+
+- **Single output value validation**: Ensuring output is (i) predefined choice, (ii) length within range, (iii) numeric within range, (iv) complete sentence.
+- **Syntactic checks**: Ensuring generated URLs valid/reachable, Python/SQL code bug-free.
+- **Semantic checks**: Verifying output aligned with reference document, extractive summary closely matches source. Via cosine similarity or fuzzy matching.
+- **Safety checks**: Ensuring output free inappropriate language or translated text quality high.
+
+**Nvidia's NeMo-Guardrails**: Similar principle, designed for LLM-based conversational systems. Rather than syntactic focus, emphasizes semantic ones: steering away political topics, providing factually correct information, detecting jailbreaking.
+
+Different approach: instead deterministic checks (value list existence, code syntax inspection), leans LLM usage validating outputs (inspired SelfCheckGPT).
+
+Fact-checking/hallucination prevention example: LLM itself checks whether most recent output consistent with context. Knowledge base fact-check: LLM queried if response true based retrieved documents. Without knowledge base, LLM generates multiple completions as context. Assumption: Multiple disagreeing completions likely original hallucination.
+
+Moderation example: screens harmful/unethical content via LLM. Given ethics/harm nuance, heuristics/conventional ML fall short. LLM required deeper intent/dialogue structure understanding.
+
+**Apart from LLM output verification**, can **directly steer output adhering specific grammar**. **Microsoft's Guidance** example. Unlike Guardrails imposing JSON schema via prompt, Guidance enforces schema injecting tokens comprising structure.
+
+Think Guidance as domain-specific language for LLM interactions/output. Draws Handlebars inspiration (popular web templating language enabling variable interpolation, logical control). Guidance sets apart executing linearly maintaining generated token order. Injecting structure tokens—instead relying LLM correctly generating—dictates specific output format.
+
+Their examples show: **generating always-valid JSON**, **generating complex output formats** with multiple keys, ensuring LLMs **play right roles**, having **agents interact**.
+
+Introduced **token healing**: useful feature avoiding subtle tokenization bugs. Simple terms: rewinds generation one token before prompt end, restricts first generated token matching last prompt token prefix. Eliminates token boundary fretting crafting prompts.
+
+### How to Apply Guardrails
+
+Though LLM guardrails in industry still nascent, several immediately useful, practical strategies:
+
+**Structural guidance**: Apply whenever possible. Direct output control, precise method ensuring output conforms specific structure/format.
+
+**Syntactic guardrails**: Check categorical output within acceptable choice sets, numeric output within expected range. Generate SQL: verify syntax errors free, all query columns match schema. Ditto code generation (Python, JavaScript).
+
+**Content safety guardrails**: Verify output no harmful/inappropriate content. Simple: check against "[List of Dirty, Naughty, Obscene, and Otherwise Bad Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words)" or use profanity detection models. **Common** to run moderation classifiers on output. Complex, nuanced output relies LLM evaluator.
+
+**Semantic/factuality guardrails**: Confirm output semantically relevant to input. Two-sentence movie synopsis summary: validate produced summary semantically similar output, or have LLM ascertain summary accurately represents synopsis.
+
+**Input guardrails**: Limit input types models respond to, mitigating inappropriate/adversarial prompt risks leading harmful content. Midjourney returns errors requesting NSFW content. Simple: string list comparison or moderation classifier use.
+
+---
+
+## Defensive UX: To Anticipate & Handle Errors Gracefully
+
+Defensive UX: design strategy acknowledging bad things—inaccuracies, hallucinations—happen during machine learning/LLM product user interactions. Intent: anticipate and manage in advance, primarily guiding user behavior, averting misuse, handling errors gracefully.
+
+### Why Defensive UX?
+
+Machine learning and LLMs aren't perfect—produce inaccurate output. Respond differently same input over time (search personalization, LLM diverse output on creative, higher temperature settings). Can violate consistency principle advocating consistent UI and predictable behaviors.
+
+Defensive UX mitigates via:
+
+- **Increased accessibility**: Helping users understand ML/LLM features, limitations makes more accessible, user-friendly.
+- **Increased trust**: Users seeing feature handling difficult scenarios gracefully without harmful output likely trust more.
+- **Better UX**: System and UX design handling ambiguous situations, errors enables smoother, more enjoyable experience.
+
+### More About Defensive UX
+
+Learning more about defensive UX via Human-AI guidelines from Microsoft, Google, Apple.
+
+**Microsoft's Guidelines for Human-AI Interaction**: Based survey 168 potential guidelines from internal/external industry sources, academic literature, public articles. After combining similar guidelines, filtering too vague/specific or non-AI-specific, heuristic evaluation, narrowed 18 guidelines.
+
+Organized by user journey:
+
+- **Initially**: Make clear system can do (G1), make clear how well (G2)
+- **During interaction**: Time services based context (G3), mitigate social biases (G6)
+- **When wrong**: Support efficient dismissal (G8), support efficient correction (G9)
+- **Over time**: Learn user behavior (G13), provide global controls (G17)
+
+**Google's People + AI Guidebook**: Rooted data/insights from Google product teams, academic research. Organized into developer-needed concepts versus Microsoft's user-organization.
+
+23 patterns around common product development questions:
+
+- **How start**: Determine AI value addition, invest early good data practices (evals)
+- **How onboard users**: Make safe exploring, anchor familiarity, automate phases
+- **How build trust**: Set right expectations, be transparent, automate lower-risk
+
+**Apple's Human Interface Guidelines for Machine Learning**: Differs bottom-up approach. Primary source: practitioner knowledge/experience. Less references/data, focuses Apple's longstanding design principles. Unique perspective distinguishing from other two.
+
+Focuses applying Apple design principles to ML-infused products, emphasizing UI rather model functionality. Starts asking developers considering ML app role, working backward from user experience. Includes: ML critical or complementary (Face ID essential, keyboard works without QuickType); proactive or reactive (Siri Suggestions proactive, autocorrect reactive); dynamic or static (Recommendations dynamic, Photos object detection improves with releases).
+
+Then delves several patterns split inputs/outputs. Inputs focus explicit feedback, implicit feedback, calibration, corrections. Guides AI product design requesting, processing user data, interactions. Outputs focus mistakes, multiple options, confidence, attribution, limitations. Intent: ensure model output comprehensible, useful.
+
+Three guideline differences insightful: Google emphasizes training data/model development (engineering culture). Microsoft emphasizes mental models (HCI academic study). Apple centers seamless UX (cultural values/principles).
+
+### How to Apply Defensive UX
+
+Following patterns based on guidelines. (Disclaimer: Not a designer.)
+
+**Set right expectations**: Consistent across three guidelines:
+
+- Microsoft: Make clear how well system does what (help understand AI mistakes frequency)
+- Google: Set right expectations (be transparent capable/incapable)
+- Apple: Help realistic expectations (describe limitation in marketing/feature context)
+
+Simple: brief disclaimer above AI-generated results like Bard, or app limitations highlight like ChatGPT.
+
+Being transparent about product capabilities/limitations helps users calibrate functionality/output expectations. Short-term less trust, long-run fosters trust—users less likely overestimate subsequently facing disappointment.
+
+**Enable efficient dismissal**: Microsoft Guideline 8: Support efficient dismissal (make easy dismiss/ignore undesired AI services).
+
+Example: site-navigating chatbot asking help should easy dismiss. Ensures chatbot doesn't become nuisance on smaller screens. GitHub Copilot: users conveniently ignore code suggestions simply continuing typing. May reduce feature usage short-term, prevents nuisance reducing customer satisfaction long-term.
+
+**Provide attribution**: Listed all three guidelines:
+
+- Microsoft: Make clear why system did what (enable accessing explanations for system behavior)
+- Google: Add human source context (help appraise recommendations with 3rd-party input)
+- Apple: Consider attributions distinguishing results
+
+Citations increasingly common. BingChat includes citations (usually reputable sources) in responses. Shows information origin, allowing users quality assessment. LLM explaining why user might like product: include actual review quote or mention product rating alongside explanation.
+
+Community/expert context enhances trust. Hiking trail recommendation: mentioning highly recommended by relevant community builds value. Personalize explaining: "Because you've read non-fiction," "New books by read authors." Not only personalizes but provides context enhancing understanding/trust.
+
+**Anchor on familiarity**: When introducing new AI product/feature, guide users with familiar UX patterns, features. Easier focusing main task, earning customer trust. Resist exotic UI showcasing "magical" features.
+
+Similarly, chat-based features increasingly common post-ChatGPT. Chat your docs, chat query data, chat buy groceries. However, questioning whether chat right UX most experiences—takes much effort versus familiar text/image clicking.
+
+Increased user effort leads higher expectations harder meeting. Netflix shared users have higher recommendation expectations from explicit actions (search) versus passive (scrolling recommendation slates, product clicking). Generally, effort investment (chat, search) increases expectations.
+
+While chat offers flexibility, demands user effort. Less intuitive lacking adjustment signifiers. Overall, sticking familiar, constrained UI makes product navigation easier; chat secondary or tertiary option.
+
+---
+
+## Collect User Feedback: To Build Our Data Flywheel
+
+Gathering user feedback learns preferences. LLM products specifically, user feedback contributes evals, fine-tuning, guardrails. Data—pre-training corpus, expert demonstrations, human preferences for reward modeling—is LLM product moat. Deliberately design UX collecting user feedback.
+
+Feedback: explicit (users deliberately provide information responding requests) or implicit (information learned from interactions without deliberate user feedback).
+
+### Why Collect User Feedback
+
+User feedback **helps models improve**. Learning user likes, dislikes, complaints improves meeting needs. **Enables individual preference adaptation**. Recommendations prime example. User interactions learning likes/dislikes better tailor tastes over time.
+
+**Feedback loop evaluates system overall performance**: While evals measure model/system performance, user feedback measures concrete user satisfaction, product effectiveness.
+
+### How to Collect User Feedback
+
+**Make providing feedback easy**: Echoed three guidelines:
+
+- Microsoft: Encourage granular feedback (enable providing preferences indicating regular interaction with AI)
+- Google: Let users give feedback (give real-time teaching, feedback, error correction opportunity)
+- Apple: Provide actionable improving presented content, experience information
+
+ChatGPT example: Users indicate thumbs up/down responses, regenerate if really bad/unhelpful. Useful human preference feedback fine-tuning LLMs.
+
+Midjourney example: Post-generation, users generate new images (negative feedback), tweak variation (positive feedback), upscale/download image (strong positive feedback). Enables rich comparison data on outputs.
+
+**Consider implicit feedback**: Arises user product interactions. Unlike explicit specific responses, implicit provides wide-ranging user behavior, preference data.
+
+Copilot-like assistants: Users indicate helpfulness accepting suggestion completely (strong positive), accepting with tweaks (positive), ignoring (neutral/negative). Alternatively, updating comment led code generation suggests initial code didn't meet needs.
+
+Chatbots (ChatGPT, BingChat): Daily usage change over time? Sticky suggests liking. Average conversation length? Tricky interpretation: longer = engaging/fruitful or longer getting needed? Other patterns: common machine learning.
+
+---
+
+## Other Patterns Common in Machine Learning
+
+Beyond seven patterns, other ML patterns relevant LLM systems/products:
+
+**Data flywheel**: Continuous collection improves models, better user experience. Increased usage provides data further evaluating/fine-tuning, creating virtuous cycle.
+
+**Cascade**: Rather assigning single complex LLM task, simplify breaking so only handling excelling tasks (reasoning, eloquent communication). RAG example: instead relying LLM retrieve/rank items from internal knowledge, augment LLMs external knowledge, focus applying reasoning abilities.
+
+**Monitoring**: Demonstrates AI system value added or lack. Someone shared LLM-based customer support discontinued after two weeks prod—A/B test showed 12x losses using LLM versus support team!
+
+---
+
+## Additional Insights From Community
+
+**Separation of concerns/task decomposition** (Erick Enriquez): Distinct prompts for subtasks, chaining helps attention/reliability (hurts latency). Had trouble rigid output structure AND variable response content, split tasks.
+
+**Role-based access control; security** (Krishna): Who accesses what; DB/LLM using ensuring right security guards.
+
+**Consistent output format; tool augmentation** (Paul Tune): Standardized format (JSON); offload specialist, proven, reliable models.
+
+**Security** (Anderson Darario): Mitigate cache poisoning, input validation, prompt injection, training data provenance, non-vulnerable code, malicious input (AI Agent tools), denial service (LLM stress test).
+
+**UX/UI feedback incentivization** (Wen Yang): Incentivize user-generated answer feedback. Implicit: Copilot ghost text (TAB accept = positive).
+
+**Consistency checks; chaining; task decomposition; output ensemble** (Dan White): Self-consistency sampling, chaining, decomposition, multiple model output ensembling. Applied almost daily.
+
+**Analytics tool guardrails** (m_voitko): Relevant building analytics where LLM translates natural to programming language.
+
+---
+
+## Conclusion
+
+This longest-ever post covers seven key patterns building LLM-based systems/products:
+
+1. **Evals**: Measure performance
+2. **RAG**: Add recent, external knowledge
+3. **Fine-tuning**: Specialize specific tasks
+4. **Caching**: Reduce latency/cost
+5. **Guardrails**: Ensure output quality
+6. **Defensive UX**: Anticipate, handle errors
+7. **Collect feedback**: Build data flywheel
+
+These patterns exist on spectrums: improving performance versus reducing cost/risk, and proximity data versus proximity users.
+
+Building LLM-based systems/products: still early journey. Are other key patterns/resources? What found useful/not? Experience appreciated. **Please reach out!**
