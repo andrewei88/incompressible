@@ -50,8 +50,6 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 **Preserve framing claims:** If the article opens with a specific motivating problem or question (e.g., "students asked why X", "we discovered Y was broken"), keep it — it's a claim, not filler. Similarly, if the conclusion makes a specific, testable assertion (e.g., "95% of materials do X wrong"), preserve it. Only discard introductions and conclusions that are generic summaries with no new claims.
 
-**Do not infer specifics the original leaves unnamed.** If the original says "the default dataset" without naming it, do not add the name. If the original says "published in May" without a year, do not add the year. If the original says "a few small packages," do not drop the qualifier. The compression must use the same level of specificity as the original. Adding precision from external knowledge is hallucination, even when correct.
-
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
 - Analogies that restate a point already made plainly
