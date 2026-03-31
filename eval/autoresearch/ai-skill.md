@@ -45,6 +45,7 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Actionable steps
 - Key distinctions
 - Evidence supporting non-obvious claims
+- Hedged or qualified claims: preserve the exact qualifier ("in some cases", "may", "outperformed in one experiment"). Do not strengthen ("always") or weaken ("might possibly") the author's hedging.
 
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
