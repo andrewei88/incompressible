@@ -51,8 +51,6 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 **Preserve framing claims:** If the article opens with a specific motivating problem or question (e.g., "students asked why X", "we discovered Y was broken"), keep it — it's a claim, not filler. Similarly, if the conclusion makes a specific, testable assertion (e.g., "95% of materials do X wrong"), preserve it. Only discard introductions and conclusions that are generic summaries with no new claims. The motivating context (who complained, what they asked, what event triggered the article) is often the most memorable part of the piece. If it names a specific group, institution, or event, it must survive compression.
 
-**Never derive or compute:** If the article states a value descriptively (e.g., "probability of 0.1"), reproduce the author's wording. Do not convert it to an equivalent formula, expression, or derived form (e.g., "log(1/9)"), even if mathematically correct. The compression must contain only what the author wrote, not what you can calculate from it.
-
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
 - Analogies that restate a point already made plainly
