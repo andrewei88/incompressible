@@ -46,11 +46,13 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Key distinctions
 - Evidence supporting non-obvious claims
 
+**Preserve framing claims:** If the article opens with a specific motivating problem or question (e.g., "students asked why X", "we discovered Y was broken"), keep it — it's a claim, not filler. Similarly, if the conclusion makes a specific, testable assertion (e.g., "95% of materials do X wrong"), preserve it. Only discard introductions and conclusions that are generic summaries with no new claims.
+
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
 - Analogies that restate a point already made plainly
 - Repetition
-- Filler transitions and introductions
+- Generic filler transitions and introductions that make no new claims
 - Social proof and credibility markers
 
 **Style:**
