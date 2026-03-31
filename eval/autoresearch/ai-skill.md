@@ -61,6 +61,8 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 **Post-compression check for systems:** If the article describes a system with an autonomous or automated loop, verify your compression preserves: (1) what the loop does, (2) how it manages state between iterations (e.g., git commits, checkpointing, logging), and (3) how it handles failure (e.g., revert, retry, alert). These mechanisms are architectural, not implementation details.
 
+**Post-compression precision check:** After compressing, scan your output for any specific names, dates, numbers, or counts that you added but the original left implicit or unnamed. If the original says "published in May" and you wrote "May 2023," remove the year. If the original describes examples without counting them and you wrote "four failure modes," remove the count. Match the original's level of specificity exactly.
+
 **Style:**
 - Short sentences. If a sentence has a comma, consider splitting it.
 - Simple words. "Use" not "utilize."
