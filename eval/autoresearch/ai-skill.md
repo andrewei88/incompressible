@@ -62,6 +62,8 @@ Identify distinct sections of the article. Each section has one dominant informa
 
 **Post-compression check for systems:** If the article describes a system with an autonomous or automated loop, verify your compression preserves: (1) what the loop does, (2) how it manages state between iterations (e.g., git commits, checkpointing, logging), and (3) how it handles failure (e.g., revert, retry, alert). These mechanisms are architectural, not implementation details.
 
+**Post-compression check for precision:** Scan your output for any value, formula, or expression that does not appear verbatim in the original. If you derived it (e.g., converted a description to an equation) or added it from external knowledge (e.g., inserted an author's name the article doesn't mention), replace it with the author's original phrasing.
+
 **Style:**
 - Short sentences. If a sentence has a comma, consider splitting it.
 - Simple words. "Use" not "utilize."
