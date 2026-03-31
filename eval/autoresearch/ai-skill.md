@@ -70,4 +70,5 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Padded articles (heavy engagement hooks, humor): 5-10%
 - Average-density articles: 8-15%
 - Dense/technical articles: 15-25%
+- Already-compressed sources (READMEs, documentation, API references): 25-40%
 - Never below 5%
