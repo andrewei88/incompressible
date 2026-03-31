@@ -45,6 +45,7 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Actionable steps
 - Key distinctions
 - Evidence supporting non-obvious claims
+- Safety and reversibility mechanisms (rollback, revert, undo, checkpointing) in autonomous or automated systems
 
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
