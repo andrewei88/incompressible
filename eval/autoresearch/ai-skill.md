@@ -45,7 +45,6 @@ Identify distinct sections of the article. Each section has one dominant informa
 - Actionable steps
 - Key distinctions
 - Evidence supporting non-obvious claims
-- Hedging and epistemic markers (seems, appears, I think, likely, might, suggests) — these signal the author's uncertainty, not filler. If the author hedges a claim, the compression must hedge it too.
 - Numerical thresholds, limits, and ceilings (e.g., "tops out after ~5 models", "only works above 50B parameters") — these specific bounds distinguish expert knowledge from generic advice
 - Code examples that demonstrate a key concept, especially bug patterns and fixes. Reproduce the essential lines, not the full snippet. If the code IS the point (e.g., showing a bug mechanism), it must survive compression.
 - Enumerated categories and illustrative examples with specific details: When an article names specific categories, phases, or types that organize a framework (e.g., "four phases: X, Y, Z, W"), list them explicitly — don't summarize as "by [grouping]." When an article uses a concrete example with specific numbers or quotes to demonstrate a capability, preserve the example's key specifics — they serve as evidence, not decoration.
