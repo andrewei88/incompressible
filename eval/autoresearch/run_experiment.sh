@@ -11,10 +11,12 @@
 #   - Recall: core ideas captured (Score: X/Y)
 #   - Precision: hallucination count (Hallucinations: N)
 #   - Compression ratio: compressed/original word percentage
+#   - Section count: number of sections in compressed output
 #
 # Constraints (enforced by the orchestrating agent, not this script):
 #   - Hallucinations > 0 on any article → auto-revert
 #   - Compression ratio outside 5-40% on any article → auto-revert
+#   - Format/section quality: reported for agent judgment, not hard-gated
 
 set -euo pipefail
 

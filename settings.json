@@ -17,7 +17,9 @@
     "data-breakdown": "pie-chart",
     "data-comparison": "bar-chart",
     "transformation": "before-after",
-    "experience": "user-journey"
+    "experience": "user-journey",
+    "reasoning-chain": "reasoning-chain",
+    "code-example": "code"
   },
   "globalPreference": "auto"
 }
