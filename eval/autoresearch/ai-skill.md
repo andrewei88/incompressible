@@ -127,5 +127,4 @@ If more than 40% of sections in a compression use key-points format, re-examine 
 - Average-density articles: 8-15%
 - Dense/technical articles: 15-25%
 - Already-compressed sources (READMEs, documentation, API references): 25-40%
-- Never below 5%, never above 40%
-- **Post-compression ratio check:** Count your output words and divide by the original word count. If the ratio exceeds 40%, you're reproducing too much. Cut redundant phrasing, merge overlapping points, and prefer terse language. If below 5%, you've lost content.
+- Never below 5%
