@@ -98,11 +98,8 @@ If more than 40% of sections in a compression use key-points format, re-examine 
 - Numerical thresholds, limits, and ceilings (e.g., "tops out after ~5 models", "only works above 50B parameters") — these specific bounds distinguish expert knowledge from generic advice
 - Code examples that demonstrate a key concept, especially bug patterns and fixes. Reproduce the essential lines, not the full snippet. If the code IS the point (e.g., showing a bug mechanism), it must survive compression.
 - Enumerated categories and illustrative examples with specific details: When an article names specific categories, phases, or types that organize a framework (e.g., "four phases: X, Y, Z, W"), list them explicitly — don't summarize as "by [grouping]." When an article uses a concrete example with specific numbers or quotes to demonstrate a capability, preserve the example's key specifics — they serve as evidence, not decoration.
-- Term definitions and acronym expansions: When the author defines a term, abbreviation, or acronym (e.g., "val_bpb (validation bits per byte)"), the definition must survive compression. A term used without its definition is opaque to the reader. On first use, include the expansion inline.
 
 **Preserve framing claims:** If the article opens with a specific motivating problem or question (e.g., "students asked why X", "we discovered Y was broken"), keep it — it's a claim, not filler. Similarly, if the conclusion makes a specific, testable assertion (e.g., "95% of materials do X wrong"), preserve it. Only discard introductions and conclusions that are generic summaries with no new claims. The motivating context (who complained, what they asked, what event triggered the article) is often the most memorable part of the piece. If it names a specific group, institution, or event, it must survive compression.
-
-**Preserve pattern-illustrating examples:** When an article describes a general pattern or failure mode and gives specific, concrete examples (e.g., specific bugs, specific API behaviors, specific model failures), preserve at least one example with its specifics. Examples make abstract claims concrete and testable. "Bugs are silent" is generic; "flipped labels during augmentation pass without error" is actionable. The example IS the evidence.
 
 **Discard:**
 - Anecdotes used purely for engagement (keep the point, cut the story)
@@ -114,8 +111,6 @@ If more than 40% of sections in a compression use key-points format, re-examine 
 **Disambiguation:** When an article describes an automated or autonomous system, its tooling choices (e.g., git for versioning, Docker for isolation, cron for scheduling) are architectural decisions, not filler. Keep them.
 
 **Post-compression check for systems:** If the article describes a system with an autonomous or automated loop, verify your compression preserves: (1) what the loop does, (2) how it manages state between iterations (e.g., git commits, checkpointing, logging), and (3) how it handles failure (e.g., revert, retry, alert). These mechanisms are architectural, not implementation details.
-
-**Undefined terms check:** After compressing, scan the output for any abbreviation, acronym, variable name, or domain-specific term (e.g., `val_bpb`, `RLHF`, `CoT`). For each, check whether the original defines it. If the original provides a definition or expansion and the compression uses the term without it, add the definition on first use. An undefined term forces the reader to leave the compression and look it up, which defeats the purpose of compressing.
 
 **Section coverage:** After classifying sections, verify that every major section of the original article containing operational or technical content is represented in the compression. Dropping an entire section is a completeness failure worse than a slightly verbose section. For articles under 2000 words (especially READMEs and documentation that are already information-dense), aim for near 1:1 coverage of the original's headings. Administrative sections (License, Contributing, Code of Conduct) may be dropped.
 
