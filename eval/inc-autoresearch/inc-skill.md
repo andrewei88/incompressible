@@ -126,7 +126,7 @@ If more than 40% of sections use key-points, re-examine each and reclassify. For
 
 3. **Most-quotable line test:** The 1-2 lines a reader would most likely quote must appear verbatim or near-verbatim.
 
-4. **Faithfulness check:** Every claim must trace to the original. No added analogies, no upgraded hedging, no attributed frameworks the author didn't reference, no inserted causal links. Tables must not compress uncertainty.
+4. **Faithfulness check:** Every claim must trace to the original. No added analogies, no upgraded hedging, no attributed frameworks the author didn't reference, no inserted causal links. Tables must not compress uncertainty. When paraphrasing quantities, use the author's exact words ("a lot" stays "a lot", not "millions"). Do not add surnames, titles, or identifying details the author did not include. Do not convert hedged predictions ("might", "could", "probably") into definitive statements ("will", "is").
 
 5. **Systems check:** If the article describes a system with a loop, preserve: what the loop does, how it manages state, how it handles failure.
 
