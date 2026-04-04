@@ -1,0 +1,12 @@
+1. Three AI levels: ANI (narrow), AGI (general), ASI (superintelligent)
+2. Law of Accelerating Returns: progress is exponential, not linear
+3. Die Progress Unit (DPU): timespan of change that would shock a time-traveler, compressing over history
+4. Hardware nearly sufficient for AGI-level computation (Tianhe-2 exceeds estimated brain capacity)
+5. Software approaches: brain emulation, genetic algorithms, self-improving systems
+6. Intelligence explosion: AGI → ASI could happen in hours via recursive self-improvement
+7. Median expert estimate for AGI: ~2040
+8. Three cognitive biases prevent accurate prediction: linear thinking, narrow time windows, experience-based skepticism
+9. ASI would have god-like capabilities (atomic-level control)
+10. The key question: will superintelligent AI be aligned with human values?
+11. This is humanity's most important challenge
+12. Exponential curves look flat at the beginning — we're on the flat part now

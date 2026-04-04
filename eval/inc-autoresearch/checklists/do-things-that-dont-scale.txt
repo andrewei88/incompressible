@@ -1,0 +1,17 @@
+1. Startups take off because founders make them take off, not spontaneously
+2. Compound growth: 10%/week = 14K users in a year
+3. Manual recruiting: go get users one at a time
+4. Collison installation: set users up on the spot instead of just asking
+5. Extraordinary attention to early users (Wufoo hand-written thank-you notes)
+6. Make the experience insanely great, even with a buggy product
+7. Start in deliberately narrow market (Facebook: Harvard only first)
+8. Pick one user, build for them, then generalize (consulting approach)
+9. Do manually what you'll automate later (Stripe signed up merchants by hand)
+10. Big launches don't work. Users come gradually, not from a single announcement
+11. Partnerships don't work for early-stage startups
+12. Think of startup ideas as vectors: what you build + the unscalable initial tactic
+13. The unscalable things should change company DNA permanently
+14. Never seen a startup lured down a blind alley by trying too hard to make initial users happy
+15. Among companies, the best early adopters are usually other startups
+16. Hardware startups get an unfair advantage from personal attention (Pebble, Meraki)
+17. Meraki: doing things that don't scale can become the product itself

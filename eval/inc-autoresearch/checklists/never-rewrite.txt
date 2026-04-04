@@ -1,0 +1,6 @@
+1. Rewriting software from scratch is one of the worst strategic mistakes
+2. Netscape rewrote from scratch, lost 3 years of market position, and collapsed
+3. It's harder to read code than to write it — this bias drives unnecessary rewrites
+4. Old code contains accumulated bug fixes, edge case solutions, and hard-won knowledge
+5. Three categories of mess: architectural (refactor), inefficient (optimize), aesthetic (clean up) — none require full rewrite
+6. Incremental improvement beats starting over
