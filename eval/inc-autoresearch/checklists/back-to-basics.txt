@@ -1,0 +1,10 @@
+1. Biggest architectural mistakes come from weak understanding of lowest-level fundamentals
+2. C strings (ASCIZ: null-terminated) can't know their length without scanning and can't contain zeros — inherited from PDP-7
+3. Repeated strcat creates Shlemiel the Painter's algorithm: O(n-squared) because each call rescans from the beginning
+4. Fix: mystrcat returns pointer to end of string, making concatenation O(n) instead of O(n-squared)
+5. Pascal strings store length in first byte — length check is one instruction instead of a loop; Excel uses them internally (why strings limited to 255 bytes, why Excel is fast)
+6. Buffer overflows from incorrect memory allocation were the number one cause of hacks and worms
+7. malloc walks a free chain and occasionally does slow cleanup — same performance characteristic as garbage collection
+8. Smart allocation: powers of 2 minimize fragmentation (wastes at most 50%); doubling on realloc means at most lg(n) reallocations
+9. Relational databases use fixed-length rows so next-record is one CPU instruction (pointer += recordsize); XML requires parsing, hundreds of instructions per record
+10. CS students should start with C and build up from the CPU, not start with Java — generations of graduates create Shlemiel algorithms without realizing it

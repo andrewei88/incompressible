@@ -1,4 +1,1 @@
-exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	avg	hallucinations	verdict
-0	ba1c6fe	baseline	94.1	100.0	100.0	100.0	100.0	100.0	100.0	98.4	3	BASELINE
-1	(reverted)	Preserve strong first-person author assertions verbatim	94.1	100.0	100.0	100.0	100.0	100.0	100.0	98.4	3	REVERT
-2	20782c1	Strengthen faithfulness check: exact quantities, no added surnames, no hedging upgrades	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	3	KEEP*
+exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	how-to-make-wealth	avg	hallucinations	verdict

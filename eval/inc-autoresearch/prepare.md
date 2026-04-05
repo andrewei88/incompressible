@@ -57,7 +57,7 @@ Tab-separated file: `results.tsv`
 
 Header row:
 ```
-exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	avg	hallucinations	verdict
+exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	how-to-make-wealth	avg	hallucinations	verdict
 ```
 
 ## Corpus
@@ -217,6 +217,80 @@ exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	wha
 6. World-Changing: what problem bigger than you do you care about?
 7. Hypothetical Day: where would you spend time if you had to leave daily?
 8. Action reveals purpose — meaning emerges from doing, not introspection
+
+### Article 8: What You Can't Say
+
+- **ID**: what-you-cant-say
+- **File**: corpus/what-you-cant-say.txt
+- **Source**: paulgraham.com/say.html
+- **Author**: Paul Graham
+- **Words**: ~5,500
+- **Density**: average
+- **Why included**: Rhetorical/argumentative essay about moral fashions. Tests quotable-line preservation, rhetorical framing, and specific historical examples embedded in argument.
+
+**Core ideas (11):**
+
+1. Moral fashions exist like clothing fashions but are more dangerous — violating them can get you fired, ostracized, imprisoned, or killed
+2. The Conformist Test: if you have no opinions you'd be reluctant to express, you probably just think what you're told
+3. Statements that make people maddest are those they worry might be true (Galileo example)
+4. "Heresy" labels (blasphemy, inappropriate, divisive) shoot down ideas before examining truth — when someone attacks a statement as "divisive" instead of "false," pay attention
+5. Time and space comparison: diff present ideas against past cultures and other societies to find what we're wrong about
+6. Moral fashions created deliberately by groups poised between weakness and power — strong enough to enforce taboos but weak enough to need them
+7. Fashion adoption has two waves: early adopters driven by ambition, then a larger group driven by fear
+8. Unthinkable thoughts benefit work — great work grows from overlooked ideas; training to think outside the box makes innovation easier
+9. Practical advice: don't say heretical thoughts; draw a sharp line between thoughts and speech ("pensieri stretti & il viso sciolto")
+10. Counter-strategies: ratchet debate up one level of abstraction, use metaphor (Arthur Miller's "The Crucible" vs HUAC), or humor — zealots can't reply to jokes
+11. Open-mindedness is invisible to those who lack it — when people are bad at it, they don't know it
+
+### Article 9: Back to Basics
+
+- **ID**: back-to-basics
+- **File**: corpus/back-to-basics.txt
+- **Source**: joelonsoftware.com/2001/12/11/back-to-basics/
+- **Author**: Joel Spolsky
+- **Words**: ~3,200
+- **Density**: dense
+- **Why included**: Technical article with code examples, specific algorithms, and performance analysis. Tests code preservation, numerical claims, and technical argument chains in non-AI context.
+
+**Core ideas (10):**
+
+1. Biggest architectural mistakes come from weak understanding of lowest-level fundamentals
+2. C strings (ASCIZ: null-terminated) can't know their length without scanning and can't contain zeros — inherited from PDP-7
+3. Repeated strcat creates Shlemiel the Painter's algorithm: O(n-squared) because each call rescans from the beginning
+4. Fix: mystrcat returns pointer to end of string, making concatenation O(n) instead of O(n-squared)
+5. Pascal strings store length in first byte — length check is one instruction instead of a loop; Excel uses them internally (why strings limited to 255 bytes, why Excel is fast)
+6. Buffer overflows from incorrect memory allocation were the number one cause of hacks and worms
+7. malloc walks a free chain and occasionally does slow cleanup — same performance characteristic as garbage collection
+8. Smart allocation: powers of 2 minimize fragmentation (wastes at most 50%); doubling on realloc means at most lg(n) reallocations
+9. Relational databases use fixed-length rows so next-record is one CPU instruction (pointer += recordsize); XML requires parsing, hundreds of instructions per record
+10. CS students should start with C and build up from the CPU, not start with Java — generations of graduates create Shlemiel algorithms without realizing it
+
+### Article 10: How to Make Wealth
+
+- **ID**: how-to-make-wealth
+- **File**: corpus/how-to-make-wealth.txt
+- **Source**: paulgraham.com/wealth.html
+- **Author**: Paul Graham
+- **Words**: ~9,000
+- **Density**: average
+- **Why included**: Longest essay in corpus. Many specific economic claims, named frameworks (Pie Fallacy, measurement + leverage), and numerical arguments. Tests preservation of specific numbers and multi-section argument structure.
+
+**Core ideas (14):**
+
+1. Startup = compressing your working life into a few years; 2x hours, 3x productivity, no management overhead = roughly 36x more productive (multiplier between 10 and 100)
+2. Conservation law: to make a million dollars, endure a million dollars' worth of pain
+3. Money is not wealth — wealth is stuff we want; money is a medium of exchange, a side effect of specialization
+4. The Pie Fallacy: wealth is not a fixed pie — you can create new wealth
+5. Getting rich requires both measurement and leverage — measurement alone (piecework) or leverage alone isn't enough
+6. Smallness = measurement: in a 10-person startup, you're within a factor of 10 of measuring individual contribution
+7. Technology = leverage: new techniques multiply value across all users — difference between a startup and a barber shop
+8. "Run upstairs" strategy: deliberately choose harder problems because difficulty is harder for large competitors to follow
+9. Startup payoff has high variance: if the mean is 30x, the median is probably zero — most startups tank
+10. Acquirers buy users, not technology — users are the only real proof you've created wealth
+11. Fear of loss motivates acquirers more than hope of gain
+12. Rule of law enabled wealth creation: medieval European merchants could protect fortunes from feudal lords, which caused industrialization
+13. Bill Gates/Microsoft required luck (IBM's DOS licensing blunder) — outlier billionaire fortunes involve a large random factor
+14. Governments that forbid wealth accumulation effectively decree that you work slowly — Soviet Union example
 
 ### Adding articles to the corpus
 

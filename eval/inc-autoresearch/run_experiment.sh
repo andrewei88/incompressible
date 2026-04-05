@@ -9,7 +9,7 @@ set -euo pipefail
 OUTPUT_DIR="${1:-output}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-ARTICLES=("do-things-that-dont-scale" "mean-people-fail" "ai-revolution" "what-makes-you-you" "never-rewrite" "most-important-century" "seven-strange-questions")
+ARTICLES=("do-things-that-dont-scale" "mean-people-fail" "ai-revolution" "what-makes-you-you" "never-rewrite" "most-important-century" "seven-strange-questions" "what-you-cant-say" "back-to-basics" "how-to-make-wealth")
 TOTAL_SCORE=0
 TOTAL_IDEAS=0
 TOTAL_HALLUCINATIONS=0
