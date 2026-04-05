@@ -57,7 +57,7 @@ Tab-separated file: `results.tsv`
 
 Header row:
 ```
-exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	how-to-make-wealth	avg	hallucinations	verdict
+exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	how-to-make-wealth	avg	hallucinations	verdict
 ```
 
 ## Corpus
@@ -92,24 +92,30 @@ exp	commit	mutation	do-things-that-dont-scale	mean-people-fail	ai-revolution	wha
 16. Hardware startups get an unfair advantage from personal attention (Pebble, Meraki)
 17. Meraki: doing things that don't scale can become the product itself
 
-### Article 2: Mean People Fail
+### Article 2: The Psychology of Money
 
-- **ID**: mean-people-fail
-- **File**: corpus/mean-people-fail.txt
-- **Source**: paulgraham.com/mean.html
-- **Author**: Paul Graham
-- **Words**: ~2,100
+- **ID**: psychology-of-money
+- **File**: corpus/psychology-of-money.txt
+- **Source**: collabfund.com/blog/the-psychology-of-money/
+- **Author**: Morgan Housel
+- **Words**: ~8,000
 - **Density**: average
-- **Why included**: Short article, single argument. Tests short-article rule and forced fragmentation.
+- **Why included**: Data-heavy financial writing with specific numbers, named people, and behavioral claims. Framework article (20 biases). Tests numerical preservation, anecdote-as-evidence extraction, and framework/catalog handling. Different author style from PG essays.
 
-**Core ideas (6):**
+**Core ideas (12):**
 
-1. Most successful people aren't mean — meanness and success inversely correlate
-2. Meanness impairs thinking — fighting consumes mental energy on situation-specific tricks
-3. Mean founders can't attract top talent — best people have options
-4. Successful founders driven by world-improvement, not money — money-driven ones take acquisitions
-5. Historical shift: success was zero-sum (resource control) → now positive-sum (innovation)
-6. Civil peace enables creation — people must feel what they create can't be stolen
+1. Grace Groner ($7M from humble savings + 80 years compounding) vs Richard Fuscone (Merrill Lynch VP, bankruptcy) — investing is about behavior, not knowledge
+2. Luck and risk are two sides of the same coin — role of luck is real but hard to quantify (Robert Shiller: "the exact role of luck in successful outcomes")
+3. True cost of investing is emotional (volatility), not financial fees — Monster Beverage rose 211,000% but lost half its value five separate times
+4. Rich man in the car paradox: people want wealth to signal admiration, but others use it as a benchmark for their own desires, not to admire the owner
+5. Compounding is counterintuitive: 1950-1990 gained 296 MB; 1990-today gained 60 million MB. Key to Buffett's success is investing consistently for three-quarters of a century.
+6. Pessimism is seductive because money is ubiquitous (bad news affects everyone) and pessimism requires action while optimism calls for staying the course
+7. Wealth is what you don't see — cars not purchased, diamonds not bought. Rihanna sued her advisor; he responded "Was it really necessary to tell her that if you spend money on things, you will end up with the things and not the money?"
+8. Room for error is not conservative — it lets you endure long enough for low-probability outcomes to compound. Spreadsheets model 30% declines but not the psyche.
+9. Different financial games: Cisco short-term traders vs long-term investors. Understanding your own time horizon matters more than almost anything else.
+10. Russian Roulette syndrome: you can be risk-loving yet completely averse to ruin (Taleb). Leverage pushes routine risks into capability of producing ruin.
+11. Historians are Prophets fallacy: 401(k) is 39 years old, VC barely existed 25 years ago, S&P 500 didn't include financials until 1976. The further back you look, the more general your takeaways should be.
+12. Political beliefs drive financial decisions — data often doesn't mesh with how people think it should, and correlation between politics and economics isn't as clear as people think
 
 ### Article 3: The AI Revolution: Road to Superintelligence
 
