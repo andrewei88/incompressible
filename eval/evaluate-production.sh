@@ -83,21 +83,26 @@ Format (one per line):
 ...
 Then on its own line: Completeness: X/Y
 
-## Job 2: Faithfulness check
+## Job 2: Faithfulness check (atomic fact decomposition)
 
-Read every claim in the compression. For each, ask: "Did the original article say this?"
+For each claim in the compression, decompose it into atomic facts before checking. A single sentence like "Company X, founded in 2019 in San Francisco, grew revenue 40%" contains three atomic facts: (1) founded in 2019, (2) in San Francisco, (3) grew revenue 40%.
 
-Flag any claim that:
-- States a fact not in the original (even if factually correct from external knowledge)
+For each atomic fact, find the specific sentence in the original that supports it. Flag any atomic fact that:
+- States something not in the original (even if factually correct from external knowledge)
 - Adds a framework, term, or analogy the author didn't use
 - Upgrades hedged language to definitive claims ("might" → "will")
 - Reverses or distorts the original's meaning
 - Derives or computes values the author didn't state
 - Infers a year, date, or attribution from metadata rather than article text
 
-Format:
+Format your work:
+Claim: "[full sentence from compression]"
+  Atoms: [fact 1] ← supported by: "[source sentence]" | [fact 2] ← NOT FOUND
+(You may abbreviate for claims where all atoms check out. Show full trace only for flagged claims.)
+
+After the analysis, write:
 Hallucination check:
-- [each flagged claim and reason, or "None found"]
+- [List each hallucinated atomic fact with the claim it came from, or "None found"]
 Then on its own line: Hallucinations: N
 
 ## Job 3: Actionable fixes

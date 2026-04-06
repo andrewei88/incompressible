@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Psychology of Money — INCMPRSBL</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "—";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
+
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <a href="#section-1" class="active"><span class="num">1</span>Core Thesis</a>
+<a href="#section-2"><span class="num">2</span>20 Biases</a>
+<a href="#section-3"><span class="num">3</span>Key Evidence</a>
+<a href="#section-4"><span class="num">4</span>Hierarchy</a>
+<a href="#section-5"><span class="num">5</span>Quotable Lines</a>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">&larr; INCMPRSBL</a>
+        <div class="header-top">
+          <h1>The Psychology of Money</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="https://collabfund.com/blog/the-psychology-of-money/" target="_blank" rel="noopener">collabfund.com</a> &middot; 8,146 &rarr; 1,067 words &middot; 6 min &middot; <span class="time-saved" data-tooltip="Reading time saved on this article"><span>35 min</span> saved</span></div>
+      </div>
+
+      <div class="section" id="section-1">
+  <div class="section-label">
+    <span class="section-type">Argument</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Core Thesis</h2>
+  <div class="key-points">
+    <ul>
+      <li>Grace Groner (orphaned at 12, secretary, never married, never drove a car) left $7M to charity from 80 years of hands-off stock market compounding. Richard Fuscone (Harvard/Chicago, former vice chairman of Merrill Lynch&#x27;s Latin America division, retired in 40s) declared bankruptcy from heavy borrowing and illiquid investments. Both outcomes in the same year.</li>
+      <li>&quot;In what other field does someone with no education, no relevant experience, no resources, and no connections vastly outperform someone with the best education, the most relevant experiences, the best resources and the best connections?&quot;</li>
+      <li>Investing is not the study of finance. It&#x27;s the study of how people behave with money. Managing money isn&#x27;t about what you know; it&#x27;s how you behave.</li>
+      <li>The finance industry talks too much about what to do, and not enough about what happens in your head when you try to do it.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">Catalog</span>
+    <span class="section-format">&middot; Reference</span>
+  </div>
+  <h2>20 Biases and Causes of Bad Financial Behavior</h2>
+  <table class="data-table">
+    <thead><tr><th>Bias</th><th>Core Insight</th></tr></thead>
+    <tbody>
+      <tr><td>1. Luck-Risk Fallacy</td><td>Luck and risk are the same coin; we ignore luck, overweight mistakes</td></tr>
+      <tr><td>2. Cost Avoidance</td><td>True investing cost is emotional, not the visible financial fee</td></tr>
+      <tr><td>3. Rich Man in Car</td><td>Others use your wealth as their own benchmark, not to admire you</td></tr>
+      <tr><td>4. Shifting Desires</td><td>Desires shift every ~20 years, fragmenting compounding</td></tr>
+      <tr><td>5. Anchored to History</td><td>0.00000001% of reality shapes 80% of your worldview</td></tr>
+      <tr><td>6. Historians as Prophets</td><td>Specific trends are unreliable; only general human lessons persist</td></tr>
+      <tr><td>7. Seduction of Pessimism</td><td>Pessimism sounds smart; real optimism means odds favor you over time</td></tr>
+      <tr><td>8. Compounding Blindness</td><td>Exponential growth always exceeds intuition</td></tr>
+      <tr><td>9. Social Proof</td><td>Opportunity inversely correlates with popularity</td></tr>
+      <tr><td>10. Academic Appeal</td><td>What works on spreadsheets fails at the kitchen table</td></tr>
+      <tr><td>11. Invisible Wealth</td><td>Wealth is the purchases not made, the upgrades declined</td></tr>
+      <tr><td>12. Action Bias</td><td>&quot;Don&#x27;t do anything&quot;: most powerful, most ignored financial advice</td></tr>
+      <tr><td>13. Room for Error</td><td>Margin of safety lets you endure until low-probability payoffs arrive</td></tr>
+      <tr><td>14. Different Games</td><td>Don&#x27;t take cues from players in shorter financial games</td></tr>
+      <tr><td>15. Financial Entertainment</td><td>Finance feels like sports where you&#x27;re both fan and player</td></tr>
+      <tr><td>16. Russian Roulette</td><td>Leverage turns routine risk into ruin</td></tr>
+      <tr><td>17. Skills vs Behavior</td><td>Without behavior at the base, top-level skills are worthless</td></tr>
+      <tr><td>18. Narrative Bias</td><td>People filter data to match narratives, discard contradictions</td></tr>
+      <tr><td>19. Political Interference</td><td>Confidence flips with presidency; actual economy barely changes</td></tr>
+      <tr><td>20. Recency Extrapolation</td><td>Recent events feel permanent but most goals are long-term</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-3">
+  <div class="section-label">
+    <span class="section-type">Argument</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Key Evidence</h2>
+  <div class="key-points">
+    <ul>
+      <li>Monster Beverage stock rose 211,000% from 1995-2016 but lost more than half its value on five separate occasions. Buffett made $90B by reading SEC filings 12 hours a day for 70 years, often at the expense of his family. The emotional and physical price is the true cost.</li>
+      <li>Hard drives: 1950-1990 gained 296 megabytes. 1990-present gained 60 million megabytes. 8+8+8+8+8+8+8+8+8 = 72. 8x8x8x8x8x8x8x8x8 = 134,217,728. In 2004 Bill Gates questioned why anyone would need a gigabyte of storage.</li>
+      <li>Good investing isn&#x27;t about earning the highest returns (one-off hits that kill confidence). It&#x27;s about earning pretty good returns you can stick with for a long time. That&#x27;s when compounding runs wild.</li>
+      <li>Born in 1970: stock market went up 10-fold in your formative years. Born in 1950: market went nowhere. &quot;Current investment beliefs depend on the realizations experienced in the past.&quot;</li>
+      <li>401(k) is 39 years old. Roth IRA isn&#x27;t old enough to drink. S&amp;P 500 excluded financial stocks until 1976. Venture capital barely existed 25 years ago. The further back you look, the more general your takeaways should be.</li>
+      <li>Markowitz won the Nobel Prize for portfolio optimization formulas, then split his own money 50/50 to &quot;minimize my future regret.&quot;</li>
+      <li>Cisco reached $600B in 1999. Burton Malkiel pointed out its implied growth rate meant it would exceed the entire U.S. economy in 20 years. Short-term traders drove the price; long-term investors got swept up in a different game.</li>
+      <li>Rihanna nearly went broke and sued her financial advisor. His response: &quot;Was it really necessary to tell her that if you spend money on things, you will end up with the things and not the money?&quot;</li>
+      <li>Room for error is not a conservative hedge. It lets you endure hardship so you stay in the game long enough for low-probability outcomes to pay off. A 30% decline may be survivable on a spreadsheet but devastating to your psyche.</li>
+      <li>Housing fell 30%. Leveraged homeowners wiped out in 2009 couldn&#x27;t access cheap mortgage rates in 2010. Lehman Brothers couldn&#x27;t invest in cheap debt in 2009. Leverage erased every opportunity to recover.</li>
+      <li>Gallup data: Republican economic confidence jumped -33 to +47 when the presidency changed; Democrat confidence dropped +16 to -21. GDP, jobs, and stock market growth didn&#x27;t materially change.</li>
+      <li>40,000 self-described contrarians at the Berkshire Hathaway annual meeting, waiting in line at 4 AM to tell each other about not following the crowd. Real contrarianism means your views are so uncomfortable they cause you to second-guess yourself.</li>
+      <li>After 9/11, &quot;another catastrophic terrorist attack is inevitable and only a matter of time.&quot; The Today Show pitched parachutes for office workers to keep under their desks. Mean reversion is a merciless law of finance. A stable strategy designed to endure change is almost always superior to one that attempts to guard against whatever just happened happening again.</li>
+      <li>Finance is entertainment: &quot;money is like a sporting event where you&#x27;re both the fan and the player, with outcomes affecting you both emotionally and directly.&quot; The purpose of investing is to maximize returns, not minimize boredom. Boring is good.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-4">
+  <div class="section-label">
+    <span class="section-type">Framework</span>
+    <span class="section-format">&middot; Table</span>
+  </div>
+  <h2>Hierarchy of Investor Needs (pyramid, bottom to top)</h2>
+  <table class="data-table">
+    <thead><tr><th>Level</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>Investor Behavior</td><td>Base (most critical). Grace mastered this; it made everything above unnecessary.</td></tr>
+      <tr><td>Asset Allocation</td><td>Second</td></tr>
+      <tr><td>Fees &amp; Transaction Costs</td><td>Third</td></tr>
+      <tr><td>Security Selection</td><td>Fourth</td></tr>
+      <tr><td>Taxes</td><td>Top (least critical). Richard excelled here but failed the base.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="section-5">
+  <div class="section-label">
+    <span class="section-type">Argument</span>
+    <span class="section-format">&middot; Key Points</span>
+  </div>
+  <h2>Quotable Lines</h2>
+  <div class="key-points">
+    <ul>
+      <li>&quot;Not all success is due to hard work, and not all poverty is due to laziness. Keep this in mind when judging people, including yourself.&quot;</li>
+      <li>Scott Adams: &quot;If you want success, figure out the price, then pay it.&quot;</li>
+      <li>Albert Bartlett: &quot;The greatest shortcoming of the human race is our inability to understand the exponential function.&quot;</li>
+      <li>Ben Graham: &quot;The purpose of the margin of safety is to render the forecast unnecessary.&quot;</li>
+      <li>Nassim Taleb: &quot;You can be risk loving and yet completely averse to ruin.&quot;</li>
+      <li>Hans Rosling: &quot;I am not an optimist. I am a very serious possibilist.&quot;</li>
+      <li>&quot;The ability to do what you want, when you want, with who you want, and why you want, has infinite ROI.&quot;</li>
+      <li>Krishnamurti&#x27;s secret: &quot;You see, I don&#x27;t mind what happens.&quot; That might be the best trick when dealing with the psychology of money.</li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    let lastActiveId = null;
+    var sectionTops = [];
+    sections.forEach(function(section) {
+      sectionTops.push({
+        id: section.id,
+        absTop: section.getBoundingClientRect().top + window.scrollY
+      });
+    });
+    function updateActiveSection() {
+      var scrollY = window.scrollY;
+      var maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) maxScroll = 1;
+      var readPos = (scrollY / maxScroll) * document.body.scrollHeight;
+      var current = sectionTops[0].id;
+      for (var i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].absTop <= readPos) {
+          current = sectionTops[i].id;
+        }
+      }
+      if (current !== lastActiveId) {
+        lastActiveId = current;
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('.sidebar a[href="#' + current + '"]');
+        if (active) active.classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

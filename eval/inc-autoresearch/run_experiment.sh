@@ -9,7 +9,7 @@ set -euo pipefail
 OUTPUT_DIR="${1:-output}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-ARTICLES=("do-things-that-dont-scale" "psychology-of-money" "ai-revolution" "what-makes-you-you" "never-rewrite" "most-important-century" "seven-strange-questions" "what-you-cant-say" "back-to-basics" "how-to-make-wealth")
+ARTICLES=("do-things-that-dont-scale" "psychology-of-money" "ai-revolution" "what-makes-you-you" "never-rewrite" "most-important-century" "seven-strange-questions" "what-you-cant-say" "back-to-basics" "you-and-your-research")
 TOTAL_SCORE=0
 TOTAL_IDEAS=0
 TOTAL_HALLUCINATIONS=0
@@ -34,8 +34,11 @@ for article in "${ARTICLES[@]}"; do
   EVAL_OUTPUT=$(bash "$SCRIPT_DIR/evaluate.sh" "$article" "$CHECKLIST" "$OUTPUT_DIR")
   echo "$EVAL_OUTPUT"
 
+  # Strip markdown bold markers before parsing (LLM sometimes wraps Score/Hallucinations in **)
+  EVAL_CLEAN=$(echo "$EVAL_OUTPUT" | sed 's/\*\*//g')
+
   # Parse "Score: X/Y" from evaluation output
-  SCORE_LINE=$(echo "$EVAL_OUTPUT" | grep -E "^Score:" | tail -1)
+  SCORE_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Score:" | tail -1)
   if [ -n "$SCORE_LINE" ]; then
     NUMERATOR=$(echo "$SCORE_LINE" | sed 's/Score: \([0-9]*\)\/.*/\1/')
     DENOMINATOR=$(echo "$SCORE_LINE" | sed 's/Score: [0-9]*\/\([0-9]*\).*/\1/')
@@ -48,7 +51,7 @@ for article in "${ARTICLES[@]}"; do
   fi
 
   # Parse "Hallucinations: N" from evaluation output
-  HALLUC_LINE=$(echo "$EVAL_OUTPUT" | grep -E "^Hallucinations:" | tail -1)
+  HALLUC_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Hallucinations:" | tail -1)
   if [ -n "$HALLUC_LINE" ]; then
     HALLUC_COUNT=$(echo "$HALLUC_LINE" | sed 's/Hallucinations: \([0-9]*\).*/\1/')
     TOTAL_HALLUCINATIONS=$((TOTAL_HALLUCINATIONS + HALLUC_COUNT))
@@ -58,7 +61,7 @@ for article in "${ARTICLES[@]}"; do
   fi
 
   # Parse "Compression: X.X%" from evaluation output
-  COMP_LINE=$(echo "$EVAL_OUTPUT" | grep -E "^Compression:" | tail -1)
+  COMP_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Compression:" | tail -1)
   if [ -n "$COMP_LINE" ]; then
     COMP_PCT=$(echo "$COMP_LINE" | sed 's/Compression: \([0-9.]*\)%.*/\1/')
     TOO_LOW=$(echo "$COMP_PCT < 5" | bc)

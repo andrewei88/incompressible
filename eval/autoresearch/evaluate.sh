@@ -66,20 +66,26 @@ For each core idea, respond with ONLY:
 ...
 Then on its own line: Score: X/Y
 
-## Job 2: Precision check (hallucination detection)
+## Job 2: Precision check (atomic fact decomposition)
 
-After the score, review the compressed article for claims NOT in the original. For each claim in the compression, ask: "Did the original article say this, or was it added?"
+For each claim in the compression, decompose it into atomic facts before checking. A single sentence like "Company X, founded in 2019 in San Francisco, grew revenue 40%" contains three atomic facts: (1) founded in 2019, (2) in San Francisco, (3) grew revenue 40%.
 
-A hallucination is any claim in the compression that:
-- States a fact not in the original (even if factually correct from external knowledge)
+For each atomic fact, find the specific sentence in the original that supports it. Flag any atomic fact that:
+- States something not in the original (even if factually correct from external knowledge)
 - Adds a framework, term, or analogy the author didn't use
 - Upgrades hedged language to definitive claims ("might" → "will")
 - Adds causal links the author left ambiguous
 - Attributes specific numbers the author didn't state
+- Reverses or distorts the original's meaning
 
-After the recall score, write:
+Format your work:
+Claim: "[full sentence from compression]"
+  Atoms: [fact 1] ← supported by: "[source sentence]" | [fact 2] ← NOT FOUND
+(You may abbreviate for claims where all atoms check out. Show full trace only for flagged claims.)
+
+After the analysis, write:
 Hallucination check:
-- [List each hallucinated claim, or "None found"]
+- [List each hallucinated atomic fact with the claim it came from, or "None found"]
 Hallucinations: N
 
 ORIGINAL ARTICLE:

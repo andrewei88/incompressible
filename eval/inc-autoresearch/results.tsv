@@ -1,2 +1,5 @@
-exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	how-to-make-wealth	avg	hallucinations	verdict
-0	7767086	baseline	88.2	100.0	100.0	100.0	100.0	85.7	100.0	100.0	100.0	100.0	97.4	4	BASELINE
+exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	what-makes-you-you	never-rewrite	most-important-century	seven-strange-questions	what-you-cant-say	back-to-basics	you-and-your-research	avg	hallucinations	verdict
+0	d428e48	baseline	88.2	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	98.8	12	BASELINE
+1	d428e48	best-of-3	94.1	100.0	91.6	100.0	100.0	100.0	100.0	100.0	100.0	100.0	98.1	5	REVERT
+2	d428e48	anti-synthesis rules	94.1	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	99.0	7	KEEP
+3	d428e48	table cell overstatement rule	94.1	100.0	75.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	96.2	7	KEEP

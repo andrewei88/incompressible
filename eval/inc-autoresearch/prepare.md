@@ -271,32 +271,33 @@ exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	
 9. Relational databases use fixed-length rows so next-record is one CPU instruction (pointer += recordsize); XML requires parsing, hundreds of instructions per record
 10. CS students should start with C and build up from the CPU, not start with Java — generations of graduates create Shlemiel algorithms without realizing it
 
-### Article 10: How to Make Wealth
+### Article 10: You and Your Research
 
-- **ID**: how-to-make-wealth
-- **File**: corpus/how-to-make-wealth.txt
-- **Source**: paulgraham.com/wealth.html
-- **Author**: Paul Graham
-- **Words**: ~9,000
-- **Density**: average
-- **Why included**: Longest essay in corpus. Many specific economic claims, named frameworks (Pie Fallacy, measurement + leverage), and numerical arguments. Tests preservation of specific numbers and multi-section argument structure.
+- **ID**: you-and-your-research
+- **File**: corpus/you-and-your-research.txt
+- **Source**: cs.virginia.edu/~robins/YouAndYourResearch.html
+- **Author**: Richard Hamming
+- **Words**: ~13,600
+- **Density**: padded (speech transcript with anecdotes)
+- **Why included**: Longest article in corpus. Speech transcript format (different from essays). Rich in named examples (Shannon, Tukey, Feynman, Bell Labs), specific anecdotes used as evidence, and prescriptive claims. Tests compression of conversational writing style and extraction of principles from narrative.
 
-**Core ideas (14):**
+**Core ideas (15):**
 
-1. Startup = compressing your working life into a few years; 2x hours, 3x productivity, no management overhead = roughly 36x more productive (multiplier between 10 and 100)
-2. Conservation law: to make a million dollars, endure a million dollars' worth of pain
-3. Money is not wealth — wealth is stuff we want; money is a medium of exchange, a side effect of specialization
-4. The Pie Fallacy: wealth is not a fixed pie — you can create new wealth
-5. Getting rich requires both measurement and leverage — measurement alone (piecework) or leverage alone isn't enough
-6. Smallness = measurement: in a 10-person startup, you're within a factor of 10 of measuring individual contribution
-7. Technology = leverage: new techniques multiply value across all users — difference between a startup and a barber shop
-8. "Run upstairs" strategy: deliberately choose harder problems because difficulty is harder for large competitors to follow
-9. Startup payoff has high variance: if the mean is 30x, the median is probably zero — most startups tank
-10. Acquirers buy users, not technology — users are the only real proof you've created wealth
-11. Fear of loss motivates acquirers more than hope of gain
-12. Rule of law enabled wealth creation: medieval European merchants could protect fortunes from feudal lords, which caused industrialization
-13. Bill Gates/Microsoft required luck (IBM's DOS licensing blunder) — outlier billionaire fortunes involve a large random factor
-14. Governments that forbid wealth accumulation effectively decree that you work slowly — Soviet Union example
+1. Luck favors the prepared mind (Pasteur): luck determines which specific thing you do, but the prepared mind will find something important
+2. Great scientists have courage: Shannon proved the average random code is good, therefore a good code must exist — only someone with infinite courage could think that
+3. Knowledge and productivity compound like interest: 10% more effort yields more than twice the output over a lifetime (Bode to Hamming about Tukey)
+4. You must work on important problems: "If you do not work on an important problem, it's unlikely you'll do important work" — chemistry table confrontation
+5. Important means having a reasonable attack, not just consequences: time travel, teleportation, and antigravity were never worked on at Bell Labs despite being Nobel-worthy
+6. Great scientists keep 10-20 important problems in mind and drop everything when they see an opening
+7. Open door vs closed door: closed door gets more done today but open door correlates with doing important things long-term
+8. Tolerate ambiguity: believe the theory enough to proceed, doubt it enough to notice flaws (Darwin wrote down contradictory evidence to avoid forgetting it)
+9. Emotional commitment feeds the subconscious: immerse in a problem so your subconscious works on it, and the answer comes in the morning
+10. Turn defects into assets: Hamming was denied programmers, which forced him into automatic programming — great scientists change viewpoint to convert obstacles
+11. Solve for the class, not the instance: "I would never again solve an isolated problem except as characteristic of a class" — generalization often simplifies the solution
+12. You must sell your work: learn to write clearly, give formal talks, and give informal talks — three distinct skills
+13. Great Thoughts Time: Hamming spent Friday afternoons only discussing important questions — 10% of time dedicated to what matters
+14. The Institute for Advanced Study ruined more good scientists than it created — fame and recognition sterilize; great scientists must keep planting small acorns
+15. Work with the system, don't fight it: ego assertion and personality defects cost a steady price over a lifetime — the appearance of conforming gets you far
 
 ### Adding articles to the corpus
 

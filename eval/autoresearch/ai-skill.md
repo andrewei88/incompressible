@@ -117,6 +117,8 @@ If more than 40% of sections in a compression use key-points format, re-examine 
 
 **Table semantic coherence:** Every row in a table must be an instance of the category declared by the section title. If a table is titled "Design Choices," every row must be a design choice from the original. Don't repurpose unrelated content to fill rows just because it fits the column structure.
 
+**Faithfulness check:** Read every claim in the compression and ask: "Did the author say this, or did I infer it?" When paraphrasing quantities, use the author's exact words ("a lot" stays "a lot", not "millions"). Do not add surnames, titles, or identifying details the author did not include. Do not convert hedged predictions ("might", "could", "probably") into definitive statements ("will", "is"). Do not name concepts the author left unnamed (if the author describes a paradox without naming it, do not add the name). Do not compute or derive numbers the author didn't state (if the author gives two values but not their ratio, do not calculate it). Do not create labels, formulas, or declarative claims that make the author's implicit arguments explicit (if the author structures an argument without stating a conclusion, do not state it for them). Diagram and table labels must use only words from the original text. Table cells that state limits, costs, capacities, or quantities must trace to explicit text in the original. If the original doesn't state a value, write "not stated" or omit the cell.
+
 **Style:**
 - Short sentences. If a sentence has a comma, consider splitting it.
 - Simple words. "Use" not "utilize."
