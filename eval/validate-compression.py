@@ -35,8 +35,16 @@ def extract_numbers(text):
     Decimal period is only captured if followed by at least one digit, so
     sentence-ending periods after a number are not absorbed into the token.
     """
+    # Normalize "X percent" → "X%" before scanning so source and compression
+    # speak the same notation. Authors write "13 percent"; compressors emit "13%".
+    normalized_text = re.sub(
+        r'(\d+(?:\.\d+)?)\s+percent\b',
+        r'\1%',
+        text,
+        flags=re.IGNORECASE,
+    )
     # Match numbers like 390, 1,000, $390, 40%, 10.5 — but NOT trailing punctuation
-    nums = re.findall(r'[\$]?[\d,]+(?:\.\d+)?[%]?', text)
+    nums = re.findall(r'[\$]?[\d,]+(?:\.\d+)?[%]?', normalized_text)
     # Normalize: strip $ and commas, keep %
     normalized = set()
     for n in nums:
@@ -224,11 +232,21 @@ def analyze(original, compressed):
 
 
 def validate(original_path, compressed_path):
-    """Read files and return warning strings (back-compat API)."""
+    """Read files and return warning strings (back-compat API).
+
+    If compressed_path is JSON, flatten section content so top-level metadata
+    fields like originalWordCount don't leak into the analyzed text.
+    """
     with open(original_path, 'r') as f:
         original = f.read()
     with open(compressed_path, 'r') as f:
-        compressed = f.read()
+        raw = f.read()
+    compressed = raw
+    if compressed_path.endswith('.json'):
+        try:
+            compressed = _flatten_json_to_text(json.loads(raw))
+        except (ValueError, AttributeError):
+            compressed = raw
     warnings, _ = analyze(original, compressed)
     return warnings
 
