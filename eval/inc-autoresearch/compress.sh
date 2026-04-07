@@ -33,7 +33,7 @@ CLAIMS_PATH="$SCRIPT_DIR/${OUTPUT_DIR}/${ARTICLE_ID}.claims"
 # Step 1: Extract key claims as direct quotes (selection task, not generation)
 {
   cat <<'EXTRACT_PROMPT'
-You are a claim extractor. Read the article below and extract the 15-25 most important claims, arguments, data points, and insights as EXACT QUOTES from the original text.
+You are a claim extractor. Read the article below and extract the most important claims, arguments, data points, and insights as EXACT QUOTES from the original text. Extract as many as needed to cover the article — aim for 20-40 for dense essays; fewer for short pieces. Err on the side of MORE when in doubt.
 
 Rules:
 - Each extracted claim must be a direct quote or very close paraphrase from the article
@@ -42,6 +42,11 @@ Rules:
 - Do NOT paraphrase beyond minor grammatical adjustments
 - Do NOT add any claims, frameworks, or interpretations not in the text
 - Do NOT use external knowledge
+
+MANDATORY coverage — miss none of these if present in the article:
+1. **Named-source attributions.** Whenever the author quotes, cites, or references a named person (economist, author, historical figure, expert), extract the name + the quote/claim as a single item. Do not drop the name. "Shiller said 'X'" is ONE claim; never compress to just "X".
+2. **Reasoning/mechanism for each listed principle.** When the article lists biases, flaws, rules, principles, or numbered items, each one needs TWO extracted claims: the definition/name AND the mechanism/reasoning the author gives for why it's true. "Pessimism is seductive" is half a claim; "Pessimism is seductive because it demands action and feels safer than optimism" is the full claim.
+3. **Distinctive memorable phrasings.** When the author uses a specific vivid phrase ("positioning of each atom", "humanity's most important challenge", "don't mind what happens", "rich man in the car paradox"), capture it VERBATIM as its own claim. Paraphrasing these destroys the signal that made them memorable.
 
 Format:
 [1] "exact quote" (Section: heading or context)
