@@ -15,3 +15,6 @@ exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	
 13a	287d121	extraction prompt rewrite (run 1)	88.2	91.6	91.6	100.0	100.0	100.0	100.0	100.0	100.0	100.0	96.2	0	KEEP
 13b	287d121	extraction prompt rewrite (run 2)	94.1	91.6	83.3	100.0	100.0	100.0	100.0	100.0	100.0	100.0	96.2	0	KEEP
 13c	287d121	extraction prompt rewrite (run 3)	94.1	91.6	83.3	100.0	100.0	100.0	100.0	100.0	100.0	100.0	96.2	0	CONFIRMED
+exp16a	thesis-framing-rule	97.1	0	KEEP
+exp16b	thesis-framing-rule	96.2	0	KEEP
+exp16c	thesis-framing-rule	97.1	0	KEEP
