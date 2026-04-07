@@ -1,0 +1,13 @@
+{
+  "_comment": "Per-article compression ratio baselines from Exp 16 (2026-04-07). Pipeline flags if drift exceeds ±15% of baseline. Baselines are descriptive of current calibrated output, not prescriptive targets — tightening must be an intentional experiment.",
+  "you-and-your-research": 10.9,
+  "ai-revolution": 15.8,
+  "what-makes-you-you": 16.0,
+  "psychology-of-money": 16.5,
+  "what-you-cant-say": 23.4,
+  "seven-strange-questions": 26.2,
+  "do-things-that-dont-scale": 27.5,
+  "back-to-basics": 28.9,
+  "most-important-century": 36.8,
+  "never-rewrite": 60.1
+}

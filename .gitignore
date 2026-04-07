@@ -22,6 +22,7 @@ eval/inc-autoresearch/*
 !eval/inc-autoresearch/evaluate.sh
 !eval/inc-autoresearch/run_experiment.sh
 !eval/inc-autoresearch/results.tsv
+!eval/inc-autoresearch/ratios_baseline.json
 !eval/inc-autoresearch/checklists/
 !eval/inc-autoresearch/corpus/
 stats.json
