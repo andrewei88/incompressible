@@ -32,36 +32,55 @@ for article in "${ARTICLES[@]}"; do
 
   echo ""
   echo "--- ${article} ---"
-  EVAL_OUTPUT=$(bash "$SCRIPT_DIR/evaluate.sh" "$article" "$CHECKLIST" "$OUTPUT_DIR")
-  echo "$EVAL_OUTPUT"
+  # Median-of-N evaluation: eval variance is ~2.8 pt on identical inputs, so
+  # single-run scores are unreliable. Run N=3 in parallel and take the median
+  # score / max hallucination count to give aggregate scores signal.
+  EVAL_N="${EVAL_N:-3}"
+  TMPDIR_ART="/tmp/eval-${OUTPUT_DIR}-${article}-$$"
+  mkdir -p "$TMPDIR_ART"
+  for n in $(seq 1 "$EVAL_N"); do
+    bash "$SCRIPT_DIR/evaluate.sh" "$article" "$CHECKLIST" "$OUTPUT_DIR" > "$TMPDIR_ART/eval-$n.txt" 2>&1 &
+  done
+  wait
+  # Collect per-run scores and halluc counts
+  SCORES=()
+  HALLUCS=()
+  for n in $(seq 1 "$EVAL_N"); do
+    clean=$(sed 's/\*\*//g' "$TMPDIR_ART/eval-$n.txt")
+    s=$(echo "$clean" | grep -E "^Score:" | tail -1 | sed 's/Score: \([0-9]*\)\/.*/\1/')
+    d=$(echo "$clean" | grep -E "^Score:" | tail -1 | sed 's/Score: [0-9]*\/\([0-9]*\).*/\1/')
+    h=$(echo "$clean" | grep -E "^Hallucinations:" | tail -1 | sed 's/Hallucinations: \([0-9]*\).*/\1/')
+    [ -n "$s" ] && SCORES+=("$s") && DENOMINATOR="$d"
+    [ -n "$h" ] && HALLUCS+=("$h")
+  done
+  # Print first run's full output (for debugging / context)
+  cat "$TMPDIR_ART/eval-1.txt"
+  # Compute median score
+  SORTED=($(printf '%s\n' "${SCORES[@]}" | sort -n))
+  MID=$(( ${#SORTED[@]} / 2 ))
+  NUMERATOR="${SORTED[$MID]}"
+  # Max hallucination count across runs (strictest)
+  HALLUC_COUNT=0
+  for h in "${HALLUCS[@]}"; do [ "$h" -gt "$HALLUC_COUNT" ] && HALLUC_COUNT="$h"; done
 
-  # Strip markdown bold markers before parsing (LLM sometimes wraps Score/Hallucinations in **)
-  EVAL_CLEAN=$(echo "$EVAL_OUTPUT" | sed 's/\*\*//g')
-
-  # Parse "Score: X/Y" from evaluation output
-  SCORE_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Score:" | tail -1)
-  if [ -n "$SCORE_LINE" ]; then
-    NUMERATOR=$(echo "$SCORE_LINE" | sed 's/Score: \([0-9]*\)\/.*/\1/')
-    DENOMINATOR=$(echo "$SCORE_LINE" | sed 's/Score: [0-9]*\/\([0-9]*\).*/\1/')
+  if [ -n "${NUMERATOR:-}" ] && [ -n "${DENOMINATOR:-}" ]; then
     TOTAL_SCORE=$((TOTAL_SCORE + NUMERATOR))
     TOTAL_IDEAS=$((TOTAL_IDEAS + DENOMINATOR))
     PCT=$(echo "scale=1; $NUMERATOR * 100 / $DENOMINATOR" | bc)
-    echo "=> ${article}: ${NUMERATOR}/${DENOMINATOR} (${PCT}%)"
+    echo "=> ${article}: median ${NUMERATOR}/${DENOMINATOR} (${PCT}%) [runs: ${SCORES[*]}]"
   else
     echo "WARNING: Could not parse score for ${article}" >&2
   fi
 
-  # Parse "Hallucinations: N" from evaluation output
-  HALLUC_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Hallucinations:" | tail -1)
-  if [ -n "$HALLUC_LINE" ]; then
-    HALLUC_COUNT=$(echo "$HALLUC_LINE" | sed 's/Hallucinations: \([0-9]*\).*/\1/')
+  if [ -n "${HALLUC_COUNT:-}" ]; then
     TOTAL_HALLUCINATIONS=$((TOTAL_HALLUCINATIONS + HALLUC_COUNT))
     if [ "$HALLUC_COUNT" -gt 0 ]; then
-      CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  HALLUCINATION: ${article} has ${HALLUC_COUNT} hallucinated claim(s)\n"
+      CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  HALLUCINATION: ${article} has ${HALLUC_COUNT} hallucinated claim(s) (max across ${EVAL_N} runs)\n"
     fi
   fi
 
-  # Parse "Compression: X.X%" from evaluation output
+  EVAL_CLEAN=$(sed 's/\*\*//g' "$TMPDIR_ART/eval-1.txt")
+  rm -rf "$TMPDIR_ART"
   COMP_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Compression:" | tail -1)
   if [ -n "$COMP_LINE" ]; then
     COMP_PCT=$(echo "$COMP_LINE" | sed 's/Compression: \([0-9.]*\)%.*/\1/')
