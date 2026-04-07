@@ -7,6 +7,7 @@
 set -euo pipefail
 
 OUTPUT_DIR="${1:-output}"
+MODE="${2:-abstractive}"  # abstractive, extractive, or hybrid
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 ARTICLES=("do-things-that-dont-scale" "psychology-of-money" "ai-revolution" "what-makes-you-you" "never-rewrite" "most-important-century" "seven-strange-questions" "what-you-cant-say" "back-to-basics" "you-and-your-research")
@@ -15,9 +16,9 @@ TOTAL_IDEAS=0
 TOTAL_HALLUCINATIONS=0
 CONSTRAINT_VIOLATIONS=""
 
-echo "=== Compressing all articles (output: ${OUTPUT_DIR}/) ==="
+echo "=== Compressing all articles (output: ${OUTPUT_DIR}/, mode: ${MODE}) ==="
 for article in "${ARTICLES[@]}"; do
-  bash "$SCRIPT_DIR/compress.sh" "$article" "$OUTPUT_DIR"
+  bash "$SCRIPT_DIR/compress.sh" "$article" "$OUTPUT_DIR" "$MODE"
 done
 
 echo ""

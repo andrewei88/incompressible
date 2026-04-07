@@ -9,6 +9,7 @@ set -euo pipefail
 
 ARTICLE_ID="$1"
 OUTPUT_DIR="${2:-output}"
+MODE="${3:-abstractive}"  # abstractive, extractive, or hybrid
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 SKILL_PATH="$SCRIPT_DIR/inc-skill.md"
@@ -57,8 +58,53 @@ EXTRACT_PROMPT
 echo "Extracted $(wc -l < "$CLAIMS_PATH" | tr -d ' ') claim lines for ${ARTICLE_ID}"
 
 # Step 2: Compress using extracted claims as faithfulness constraint
-{
-  cat <<'INSTRUCTIONS'
+# Determine effective mode (hybrid checks word count)
+EFFECTIVE_MODE="$MODE"
+if [ "$MODE" = "hybrid" ]; then
+  WORD_COUNT=$(wc -w < "$ARTICLE_PATH" | tr -d ' ')
+  if [ "$WORD_COUNT" -gt 5000 ]; then
+    EFFECTIVE_MODE="abstractive"
+    echo "  Hybrid: ${WORD_COUNT} words > 5000, using abstractive"
+  else
+    EFFECTIVE_MODE="extractive"
+    echo "  Hybrid: ${WORD_COUNT} words <= 5000, using extractive"
+  fi
+fi
+
+if [ "$EFFECTIVE_MODE" = "extractive" ]; then
+  {
+    cat <<'INSTRUCTIONS'
+You are an extractive compressor. Your ONLY operations are SELECTION and DELETION from the original text. You do not generate new content.
+
+Process:
+1. Read the article below.
+2. Select the sentences and phrases that capture the core ideas. Use the extracted key claims as a guide for what to keep.
+3. Organize selected text under section headings using markdown formatting (headers, bold, tables, lists).
+4. You may shorten sentences by removing clauses, but NEVER add words or phrases not in the original article.
+
+Strict rules:
+- Every word in your output must come from the original article text. No exceptions.
+- Do NOT paraphrase. Copy the author's exact words, or delete words to shorten. Never substitute synonyms.
+- Do NOT add dates, names, titles, labels, or metadata not in the article text.
+- Do NOT add commentary, analysis, or interpretation.
+- Table headers and cell values must use only words/phrases from the original.
+- If the original doesn't provide a value for a table cell, leave it empty or omit the row.
+- Section headings should use phrases from the article where possible.
+- Output ONLY the organized selection in markdown format. No explanations.
+
+EXTRACTED KEY CLAIMS (use as selection guide):
+INSTRUCTIONS
+    cat "$CLAIMS_PATH"
+    echo ""
+    echo "FORMATTING RULES:"
+    cat "$SKILL_PATH"
+    echo ""
+    echo "ARTICLE TO COMPRESS (select from this text only):"
+    cat "$ARTICLE_PATH"
+  } | claude -p > "$OUTPUT_PATH" 2>/dev/null
+else
+  {
+    cat <<'INSTRUCTIONS'
 You are a compression engine. Follow the skill rules below EXACTLY to compress the article that follows.
 
 Rules:
@@ -70,20 +116,21 @@ FAITHFULNESS CONSTRAINT: An independent process has extracted key claims from th
 
 EXTRACTED KEY CLAIMS:
 INSTRUCTIONS
-  cat "$CLAIMS_PATH"
-  echo ""
-  echo "SKILL RULES:"
-  cat "$SKILL_PATH"
-  echo ""
-  echo "ARTICLE TO COMPRESS:"
-  cat "$ARTICLE_PATH"
-} | claude -p > "$OUTPUT_PATH" 2>/dev/null
+    cat "$CLAIMS_PATH"
+    echo ""
+    echo "SKILL RULES:"
+    cat "$SKILL_PATH"
+    echo ""
+    echo "ARTICLE TO COMPRESS:"
+    cat "$ARTICLE_PATH"
+  } | claude -p > "$OUTPUT_PATH" 2>/dev/null
+fi
 
 WORDS=$(wc -w < "$OUTPUT_PATH" | tr -d ' ')
 echo "Compressed ${ARTICLE_ID}: ${WORDS} words -> ${OUTPUT_PATH}"
 
-# Step 3: Validation report (diagnostic, not blocking)
+# Step 3: Deterministic correction (strips lines containing hallucinated tokens)
 VALIDATOR="$(dirname "$SCRIPT_DIR")/validate-compression.py"
 if [ -f "$VALIDATOR" ]; then
-  python3 "$VALIDATOR" "$ARTICLE_PATH" "$OUTPUT_PATH" 2>/dev/null || true
+  python3 "$VALIDATOR" --fix "$ARTICLE_PATH" "$OUTPUT_PATH" 2>/dev/null || true
 fi

@@ -3,3 +3,11 @@ exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	
 1	d428e48	best-of-3	94.1	100.0	91.6	100.0	100.0	100.0	100.0	100.0	100.0	100.0	98.1	5	REVERT
 2	d428e48	anti-synthesis rules	94.1	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	99.0	7	KEEP
 3	d428e48	table cell overstatement rule	94.1	100.0	75.0	100.0	100.0	100.0	100.0	100.0	100.0	100.0	96.2	7	KEEP
+4	c53a024	extractive compression	88.2	100.0	58.3	100.0	100.0	100.0	100.0	100.0	100.0	100.0	93.4	1	TEST
+5	c53a024	extractive run 2	94.1	100.0	100.0	100.0	100.0	100.0	87.5	100.0	90.0	93.3	96.2	1	TEST
+6	c53a024	hybrid (5k threshold)	94.1	100.0	100.0	100.0	100.0	100.0	87.5	100.0	100.0	100.0	98.1	3	TEST
+7	c53a024	extractive-tuned (completeness bias)	88.2	100.0	75.0	100.0	100.0	100.0	87.5	100.0	100.0	100.0	94.3	2	REVERT
+8	c53a024	abstractive + deterministic corrector	94.1	66.6	83.3	100.0	100.0	100.0	100.0	100.0	100.0	93.3	92.5	0	KEEP
+9	c53a024	abstractive + corrector run 2 (confirm)	82.3	75.0	75.0	100.0	100.0	100.0	100.0	90.9	100.0	100.0	90.6	0	CONFIRMED
+10	c53a024	corrector boundary fix (% / $ tokens)											93.4	0	CONFIRMED
+11	c53a024	sentence-level strip	94.1	83.3	83.3	100.0	100.0	100.0	100.0	100.0	90.0	100.0	94.3	0	CONFIRMED
