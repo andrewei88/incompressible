@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How This All Happened — INCMPRSBL</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Theme variables */
+    :root[data-theme="dark"] {
+      --bg: #000;
+      --bg-subtle: #0a0a0a;
+      --text: #d6d9db;
+      --text-bright: #e7e9ea;
+      --text-dim: #71767b;
+      --accent: #b4a0d4;
+      --accent-hover: #c9b8e8;
+      --border: #2f3336;
+      --border-faint: #2f333622;
+    }
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f8;
+      --text: #374151;
+      --text-bright: #111827;
+      --text-dim: #6b7280;
+      --accent: #7c3aed;
+      --accent-hover: #6d28d9;
+      --border: #e5e7eb;
+      --border-faint: #e5e7eb44;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 140px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 12px 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 0;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .sidebar a:hover {
+      color: var(--accent-hover);
+    }
+    .sidebar a .num {
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+    .sidebar a:hover .num {
+      color: var(--text-bright);
+    }
+    .sidebar a.active {
+      color: var(--accent);
+    }
+    .sidebar a.active .num {
+      color: var(--text-bright);
+    }
+
+    /* Main content */
+    .container {
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      color: var(--text-bright);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .time-saved {
+      position: relative;
+      cursor: default;
+    }
+    .time-saved span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .time-saved::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+    .time-saved:hover::after {
+      opacity: 1;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text-bright);
+      border-color: var(--text-dim);
+    }
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .header .meta {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .header .meta a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .header .meta a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* Section */
+    .section {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .section-type {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-format {
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+    .section h2 {
+      color: var(--text-bright);
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Prose (17px) */
+    .prose p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* Checklist (14px) */
+    .checklist .group-label {
+      color: var(--text-bright);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .checklist .group { margin-bottom: 14px; }
+    .checklist .group:last-child { margin-bottom: 0; }
+    .checklist .item {
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    /* Table (14px) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      text-align: left;
+      padding: 9px 12px 9px 0;
+      color: var(--text-dim);
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .data-table td {
+      padding: 9px 12px 9px 0;
+      color: var(--text);
+    }
+    .data-table td:first-child {
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border-faint);
+    }
+
+    /* Key points (15px) */
+    .key-points ul {
+      list-style: none;
+    }
+    .key-points li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .key-points li::before {
+      content: "—";
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    /* Reasoning chain (15px) */
+    .reasoning-chain p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      color: var(--text);
+      max-width: 720px;
+    }
+    .reasoning-chain .arrow {
+      color: var(--text-dim);
+    }
+
+    /* Numbered steps (14px) */
+    .numbered-steps ol {
+      list-style: none;
+      counter-reset: step;
+    }
+    .numbered-steps li {
+      counter-increment: step;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .numbered-steps li::before {
+      content: counter(step) ".";
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+
+    /* Mermaid diagrams */
+    .mermaid-container {
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    /* Fix Mermaid mindmap dark-on-dark nodes */
+    .mermaid-container svg [class*="section-"] rect,
+    .mermaid-container svg [class*="section-"] path,
+    .mermaid-container svg [class*="section-"] circle,
+    .mermaid-container svg [class*="section-"] polygon,
+    .mermaid-container svg [class*="section--1"] rect,
+    .mermaid-container svg [class*="section--1"] circle {
+      fill: #2a2a2a !important;
+      stroke: #555 !important;
+    }
+    .mermaid-container svg [class*="section--1"] circle {
+      stroke: var(--accent) !important;
+    }
+    .mermaid-container svg [class*="edge-depth"] {
+      stroke: #444 !important;
+    }
+    .mermaid-container svg .nodeLabel p {
+      color: var(--text-bright) !important;
+    }
+
+    /* Custom HTML timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .timeline-details {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .timeline-details li {
+      list-style: none;
+      margin-bottom: 2px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 12px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Scroll highlight */
+    .section:target h2 {
+      color: var(--accent);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .sidebar { display: none; }
+      .header { padding: 24px 20px 20px; }
+      .section { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .key-points li, .reasoning-chain p, .prose p { max-width: 100%; }
+      .data-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar">
+      <a href="#section-1" class="active"><span class="num">1</span>Intro</a>
+      <a href="#section-2"><span class="num">2</span>War Ends</a>
+      <a href="#section-3"><span class="num">3</span>Low Rates</a>
+      <a href="#section-4"><span class="num">4</span>Pent-up Demand</a>
+      <a href="#section-5"><span class="num">5</span>Equality</a>
+      <a href="#section-6"><span class="num">6</span>Manageable Debt</a>
+      <a href="#section-7"><span class="num">7</span>1973 Cracks</a>
+      <a href="#section-8"><span class="num">8</span>Boom Returns</a>
+      <a href="#section-9"><span class="num">9</span>Big Stretch</a>
+      <a href="#section-10"><span class="num">10</span>Paradigm</a>
+      <a href="#section-11"><span class="num">11</span>Stop the Ride</a>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <a href="index.html" class="back-link">← INCMPRSBL</a>
+        <div class="header-top">
+          <h1>How This All Happened</h1>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><svg viewBox="0 0 24 24"><path class="sun-icon" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-3a1 1 0 01-1-1V1a1 1 0 112 0v2a1 1 0 01-1 1zm0 18a1 1 0 01-1-1v-2a1 1 0 112 0v2a1 1 0 01-1 1zm9-9h-2a1 1 0 110-2h2a1 1 0 110 2zM4 13H2a1 1 0 110-2h2a1 1 0 110 2zm15.07-6.49a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM6.34 19.66a1 1 0 01-.71-.29l-1.41-1.41a1 1 0 111.41-1.41l1.41 1.41a1 1 0 01-.7 1.7zM19.07 19.66a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 111.41 1.41l-1.41 1.41a1 1 0 01-.71.29zM6.34 6.51a1 1 0 01-.7-1.7l1.41-1.41a1 1 0 011.41 1.41L7.05 6.22a1 1 0 01-.71.29z"/><path class="moon-icon" d="M12.3 22a10 10 0 01-7.78-16.23A10.06 10.06 0 0012.3 2a1 1 0 01.81 1.56 6 6 0 007.33 7.33 1 1 0 011.56.81A10 10 0 0112.3 22z" style="display:none"/></svg></button>
+        </div>
+        <div class="meta"><a href="https://collabfund.com/blog/how-this-all-happened/" target="_blank" rel="noopener">collabfund.com (Morgan Housel)</a> · 4,940 → 1,045 words · 6 min · <span class="time-saved" data-tooltip="Reading time saved on this article"><span>19 min</span> saved</span></div>
+      </div>
+
+      <div class="section" id="section-1">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>Intro</h2>
+  <div class="key-points">
+    <ul>
+      <li>Short story of the U.S. economy since WWII: uncertain, then very good, then pretty bad, then really good, then really bad, and now here we are.</li>
+      <li>If you fell asleep in 1945 and woke up in 2018 you would not recognize the world around you. The amount of growth was virtually unprecedented.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-2">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>1. August 1945: War ends, fear of depression</h2>
+  <div class="key-points">
+    <ul>
+      <li>16 million Americans (11% of population) served; ~8 million overseas at end; average age 23. Within 18 months all but 1.5 million were home and out of uniform.</li>
+      <li>Three pressures built up: housing construction halted (&lt;12,000 homes/month in 1943); war-specific jobs vanished suddenly; marriage rate spiked — soldiers wanted homes, families, jobs immediately.</li>
+      <li>1946 Council of Economic Advisors warned Truman of &#x27;a full-scale depression some time in the next one to four years.&#x27;</li>
+      <li>Exports couldn&#x27;t drive growth — Europe and Japan in ruins. America buried in debt, limiting stimulus.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-3">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>2. Low interest rates and the birth of the American consumer</h2>
+  <div class="key-points">
+    <ul>
+      <li>In 1942 the Fed announced it would keep short-term rates at 0.38% to finance the war. Rates didn&#x27;t budge a single basis point for seven years. 3-month Treasury yields stayed below 2% until mid-1950s.</li>
+      <li>Consumption became an explicit economic strategy after WWII. Politicians, businessmen, labor leaders all encouraged Americans to spend.</li>
+      <li>GI Bill: 16 million veterans could buy homes often with no money down, no interest in the first year, fixed rates so low monthly mortgage could be lower than rent.</li>
+      <li>First credit card introduced in 1950. Store credit, installment, personal, payday loans took off. Interest on all debt, including credit cards, was tax deductible.</li>
+      <li>Household debt in the 1950s grew 1.5x faster than during the 2000s debt splurge.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-4">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>3. Pent-up demand + 1930s productivity boom</h2>
+  <div class="key-points">
+    <ul>
+      <li>By necessity, the Great Depression had supercharged resourcefulness, productivity, and innovation — unnoticed until the 1950s.</li>
+      <li>Commercial car/truck manufacturing virtually ceased 1942–45. Then 21.4 million cars sold 1945–49; another 37 million by 1955.</li>
+      <li>1.9 million homes built 1940–45. Then 7 million built 1945–50; another 8 million by 1955.</li>
+      <li>Pent-up demand + new manufacturing capacity created jobs for returning GIs. Mixed with consumer credit, spending exploded.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-5">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>4. Gains shared more equally than ever</h2>
+  <div class="key-points">
+    <ul>
+      <li>The defining characteristic of 1950s economics: the country got rich by making the poor less poor.</li>
+      <li>Average wages doubled from 1940 to 1948, then doubled again by 1963.</li>
+      <li>Top 1%&#x27;s share of total national income, after taxes, fell from 13% to 7% by 1945.</li>
+      <li>Real income for the bottom 20% grew by a nearly identical amount as the top 5% from 1950 to 1980.</li>
+      <li>Women&#x27;s labor force participation: 31% after the war → 37% by 1955 → 40% by 1965.</li>
+      <li>Lifestyles leveled too: rich and poor used similar cars, razors, TVs, appliances. People had peers who looked like them — important because people measure well-being against peers.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-6">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>5. Debt rose, but so did incomes</h2>
+  <div class="key-points">
+    <ul>
+      <li>Household debt rose 5-fold from 1947 to 1957, but income growth made it manageable; debt started from a low base after the Depression and war.</li>
+      <li>Even after rising in the 1950s–70s, household debt-to-income stayed below 60% (today: just over 100%).</li>
+      <li>Homeownership: 46.5% in 1900, ~same for four decades, then 53% by 1945 and 62% by 1970.</li>
+      <li>Halberstam: new homeowners &#x27;did not fear debt as their parents had&#x27; — they believed the future had already arrived.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-7">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>6. Things start cracking (1973)</h2>
+  <div class="key-points">
+    <ul>
+      <li>1973 recession brought unemployment to highest since the 1930s; inflation surged and stayed high; short-term rates hit 8% (up from 2.5% a decade earlier).</li>
+      <li>Japan booming, China opening, Middle East flexing oil — America&#x27;s dominance eroded.</li>
+      <li>Boomers came of age with different expectations as post-war tailwinds ended.</li>
+      <li>Expectations always move slower than facts. People still expected post-war equality of lifestyle even as growth became uneven.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-8">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>7. Boom resumes, but different</h2>
+  <div class="key-points">
+    <ul>
+      <li>1980s–90s: GDP growth strong; 1990s real GDP growth roughly equal to 1950s (40% vs 42%). Clinton: &#x27;We have built a new economy.&#x27;</li>
+      <li>Same growth, totally different pockets. Between 1993 and 2012, the top 1% saw incomes grow 86.1%, while the bottom 99% saw just 6.6% growth.</li>
+      <li>Stiglitz (2011): top 1% incomes rose 18% over the past decade; middle incomes fell. Men with only high-school degrees: 12% decline in the last quarter-century.</li>
+      <li>Nearly the opposite of post-war flattening — but Americans still held onto two post-war ideas: live a lifestyle similar to other Americans, and debt to finance it is acceptable.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-9">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>8. The Big Stretch</h2>
+  <div class="key-points">
+    <ul>
+      <li>Rich Americans broke away in lifestyle — bigger homes, nicer cars, expensive schools — fueled by Madison Avenue and later the internet.</li>
+      <li>Post-war Togetherness morphed into Keeping Up With The Joneses. A bank manager (Peter) feels entitled to live like an investment banker (Joe) because his parents&#x27; era had tight income distribution. Peter takes out a huge mortgage, $45k credit card debt, leases two cars, kids carry student loans.</li>
+      <li>During flat median wages, the median new American home grew 50% larger; nearly half have four or more bedrooms, up from 18% in 1983.</li>
+      <li>Average car loan (inflation-adjusted) more than doubled 1975–2003, from $12,300 to $27,900.</li>
+      <li>Share of income going to debt and lease payments: just over 8% for highest income groups, but over 21% for those below the 50th percentile.</li>
+      <li>Hyman Minsky described debt crises beginning when people take on more debt than they can service — like Wile E. Coyote looking down. That&#x27;s 2008.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-10">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>9. Paradigm hard to reverse</h2>
+  <div class="key-points">
+    <ul>
+      <li>Post-2008 response perpetuated the trends: QE boosted asset prices (boon for owners — mostly rich); Fed backstopped corporate debt (helped owners — mostly rich); tax cuts went mostly to higher incomes.</li>
+      <li>Mazumder: incomes among brothers are more correlated than height or weight.</li>
+      <li>The economy works better for some people than others. Success isn&#x27;t as meritocratic and is rewarded with higher gains than before.</li>
+      <li>Post-war expectations of a broad middle class without systematic inequality stuck around because they felt so good for so many for so long.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section" id="section-11">
+  <div class="section-label">
+    <span class="section-type">ARGUMENT</span>
+    <span class="section-format">· Key Points</span>
+  </div>
+  <h2>10. Stop the ride, I want off</h2>
+  <div class="key-points">
+    <ul>
+      <li>The Tea Party, Occupy Wall Street, Brexit, and the rise of Donald Trump each represents a group shouting, &#x27;Stop the ride, I want off.&#x27;</li>
+      <li>Stuff isn&#x27;t working within the post-war expectation that it should work roughly the same for everyone.</li>
+      <li>Benedict Evans: &#x27;The more the Internet exposes people to new points of view, the angrier people get that different views exist.&#x27;</li>
+      <li>Author isn&#x27;t pessimistic: unemployment lowest in decades, wages now growing faster for low-income workers than the rich, college costs largely stopped growing once grants factored in.</li>
+      <li>But expectations move slower than reality, so the era of &#x27;This isn&#x27;t working&#x27; and &#x27;We need something radically new&#x27; may stick around — which is part of what starts events like the one this story began with. History is just one damn thing after another.</li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </div>
+  <script>
+    const sections = document.querySelectorAll('.section[id]');
+    const links = document.querySelectorAll('.sidebar a');
+    let lastActiveId = null;
+    var sectionTops = [];
+    sections.forEach(function(section) {
+      sectionTops.push({
+        id: section.id,
+        absTop: section.getBoundingClientRect().top + window.scrollY
+      });
+    });
+    function updateActiveSection() {
+      var scrollY = window.scrollY;
+      var maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) maxScroll = 1;
+      var readPos = (scrollY / maxScroll) * document.body.scrollHeight;
+      var current = sectionTops[0].id;
+      for (var i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].absTop <= readPos) {
+          current = sectionTops[i].id;
+        }
+      }
+      if (current !== lastActiveId) {
+        lastActiveId = current;
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var active = document.querySelector('.sidebar a[href="#' + current + '"]');
+        if (active) active.classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+
+    function updateToggleIcon(theme) {
+      const sun = document.querySelector('.sun-icon');
+      const moon = document.querySelector('.moon-icon');
+      if (theme === 'dark') {
+        sun.style.display = '';
+        moon.style.display = 'none';
+      } else {
+        sun.style.display = 'none';
+        moon.style.display = '';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = newTheme;
+      updateToggleIcon(newTheme);
+      localStorage.setItem('incmprsbl-theme', newTheme);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ startOnLoad: false, theme: newTheme === 'dark' ? 'dark' : 'default' });
+        document.querySelectorAll('.mermaid').forEach(el => {
+          const code = el.getAttribute('data-original') || el.textContent;
+          el.setAttribute('data-original', code);
+          el.removeAttribute('data-processed');
+          el.innerHTML = code;
+        });
+        mermaid.init(undefined, '.mermaid');
+      }
+    }
+
+    // Restore saved theme
+    (function() {
+      const saved = localStorage.getItem('incmprsbl-theme');
+      if (saved && saved !== document.documentElement.dataset.theme) {
+        document.documentElement.dataset.theme = saved;
+        updateToggleIcon(saved);
+        if (saved === 'light' && typeof mermaid !== 'undefined') {
+          mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
