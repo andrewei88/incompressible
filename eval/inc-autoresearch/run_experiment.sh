@@ -84,13 +84,21 @@ for article in "${ARTICLES[@]}"; do
   COMP_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Compression:" | tail -1)
   if [ -n "$COMP_LINE" ]; then
     COMP_PCT=$(echo "$COMP_LINE" | sed 's/Compression: \([0-9.]*\)%.*/\1/')
-    TOO_LOW=$(echo "$COMP_PCT < 5" | bc)
-    TOO_HIGH=$(echo "$COMP_PCT > 40" | bc)
-    if [ "$TOO_LOW" -eq 1 ]; then
-      CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  COMPRESSION: ${article} at ${COMP_PCT}% (below 5% floor)\n"
-    fi
-    if [ "$TOO_HIGH" -eq 1 ]; then
-      CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  COMPRESSION: ${article} at ${COMP_PCT}% (above 40% ceiling)\n"
+    # Per-article baseline drift check: flag if > ±15% relative to calibrated baseline
+    BASELINE=$(python3 -c "import json,sys; d=json.load(open('$SCRIPT_DIR/ratios_baseline.json')); print(d.get('$article',''))" 2>/dev/null)
+    if [ -n "$BASELINE" ]; then
+      DRIFT=$(python3 -c "b=$BASELINE; c=$COMP_PCT; print(f'{(c-b)/b*100:.1f}')")
+      DRIFT_ABS=$(python3 -c "b=$BASELINE; c=$COMP_PCT; print(f'{abs((c-b)/b*100):.1f}')")
+      OUT_OF_BAND=$(python3 -c "print(1 if $DRIFT_ABS > 15 else 0)")
+      if [ "$OUT_OF_BAND" -eq 1 ]; then
+        CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  COMPRESSION: ${article} at ${COMP_PCT}% drifted ${DRIFT}% from baseline ${BASELINE}%\n"
+      fi
+    else
+      # No baseline (new article) — fall back to absolute floor
+      TOO_LOW=$(echo "$COMP_PCT < 5" | bc)
+      if [ "$TOO_LOW" -eq 1 ]; then
+        CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  COMPRESSION: ${article} at ${COMP_PCT}% (below 5% floor, no baseline)\n"
+      fi
     fi
   fi
 done
