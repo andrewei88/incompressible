@@ -11,3 +11,4 @@ exp	commit	mutation	do-things-that-dont-scale	psychology-of-money	ai-revolution	
 9	c53a024	abstractive + corrector run 2 (confirm)	82.3	75.0	75.0	100.0	100.0	100.0	100.0	90.9	100.0	100.0	90.6	0	CONFIRMED
 10	c53a024	corrector boundary fix (% / $ tokens)											93.4	0	CONFIRMED
 11	c53a024	sentence-level strip	94.1	83.3	83.3	100.0	100.0	100.0	100.0	100.0	90.0	100.0	94.3	0	CONFIRMED
+12	287d121	percent normalization + json gate	76.4	83.3	83.3	100.0	100.0	100.0	100.0	100.0	100.0	100.0	92.5	0	CONFIRMED
