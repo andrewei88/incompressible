@@ -185,6 +185,56 @@ fi
 WORDS=$(wc -w < "$OUTPUT_PATH" | tr -d ' ')
 echo "Compressed ${ARTICLE_ID}: ${WORDS} words -> ${OUTPUT_PATH}"
 
+# Step 2.5: Optional post-processor shorten pass (Exp 23).
+# Structural intervention on the ratio dimension: takes the compressed output
+# and removes redundancy via a deletion-only pass. Cannot introduce new claims
+# because the instruction is strictly deletion. Faithfulness anchor: the
+# extracted claims list from Step 1 — every claim in that list must still be
+# traceable in the shortened output. Enabled via POSTPROCESS=1 env var.
+if [ "${POSTPROCESS:-0}" = "1" ]; then
+  SHORT_PATH="${OUTPUT_PATH}.short"
+  {
+    cat <<'POSTPROCESS_PROMPT'
+You are a deletion-only editor. You will receive a compressed markdown article and a list of key claims that must be preserved.
+
+Your job: shorten the article by removing redundancy, combining sentences, and cutting filler — WITHOUT removing any of the listed key claims and WITHOUT adding any new content.
+
+Strict rules:
+- You may only DELETE words, sentences, or redundant clauses.
+- You may NOT add new words, phrases, or explanations.
+- You may NOT paraphrase or substitute synonyms.
+- You may NOT reorder sections or restructure content.
+- Every claim in the KEY CLAIMS list must still be traceable in your output.
+- Preserve all markdown formatting (headers, tables, lists, code blocks).
+- Preserve all specific numbers, names, dates, quotes, and technical terms.
+- Target: remove redundancy where it exists, but do not force deletion if the content is already tight.
+
+Output ONLY the shortened markdown. No commentary, no explanations.
+
+KEY CLAIMS (must all still be traceable):
+POSTPROCESS_PROMPT
+    cat "$CLAIMS_PATH"
+    echo ""
+    echo "COMPRESSED ARTICLE TO SHORTEN:"
+    cat "$OUTPUT_PATH"
+  } | claude -p > "$SHORT_PATH" 2>/dev/null
+  if [ -s "$SHORT_PATH" ]; then
+    SHORT_WORDS=$(wc -w < "$SHORT_PATH" | tr -d ' ')
+    # Only accept if shortened meaningfully (>5% reduction) and didn't bloat
+    if [ "$SHORT_WORDS" -lt "$WORDS" ]; then
+      mv "$SHORT_PATH" "$OUTPUT_PATH"
+      echo "  Postprocess: ${WORDS} -> ${SHORT_WORDS} words"
+      WORDS="$SHORT_WORDS"
+    else
+      rm -f "$SHORT_PATH"
+      echo "  Postprocess: no reduction, keeping original"
+    fi
+  else
+    rm -f "$SHORT_PATH"
+    echo "  Postprocess: empty output, keeping original"
+  fi
+fi
+
 # Step 3: Deterministic correction (strips lines containing hallucinated tokens)
 VALIDATOR="$(dirname "$SCRIPT_DIR")/validate-compression.py"
 if [ -f "$VALIDATOR" ]; then
