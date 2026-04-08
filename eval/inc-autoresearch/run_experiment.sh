@@ -16,9 +16,42 @@ TOTAL_IDEAS=0
 TOTAL_HALLUCINATIONS=0
 CONSTRAINT_VIOLATIONS=""
 
-echo "=== Compressing all articles (output: ${OUTPUT_DIR}/, mode: ${MODE}) ==="
+COMPRESS_N="${COMPRESS_N:-1}"
+echo "=== Compressing all articles (output: ${OUTPUT_DIR}/, mode: ${MODE}, N=${COMPRESS_N}) ==="
 for article in "${ARTICLES[@]}"; do
-  bash "$SCRIPT_DIR/compress.sh" "$article" "$OUTPUT_DIR" "$MODE"
+  if [ "$COMPRESS_N" = "1" ]; then
+    bash "$SCRIPT_DIR/compress.sh" "$article" "$OUTPUT_DIR" "$MODE"
+  else
+    # Median-of-N compression: run N times to temp dirs, pick the run whose
+    # word count is the median, copy that one to the final output path.
+    # Use this when measuring high-confidence baselines or gating ratio-targeted
+    # experiments, because single-run ratio has ~5pt noise (Exp 22).
+    TMP_BASE="/tmp/cmp-${OUTPUT_DIR}-${article}-$$"
+    for n in $(seq 1 "$COMPRESS_N"); do
+      bash "$SCRIPT_DIR/compress.sh" "$article" "${TMP_BASE}-$n" "$MODE" > /dev/null
+    done
+    # Pick median by word count
+    MEDIAN_N=$(python3 -c "
+import os, sys
+counts = []
+for n in range(1, $COMPRESS_N + 1):
+    p = f'$SCRIPT_DIR/${TMP_BASE}-{n}/${article}.md'.replace('/tmp/', '/tmp/')
+    # TMP_BASE is already absolute under /tmp
+    p = f'${TMP_BASE}-{n}/${article}.md'
+    try:
+        with open(p) as f:
+            counts.append((len(f.read().split()), n))
+    except FileNotFoundError:
+        pass
+counts.sort()
+print(counts[len(counts)//2][1] if counts else 1)
+")
+    mkdir -p "$SCRIPT_DIR/${OUTPUT_DIR}"
+    cp "${TMP_BASE}-${MEDIAN_N}/${article}.md" "$SCRIPT_DIR/${OUTPUT_DIR}/${article}.md"
+    COUNTS=$(for n in $(seq 1 "$COMPRESS_N"); do wc -w < "${TMP_BASE}-${n}/${article}.md" 2>/dev/null | tr -d ' '; done | tr '\n' ' ')
+    echo "  Median-of-${COMPRESS_N} for ${article}: runs=[${COUNTS}] picked run ${MEDIAN_N}"
+    rm -rf "${TMP_BASE}-"*
+  fi
 done
 
 echo ""
@@ -84,12 +117,18 @@ for article in "${ARTICLES[@]}"; do
   COMP_LINE=$(echo "$EVAL_CLEAN" | grep -E "^Compression:" | tail -1)
   if [ -n "$COMP_LINE" ]; then
     COMP_PCT=$(echo "$COMP_LINE" | sed 's/Compression: \([0-9.]*\)%.*/\1/')
-    # Per-article baseline drift check: flag if > ±15% relative to calibrated baseline
+    # Per-article baseline drift check: flag if > ±40% relative to calibrated baseline.
+    # Rationale (Exp 22, 2026-04-08): measured run-to-run compression variance on
+    # identical inputs is ~5pt absolute (max 5.9pt on do-things-that-dont-scale and
+    # back-to-basics). On low-baseline articles (e.g. what-makes-you-you at 15%),
+    # 5.9pt swing = 39% relative. A ±15% threshold was tighter than the noise floor
+    # and produced false alarms. ±40% captures normal noise and still flags real
+    # regressions (which are typically much larger structural shifts).
     BASELINE=$(python3 -c "import json,sys; d=json.load(open('$SCRIPT_DIR/ratios_baseline.json')); print(d.get('$article',''))" 2>/dev/null)
     if [ -n "$BASELINE" ]; then
       DRIFT=$(python3 -c "b=$BASELINE; c=$COMP_PCT; print(f'{(c-b)/b*100:.1f}')")
       DRIFT_ABS=$(python3 -c "b=$BASELINE; c=$COMP_PCT; print(f'{abs((c-b)/b*100):.1f}')")
-      OUT_OF_BAND=$(python3 -c "print(1 if $DRIFT_ABS > 15 else 0)")
+      OUT_OF_BAND=$(python3 -c "print(1 if $DRIFT_ABS > 40 else 0)")
       if [ "$OUT_OF_BAND" -eq 1 ]; then
         CONSTRAINT_VIOLATIONS="${CONSTRAINT_VIOLATIONS}  COMPRESSION: ${article} at ${COMP_PCT}% drifted ${DRIFT}% from baseline ${BASELINE}%\n"
       fi
