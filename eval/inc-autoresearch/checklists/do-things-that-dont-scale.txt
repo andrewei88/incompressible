@@ -14,4 +14,3 @@
 14. Never seen a startup lured down a blind alley by trying too hard to make initial users happy
 15. Among companies, the best early adopters are usually other startups
 16. Hardware startups get an unfair advantage from personal attention (Pebble, Meraki)
-17. Meraki: doing things that don't scale can become the product itself
