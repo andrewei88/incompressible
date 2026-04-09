@@ -159,6 +159,17 @@ INSTRUCTIONS
     cat "$ARTICLE_PATH"
   } | claude -p > "$OUTPUT_PATH" 2>/dev/null
 else
+  # Exp 24: optional target-budget injection. When BUDGET_RATIO is set
+  # (e.g. BUDGET_RATIO=18.1), compute target word count = original * ratio / 100
+  # and inject it as an explicit instruction. Hypothesis: explicit budgets
+  # reduce run-to-run word-count variance (sampling -> constraint satisfaction)
+  # and make the ratio dimension measurable.
+  BUDGET_LINE=""
+  if [ -n "${BUDGET_RATIO:-}" ]; then
+    ORIG_WORDS=$(wc -w < "$ARTICLE_PATH" | tr -d ' ')
+    TARGET_WORDS=$(python3 -c "print(int($ORIG_WORDS * $BUDGET_RATIO / 100))")
+    BUDGET_LINE="TARGET LENGTH: approximately ${TARGET_WORDS} words (±10%). This is a hard constraint. Prioritize covering the extracted key claims within this budget. Cut redundancy, combine sentences, and remove filler to hit the target."
+  fi
   {
     cat <<'INSTRUCTIONS'
 You are a compression engine. Follow the skill rules below EXACTLY to compress the article that follows.
@@ -170,8 +181,12 @@ Rules:
 
 FAITHFULNESS CONSTRAINT: An independent process has extracted key claims from the article as direct quotes (listed below). Your compression must cover these claims. Do not include any claim that cannot be traced to the extracted quotes or the original article text.
 
-EXTRACTED KEY CLAIMS:
 INSTRUCTIONS
+    if [ -n "$BUDGET_LINE" ]; then
+      echo "$BUDGET_LINE"
+      echo ""
+    fi
+    echo "EXTRACTED KEY CLAIMS:"
     cat "$CLAIMS_PATH"
     echo ""
     echo "SKILL RULES:"
